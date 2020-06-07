@@ -87,7 +87,7 @@ public class Piece_Middle_manager : MonoBehaviour
         {
             case 1:
                 Debug.Log("Checking pawn validity");
-                response = pawn.isValidPawnMove();
+                response = pawn.IsValidPawnMove();
                 if (response == false)
                 {
                     Feedback.SetText(errorMessage + transform.tag);
@@ -139,7 +139,7 @@ public class Piece_Middle_manager : MonoBehaviour
             case 12:
                 return king.isValidKingMove();
             case 7:
-                response = pawn.isValidPawnMove(true);
+                response = pawn.IsValidPawnMove(true);
                 if (response == false)
                 {
                     Feedback.SetText(errorMessage + transform.tag);

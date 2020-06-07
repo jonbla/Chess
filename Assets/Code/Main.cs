@@ -14,7 +14,7 @@ public class Main : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Coord_Manager.init();
+        Coord_Manager.Init();
         whiteTeam = GameObject.Find("White").GetComponent<Team_Manager>();
         blackTeam = GameObject.Find("Black").GetComponent<Team_Manager>();
 

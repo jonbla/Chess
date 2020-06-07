@@ -61,7 +61,7 @@ public class Coord_Manager
 
     static Transform[,] pieces = new Transform[9,9];    
     
-    public static void init()
+    public static void Init()
     {
         List<Transform> temp = new List<Transform>();
 
@@ -104,7 +104,7 @@ public class Coord_Manager
 
     //return the piece that has this name
     //return null if that name isn't found
-    static Transform getTransformObject(string name)
+    static Transform GetTransformObject(string name)
     {
         for (int i = 1; i <= 8; i++)
         {
@@ -123,7 +123,7 @@ public class Coord_Manager
     }
 
     //get the chess coords of the named piece
-    static Vector2Int getCoordPosition(string name){
+    static Vector2Int GetCoordPosition(string name){
     	for (int i = 1; i <= 8; i++){
     		for (int j = 1; j<= 8; j++){
     			Transform temp = pieces[i, j];
@@ -141,10 +141,10 @@ public class Coord_Manager
     public static void UpdatePosition(string name, Vector3 value)
     {
     	Debug.Log("updated");
-        Transform transformObj = getTransformObject(name);
+        Transform transformObj = GetTransformObject(name);
 
         Vector2Int ChessCoords = ConvertCoordsToChessUnits(value);
-        Vector2Int old = getCoordPosition(name);
+        Vector2Int old = GetCoordPosition(name);
 
         pieces[ChessCoords.x, ChessCoords.y] = transformObj;
         pieces[old.x, old.y] = null;
@@ -154,8 +154,8 @@ public class Coord_Manager
     public static Vector2Int GetPositionDifference(string name, Vector3 value)
     {
         Vector2 convertedValue = ConvertCoordsToChessUnits(value);
-        Vector2Int transformObj = getCoordPosition(name);
-        Debug.Log(getCoordPosition(name));
+        Vector2Int transformObj = GetCoordPosition(name);
+        Debug.Log(GetCoordPosition(name));
         Vector2 temp = convertedValue - transformObj;
         return new Vector2Int((int)temp.x, (int)temp.y);
     }
@@ -208,7 +208,7 @@ public class Coord_Manager
         return null;
     }
 
-    public static Transform GetGameObjectAt(Vector2Int pos)
+    public static Transform GetTransformAt(Vector2Int pos)
     {
         try
         {

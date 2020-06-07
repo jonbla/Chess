@@ -5,10 +5,13 @@ using UnityEngine;
 
 public class Pawn_Piece : Custom_Mono
 {
+    [HideInInspector]
+    public bool secondMoveDone = false;
     bool firstMoveDone = false;
 
+
     //is this a valid move for a pawn?
-    public bool isValidPawnMove(bool isBlack = false)
+    public bool IsValidPawnMove(bool isBlack = false)
     {
         Vector2Int lastMove = CP.lastMove;
         ColInfo flags = CP.CollisionInfo;
@@ -30,10 +33,15 @@ public class Pawn_Piece : Custom_Mono
                     {
                         Debug.Log("pass3");
                         KillAtLocation(); //kill piece colliding with
-                        firstMoveDone = true;
+                        UpdateMoveCount();
                         return true; //if all these were true, then the move is valid
                     }
                 }
+                if (IsEnPassant())
+                {
+                    return true;
+                }
+                print("fail4");
             }
             Debug.Log("fail1");
             return false; //if there was a horizontal move and any of these conditions are false, then this move was invalid
@@ -43,7 +51,7 @@ public class Pawn_Piece : Custom_Mono
         {
             if(lastMove.y == 2 && !firstMoveDone) //is this you first move?
             {
-                firstMoveDone = true;
+                UpdateMoveCount();
                 return true; //if so, then this move is valid
             }
             Debug.Log("fail2");
@@ -56,7 +64,20 @@ public class Pawn_Piece : Custom_Mono
             return false;
         }
 
-        firstMoveDone = true;
+        UpdateMoveCount();
         return true; //all other moves are fine
+    }
+
+    void UpdateMoveCount()
+    {
+        if (firstMoveDone)
+        {
+            secondMoveDone = true;
+        }
+
+        firstMoveDone = true;
+
+        print("first move = " + firstMoveDone);
+        print("second move = " + secondMoveDone);
     }
 }

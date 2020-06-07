@@ -52,7 +52,7 @@ public class King_Piece : Custom_Mono
     //Check if type of object exists at positions
     bool isTypeAtCoord(Vector2Int pos, string type){
 
-        Transform obj = Coord_Manager.GetGameObjectAt(pos);
+        Transform obj = Coord_Manager.GetTransformAt(pos);
         if (obj != null)
         {
             if (obj.tag == type && obj.transform.parent != transform.parent)
@@ -159,7 +159,7 @@ public class King_Piece : Custom_Mono
                 return true;
             }
 
-            if (Coord_Manager.GetGameObjectAt(new Vector2Int(i, units.y)) != null)
+            if (Coord_Manager.GetTransformAt(new Vector2Int(i, units.y)) != null)
             {
                 break;
             }
@@ -178,7 +178,7 @@ public class King_Piece : Custom_Mono
                 return true;
             }
 
-            if (Coord_Manager.GetGameObjectAt(new Vector2Int(i, units.y)) != null)
+            if (Coord_Manager.GetTransformAt(new Vector2Int(i, units.y)) != null)
             {
                 break;
             }
@@ -197,7 +197,7 @@ public class King_Piece : Custom_Mono
                 return true;
             }
 
-            if (Coord_Manager.GetGameObjectAt(new Vector2Int(units.x, i)) != null)
+            if (Coord_Manager.GetTransformAt(new Vector2Int(units.x, i)) != null)
             {
                 break;
             }
@@ -216,7 +216,7 @@ public class King_Piece : Custom_Mono
                 return true;
             }
 
-            if (Coord_Manager.GetGameObjectAt(new Vector2Int(units.x, i)) != null)
+            if (Coord_Manager.GetTransformAt(new Vector2Int(units.x, i)) != null)
             {
                 break;
             }
@@ -244,7 +244,7 @@ public class King_Piece : Custom_Mono
                 return true;
             }
 
-            if (Coord_Manager.GetGameObjectAt(new Vector2Int(units.x + i, units.y + i)) != null)
+            if (Coord_Manager.GetTransformAt(new Vector2Int(units.x + i, units.y + i)) != null)
             {
                 break;
             }
@@ -262,7 +262,7 @@ public class King_Piece : Custom_Mono
                 return true;
             }
 
-            if (Coord_Manager.GetGameObjectAt(new Vector2Int(units.x - i, units.y + i)) != null)
+            if (Coord_Manager.GetTransformAt(new Vector2Int(units.x - i, units.y + i)) != null)
             {
                 break;
             }
@@ -280,7 +280,7 @@ public class King_Piece : Custom_Mono
                 return true;
             }
 
-            if (Coord_Manager.GetGameObjectAt(new Vector2Int(units.x + i, units.y - i)) != null)
+            if (Coord_Manager.GetTransformAt(new Vector2Int(units.x + i, units.y - i)) != null)
             {
                 break;
             }
@@ -298,7 +298,7 @@ public class King_Piece : Custom_Mono
                 return true;
             }
 
-            if (Coord_Manager.GetGameObjectAt(new Vector2Int(units.x - i, units.y - i)) != null)
+            if (Coord_Manager.GetTransformAt(new Vector2Int(units.x - i, units.y - i)) != null)
             {
                 break;
             }

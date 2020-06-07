@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -26,7 +27,7 @@ public class Custom_Mono : MonoBehaviour
         else
         {
             transform.parent.parent.Find("Black").Find(targetName).GetComponent<Chess_Piece>().getKilled();
-        }//
+        }
         
     }
 
@@ -38,5 +39,37 @@ public class Custom_Mono : MonoBehaviour
             isBlack = true;
         }
         return isBlack;
+    }
+
+    public bool IsEnPassant()
+    {
+        int direction = 1;
+
+        bool isBlack = GetIsBlack();
+        if (isBlack)
+        {
+            direction = -1;
+        }
+        Vector2Int chessCoords = Coord_Manager.ConvertCoordsToChessUnits(transform.localPosition) - new Vector2Int(0, direction);
+        Transform obj = Coord_Manager.GetTransformAt(chessCoords);
+        try
+        {
+            if (obj.tag == "Pawn")
+            {
+                if (obj.parent != transform.parent)
+                {
+                    if (!obj.GetComponent<Pawn_Piece>().secondMoveDone)
+                    {
+                        obj.GetComponent<Chess_Piece>().getKilled();
+                        return true;
+                    }                    
+                }
+            }
+            return false;
+        }
+        catch (NullReferenceException)
+        {
+            return false;
+        }
     }
 }
