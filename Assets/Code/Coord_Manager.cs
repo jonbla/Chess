@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using ExtraChessStructures;
 using UnityEngine;
@@ -166,7 +167,7 @@ public class Coord_Manager
     //(1, 0, 0) = colliding with opposite colour
     //(1, 1, 0) = colliding with own colour
     //(1, 0, 1) = colliding with king
-    public static ColInfo CheckCollition(Transform piece)
+    public static ColInfo CheckCollition(Transform piece) 
     {
         Vector2Int chessCoords = ConvertCoordsToChessUnits(piece.localPosition);
         ColInfo flags = new ColInfo(false, false, false);
@@ -214,9 +215,10 @@ public class Coord_Manager
         {
             return pieces[pos.x, pos.y];
         }
-        catch (System.IndexOutOfRangeException ex)
+        catch (System.IndexOutOfRangeException)
         {
-            Debug.LogError(ex);
+            //Debug.LogError("out of index");
+            //throw ex;
             return null;
         }
         

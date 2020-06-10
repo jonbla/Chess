@@ -1,13 +1,16 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using ExtraChessStructures;
 using UnityEngine;
 
 public class Team_Manager : Custom_Mono
 {
     public bool hasTurn = false;
-    public bool isUnderCheck = false;
+    CheckFlags checkFlags;
     King_Piece king;
     Main main;
+
+    public CheckFlags checkInfo { get => GetCheckFlags(); }
 
     // Start is called before the first frame update
     void Start()
@@ -21,5 +24,17 @@ public class Team_Manager : Custom_Mono
         main.EndTurn();
     }
 
+    public CheckFlags GetCheckFlags()
+    {
+        bool check = king.IsBeingAttacked();
+        bool mate = check ? king.IsInMate() : false;
+
+        return new CheckFlags(check, mate);
+    }
+
+    public void SetCheckFlags(CheckFlags flags)
+    {
+        checkFlags = flags;
+    }
 
 }

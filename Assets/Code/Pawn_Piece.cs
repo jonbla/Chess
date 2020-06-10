@@ -6,9 +6,19 @@ using UnityEngine;
 public class Pawn_Piece : Custom_Mono
 {
     [HideInInspector]
+    public int movesSinceLastTurn;
+    int previousMoveCount;
+
+    [HideInInspector]
     public bool secondMoveDone = false;
     bool firstMoveDone = false;
 
+    Main main;
+
+    private void Awake()
+    {
+        main = GameObject.Find("MainCode").GetComponent<Main>();
+    }
 
     //is this a valid move for a pawn?
     public bool IsValidPawnMove(bool isBlack = false)

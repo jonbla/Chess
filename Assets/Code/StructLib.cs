@@ -19,6 +19,18 @@ namespace ExtraChessStructures
         
     }
 
+    public struct CheckFlags
+    {
+        public bool isInCheck;
+        public bool isInCheckmate;
+
+        public CheckFlags(bool isInCheck, bool isInCheckmate)
+        {
+            this.isInCheck = isInCheck;
+            this.isInCheckmate = isInCheckmate;
+        }
+    }
+
     enum GameState
     {
         BlackTurn,

@@ -498,7 +498,7 @@ ScriptsOnlyBuild:
     className: Outline
   - hash:
       serializedVersion: 2
-      Hash: 0f40066821aad248ac91055b751d2295
+      Hash: d366fb0c751d36d62960330ca165c427
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: Pawn_Piece
@@ -589,4 +589,4 @@ ScriptsOnlyBuild:
   platform: 13
   scenePathNames:
   - Assets/Scenes/Main.unity
-  playerPath: D:/Big Apps/Saves/Unity Projects/New Chess/Builds/override me.apk
+  playerPath: D:/Big Apps/Saves/Unity Projects/New Chess/Builds/En Passant.apk

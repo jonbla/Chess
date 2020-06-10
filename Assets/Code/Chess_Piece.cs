@@ -34,7 +34,7 @@ public class Chess_Piece : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //Keep running this fucntion while mouse is being held down
+        //Keep running this function while mouse is being held down
         if (mouseIsClicked)
         {
             MovePiece();
