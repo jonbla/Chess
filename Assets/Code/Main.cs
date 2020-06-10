@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using ExtraChessStructures;
 using UnityEngine;
 
@@ -11,7 +12,8 @@ public class Main : MonoBehaviour
     GameState state;
     Team_Manager whiteTeam;
     Team_Manager blackTeam;
-    List<Pawn_Piece> pawnsToUpdate = new List<Pawn_Piece>();
+
+    public Dictionary<Pawn_Piece, int> pawnsToUpdate = new Dictionary<Pawn_Piece, int>();
 
     // Start is called before the first frame update
     void Start()
@@ -46,6 +48,24 @@ public class Main : MonoBehaviour
 
     public void EndTurn()
     {
+        Dictionary<Pawn_Piece, int> tempDict = pawnsToUpdate;
+        foreach (var entry in pawnsToUpdate.ToList())
+        {
+            int temp = entry.Value;
+            temp--;
+            if (temp <= 0)
+            {
+                entry.Key.canBePassanted = false;
+            }
+            else
+            {
+                tempDict.Remove(entry.Key);
+                tempDict.Add(entry.Key, temp);
+            }
+        }
+        pawnsToUpdate = tempDict;
+
+
         moves++;
         ToggleTurnState();
         CheckFlags checkInfo = whiteTeam.hasTurn ? whiteTeam.checkInfo : blackTeam.checkInfo;
@@ -55,7 +75,7 @@ public class Main : MonoBehaviour
         }
         if (checkInfo.isInCheckmate)
         {
-            Feedback.SetText("THE KINf IS DEAD!");
+            Feedback.SetText("THE KING IS DEAD!");
         }
     }
 }

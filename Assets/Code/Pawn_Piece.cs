@@ -5,9 +5,7 @@ using UnityEngine;
 
 public class Pawn_Piece : Custom_Mono
 {
-    [HideInInspector]
-    public int movesSinceLastTurn;
-    int previousMoveCount;
+    public bool canBePassanted;
 
     [HideInInspector]
     public bool secondMoveDone = false;
@@ -18,6 +16,7 @@ public class Pawn_Piece : Custom_Mono
     private void Awake()
     {
         main = GameObject.Find("MainCode").GetComponent<Main>();
+        canBePassanted = false;
     }
 
     //is this a valid move for a pawn?
@@ -62,6 +61,8 @@ public class Pawn_Piece : Custom_Mono
             if(lastMove.y == 2 && !firstMoveDone) //is this you first move?
             {
                 UpdateMoveCount();
+                canBePassanted = true;
+                main.pawnsToUpdate.Add(this, 2);
                 return true; //if so, then this move is valid
             }
             Debug.Log("fail2");
@@ -86,8 +87,5 @@ public class Pawn_Piece : Custom_Mono
         }
 
         firstMoveDone = true;
-
-        print("first move = " + firstMoveDone);
-        print("second move = " + secondMoveDone);
     }
 }

@@ -59,7 +59,7 @@ public class Custom_Mono : MonoBehaviour
             {
                 if (obj.parent != transform.parent)
                 {
-                    if (!obj.GetComponent<Pawn_Piece>().secondMoveDone)
+                    if (obj.GetComponent<Pawn_Piece>().canBePassanted)
                     {
                         obj.GetComponent<Chess_Piece>().getKilled();
                         return true;
