@@ -6,8 +6,7 @@ using UnityEngine;
 
 public class Coord_Manager
 {
-    public static Coord_Manager Coord_Man; //makes this a publicly accessable object
-
+    public static Coord_Manager Coord_Man; //makes this a publicly accessable object    
     //converts real coords to board coords
     static Dictionary<float, int> map = new Dictionary<float, int>() { 
                                                 {-4.06f,  1},
@@ -60,11 +59,13 @@ public class Coord_Manager
     //list of elements that are out of play
     static List<string> deadPieces = new List<string>();
 
-    static Transform[,] pieces = new Transform[9,9];    
-    
+    static Transform[,] pieces = new Transform[9,9];
+
+    static Transform empty = new GameObject("Empty").transform;
+
     public static void Init()
     {
-        List<Transform> temp = new List<Transform>();
+        List<Transform> temp = new List<Transform>();        
 
         foreach(Transform colour in GameObject.Find("Board").transform.Find("Pieces").transform){
             foreach(Transform piece in colour)
@@ -78,6 +79,10 @@ public class Coord_Manager
         {
             for (int j = 1; j <= 8; j++)
             {
+                if(pieces[i,j] == null)
+                {
+                    pieces[i, j] = empty;
+                }
                 Debug.Log(pieces[i,j]);
             }
 
@@ -112,7 +117,7 @@ public class Coord_Manager
             for (int j = 1; j <= 8; j++)
             {
                 Transform temp = pieces[i, j];
-                if (temp != null) {
+                if (temp.name != "Empty") {
                     if (temp.name == name)
                     {
                         return pieces[i, j];
@@ -128,7 +133,7 @@ public class Coord_Manager
     	for (int i = 1; i <= 8; i++){
     		for (int j = 1; j<= 8; j++){
     			Transform temp = pieces[i, j];
-                if (temp != null) {
+                if (temp.name != "Empty") {
     				if(temp.name == name){
     					return new Vector2Int(i, j);
     				}
@@ -148,7 +153,7 @@ public class Coord_Manager
         Vector2Int old = GetCoordPosition(name);
 
         pieces[ChessCoords.x, ChessCoords.y] = transformObj;
-        pieces[old.x, old.y] = null;
+        pieces[old.x, old.y] = empty;
     }
 
     //Compare old position with current position, returns offset
@@ -174,7 +179,7 @@ public class Coord_Manager
 
         Transform col = pieces[chessCoords.x, chessCoords.y];
 
-        if ( col != null)
+        if (col.name != "Empty")
         {
             flags.isColliding = true;
             if(col.parent == piece.parent)
@@ -193,7 +198,7 @@ public class Coord_Manager
     public static string GetNameAt(Vector2Int pos)
     {
         Transform temp = pieces[pos.x, pos.y];
-        if (temp != null) {
+        if (temp.name != "Empty") {
             return temp.name;
         }
         return null;
@@ -202,7 +207,7 @@ public class Coord_Manager
     public static string GetTypeAt(Vector2Int pos)
     {
         Transform temp = pieces[pos.x, pos.y];
-        if (temp != null)
+        if (temp.name != "Empty")
         {
             return temp.tag;
         }
@@ -232,10 +237,10 @@ public class Coord_Manager
             for (int j = 0; j <= 8; j++)
             {
             	Transform temp = pieces[i, j];
-                if (temp != null) {
+                if (temp.name != "Empty") {
                 	if(pieces[i, j].name == name)
                 	{
-                    	pieces[i, j] = null;
+                    	pieces[i, j] = empty;
                 	}
                 }
             }
