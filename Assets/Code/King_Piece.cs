@@ -20,11 +20,11 @@ public class King_Piece : Custom_Mono
         }
 
         //if king is being attacked, then invalid
-        if (IsBeingAttacked())
+        /*if (IsBeingAttacked())
         {
             Feedback.SetText("King can be attacked there");
             return false;
-        }
+        }*/
 
         //kill piece if is enemy piece
         if (flags.isColliding)
@@ -42,12 +42,12 @@ public class King_Piece : Custom_Mono
     //Check if king is being attacked
     public bool IsBeingAttacked()
     {
-        return isBeingAttackedByPawn() || isBeingAttackedByHorse() || isBeingAttackedByKing() || isBeingAttackedByRook() || isBeingAttackedByBishop();
+        return isBeingAttackedByPawn() || isBeingAttackedByHorse() || isBeingAttackedByRook() || isBeingAttackedByBishop() || isBeingAttackedByKing();
     }
 
-    public bool IsBeingAttacked(Vector2Int space, bool onExcept = false)
+    public bool IsBeingAttacked(Vector2Int space)
     {
-        return isBeingAttackedByPawn(space, onExcept) || isBeingAttackedByHorse(space, onExcept) || isBeingAttackedByKing(space, onExcept) || isBeingAttackedByRook(space, onExcept) || isBeingAttackedByBishop(space, onExcept);
+        return isBeingAttackedByPawn(space) || isBeingAttackedByHorse(space) || isBeingAttackedByRook(space) || isBeingAttackedByBishop(space) || isBeingAttackedByKing(space);
     }
 
     public bool IsInMate()
@@ -95,7 +95,7 @@ public class King_Piece : Custom_Mono
     }
 
     //Check if type of object exists at positions
-    bool isTypeAtCoord(Vector2Int pos, string type, bool onExcept = false){
+    bool isTypeAtCoord(Vector2Int pos, string type){
 
         Transform obj = Coord_Manager.GetTransformAt(pos);
         if (obj != null && obj.name != "Empty")
@@ -103,10 +103,9 @@ public class King_Piece : Custom_Mono
             if (obj.parent != transform.parent)
             {
                 return obj.tag == type;
-            }
-            return false;
+            }            
         }
-        return onExcept;
+        return false;
         
     }
 
@@ -116,28 +115,21 @@ public class King_Piece : Custom_Mono
         return isBeingAttackedByPawn(Coord_Manager.ConvertCoordsToChessUnits(transform.localPosition));
     }
 
-    bool isBeingAttackedByPawn(Vector2Int units, bool onExcept = false)
+    bool isBeingAttackedByPawn(Vector2Int units)
     {
-        try
+        bool isBlack = GetIsBlack();
+
+        if (isTypeAtCoord(new Vector2Int(units.x + 1, units.y + (isBlack ? -1 : 1)), "Pawn"))
         {
-            bool isBlack = GetIsBlack();
-
-            if (isTypeAtCoord(new Vector2Int(units.x + 1, units.y + (isBlack ? -1 : 1)), "Pawn", onExcept))
-            {
-                return true;
-            }
-
-            if (isTypeAtCoord(new Vector2Int(units.x + -1, units.y + (isBlack ? -1 : 1)), "Pawn", onExcept))
-            {
-                return true;
-            }
-
-            return false;
+            return true;
         }
-        catch (IndexOutOfRangeException)
+
+        if (isTypeAtCoord(new Vector2Int(units.x + -1, units.y + (isBlack ? -1 : 1)), "Pawn"))
         {
-            return onExcept;
+            return true;
         }
+
+        return false;        
     }
 
     bool isBeingAttackedByHorse()
@@ -148,54 +140,47 @@ public class King_Piece : Custom_Mono
 
     bool isBeingAttackedByHorse(Vector2Int units, bool onExcept = false)
     {
-        try { 
-        if (isTypeAtCoord(new Vector2Int(units.x + 1, units.y + 2), "Horse", onExcept))
+        if (isTypeAtCoord(new Vector2Int(units.x + 1, units.y + 2), "Horse"))
         {
             return true;
         }
 
-        if (isTypeAtCoord(new Vector2Int(units.x + 1, units.y - 2), "Horse", onExcept))
+        if (isTypeAtCoord(new Vector2Int(units.x + 1, units.y - 2), "Horse"))
         {
             return true;
         }
 
-        if (isTypeAtCoord(new Vector2Int(units.x - 1, units.y - 2), "Horse", onExcept))
+        if (isTypeAtCoord(new Vector2Int(units.x - 1, units.y - 2), "Horse"))
         {
             return true;
         }
 
-        if (isTypeAtCoord(new Vector2Int(units.x - 1, units.y + 2), "Horse", onExcept))
+        if (isTypeAtCoord(new Vector2Int(units.x - 1, units.y + 2), "Horse"))
         {
             return true;
         }
 
-        if (isTypeAtCoord(new Vector2Int(units.x + 2, units.y + 1), "Horse", onExcept))
+        if (isTypeAtCoord(new Vector2Int(units.x + 2, units.y + 1), "Horse"))
         {
             return true;
         }
 
-        if (isTypeAtCoord(new Vector2Int(units.x + 2, units.y - 1), "Horse", onExcept))
+        if (isTypeAtCoord(new Vector2Int(units.x + 2, units.y - 1), "Horse"))
         {
             return true;
         }
 
-        if (isTypeAtCoord(new Vector2Int(units.x - 2, units.y - 1), "Horse", onExcept))
+        if (isTypeAtCoord(new Vector2Int(units.x - 2, units.y - 1), "Horse"))
         {
             return true;
         }
 
-        if (isTypeAtCoord(new Vector2Int(units.x - 2, units.y + 1), "Horse", onExcept))
+        if (isTypeAtCoord(new Vector2Int(units.x - 2, units.y + 1), "Horse"))
         {
             return true;
         }
 
-        return false;
-
-        }
-        catch (IndexOutOfRangeException)
-        {
-            return onExcept;
-        }
+        return false;        
     }
 
     bool isBeingAttackedByRook()
@@ -203,103 +188,96 @@ public class King_Piece : Custom_Mono
         return isBeingAttackedByRook(Coord_Manager.ConvertCoordsToChessUnits(transform.localPosition));
     }
 
-    bool isBeingAttackedByRook(Vector2Int units, bool onExcept = false)
+    bool isBeingAttackedByRook(Vector2Int units)
     {
-        try
+        //Debug.Log("looking right\n");
+        for (int i = units.x + 1; i <= 8; i++)
         {
-            //Debug.Log("looking right\n");
-            for (int i = units.x + 1; i <= 8; i++)
+            Vector2Int lookingAt = new Vector2Int(i, units.y);
+
+            int stepVal = RookStep(lookingAt);
+
+            switch (stepVal)
             {
-                Vector2Int lookingAt = new Vector2Int(i, units.y);
-
-                int stepVal = RookStep(lookingAt);
-
-                switch (stepVal)
-                {
-                    case 1:
-                        return true;
-                    case 0:
-                        continue;
-                    case -1:
-                        goto StraightLoop2;
-                    default:
-                        print("This code should be impossible");
-                        break;
-                }
+                case 1:
+                    return true;
+                case 0:
+                    continue;
+                case -1:
+                    goto StraightLoop2;
+                default:
+                    print("This code should be impossible");
+                    break;
             }
-
-            //Debug.Log("looking left\n");
-            StraightLoop2: { }
-            for (int i = units.x - 1; i >= 0; i--)
-            {
-                Vector2Int lookingAt = new Vector2Int(i, units.y);
-
-                int stepVal = RookStep(lookingAt);
-
-                switch (stepVal)
-                {
-                    case 1:
-                        return true;
-                    case 0:
-                        continue;
-                    case -1:
-                        goto StraightLoop3;
-                    default:
-                        print("This code should be impossible");
-                        break;
-                }
-            }
-
-            //Debug.Log("looking up\n");
-            StraightLoop3: { }
-            for (int i = units.y + 1; i <= 8; i++)
-            {
-                Vector2Int lookingAt = new Vector2Int(units.x, i);
-
-                int stepVal = RookStep(lookingAt);
-
-                switch (stepVal)
-                {
-                    case 1:
-                        return true;
-                    case 0:
-                        continue;
-                    case -1:
-                        goto StraightLoop4;
-                    default:
-                        print("This code should be impossible");
-                        break;
-                }
-            }
-
-            //Debug.Log("looking down\n");
-            StraightLoop4: { }
-            for (int i = units.y - 1; i >= 0; i--)
-            {
-                Vector2Int lookingAt = new Vector2Int(units.x, i);
-
-                int stepVal = RookStep(lookingAt);
-
-                switch (stepVal)
-                {
-                    case 1:
-                        return true;
-                    case 0:
-                        continue;
-                    case -1:
-                        return false;
-                    default:
-                        print("This code should be impossible");
-                        break;
-                }
-            }
-
-            return false;
         }
-        catch (IndexOutOfRangeException)
+
+        //Debug.Log("looking left\n");
+        StraightLoop2: { }
+        for (int i = units.x - 1; i >= 0; i--)
         {
-            return onExcept;
+            Vector2Int lookingAt = new Vector2Int(i, units.y);
+
+            int stepVal = RookStep(lookingAt);
+
+            switch (stepVal)
+            {
+                case 1:
+                    return true;
+                case 0:
+                    continue;
+                case -1:
+                    goto StraightLoop3;
+                default:
+                    print("This code should be impossible");
+                    break;
+            }
         }
+
+        //Debug.Log("looking up\n");
+        StraightLoop3: { }
+        for (int i = units.y + 1; i <= 8; i++)
+        {
+            Vector2Int lookingAt = new Vector2Int(units.x, i);
+
+            int stepVal = RookStep(lookingAt);
+
+            switch (stepVal)
+            {
+                case 1:
+                    return true;
+                case 0:
+                    continue;
+                case -1:
+                    goto StraightLoop4;
+                default:
+                    print("This code should be impossible");
+                    break;
+            }
+        }
+
+        //Debug.Log("looking down\n");
+        StraightLoop4: { }
+        for (int i = units.y - 1; i >= 0; i--)
+        {
+            Vector2Int lookingAt = new Vector2Int(units.x, i);
+
+            int stepVal = RookStep(lookingAt);
+
+            switch (stepVal)
+            {
+                case 1:
+                    return true;
+                case 0:
+                    continue;
+                case -1:
+                    return false;
+                default:
+                    print("This code should be impossible");
+                    break;
+            }
+        }
+
+        return false;        
     }
 
     int RookStep(Vector2Int target)
@@ -332,98 +310,90 @@ public class King_Piece : Custom_Mono
         return isBeingAttackedByBishop(Coord_Manager.ConvertCoordsToChessUnits(transform.localPosition));
     }
 
-    bool isBeingAttackedByBishop(Vector2Int units, bool onExcept = false)
+    bool isBeingAttackedByBishop(Vector2Int units)
     {
-        try
+        for (int i = 1; i <= 8 - Mathf.Min(units.x, units.y); i++)
         {
-            for (int i = 1; i <= 8 - Mathf.Min(units.x, units.y); i++)
+            Vector2Int lookingAt = new Vector2Int(units.x + i, units.y + i);
+
+            int stepVal = BishopStep(lookingAt);
+
+            switch (stepVal)
             {
-                Vector2Int lookingAt = new Vector2Int(units.x + i, units.y + i);
-
-                int stepVal = BishopStep(lookingAt);
-
-                switch (stepVal)
-                {
-                    case 1:
-                        return true;
-                    case 0:
-                        continue;
-                    case -1:
-                        goto DiagonalLoop2;
-                    default:
-                        print("This code should be impossible");
-                        break;
-                }
+                case 1:
+                    return true;
+                case 0:
+                    continue;
+                case -1:
+                    goto DiagonalLoop2;
+                default:
+                    print("This code should be impossible");
+                    break;
             }
-
-            DiagonalLoop2: { }
-            for (int i = 1; i <= 8 - Mathf.Min(units.x, units.y); i++)
-            {
-                Vector2Int lookingAt = new Vector2Int(units.x - i, units.y + i);
-
-                int stepVal = BishopStep(lookingAt);
-                print(stepVal);
-                switch (stepVal)
-                {
-                    case 1:
-                        return true;
-                    case 0:
-                        continue;
-                    case -1:
-                        goto DiagonalLoop3;
-                    default:
-                        print("This code should be impossible");
-                        break;
-                }
-            }
-            DiagonalLoop3: { }
-            for (int i = 1; i <= 8 - Mathf.Min(units.x, units.y); i++)
-            {
-                Vector2Int lookingAt = new Vector2Int(units.x + i, units.y - i);
-
-                int stepVal = BishopStep(lookingAt);
-
-                switch (stepVal)
-                {
-                    case 1:
-                        return true;
-                    case 0:
-                        continue;
-                    case -1:
-                        goto DiagonalLoop4;
-                    default:
-                        print("This code should be impossible");
-                        break;
-                }
-            }
-
-            DiagonalLoop4: { }
-            for (int i = 1; i <= Mathf.Max(units.x, units.y); i++)
-            {
-                Vector2Int lookingAt = new Vector2Int(units.x - i, units.y - i);
-
-                int stepVal = BishopStep(lookingAt);
-
-                switch (stepVal)
-                {
-                    case 1:
-                        return true;
-                    case 0:
-                        continue;
-                    case -1:
-                        return false;
-                    default:
-                        print("This code should be impossible");
-                        break;
-                }
-            }
-
-            return false;
         }
-        catch (IndexOutOfRangeException)
+
+        DiagonalLoop2: { }
+        for (int i = 1; i <= 8 - Mathf.Min(units.x, units.y); i++)
         {
-            return onExcept;
+            Vector2Int lookingAt = new Vector2Int(units.x - i, units.y + i);
+
+            int stepVal = BishopStep(lookingAt);
+            print(stepVal);
+            switch (stepVal)
+            {
+                case 1:
+                    return true;
+                case 0:
+                    continue;
+                case -1:
+                    goto DiagonalLoop3;
+                default:
+                    print("This code should be impossible");
+                    break;
+            }
         }
+        DiagonalLoop3: { }
+        for (int i = 1; i <= 8 - Mathf.Min(units.x, units.y); i++)
+        {
+            Vector2Int lookingAt = new Vector2Int(units.x + i, units.y - i);
+
+            int stepVal = BishopStep(lookingAt);
+
+            switch (stepVal)
+            {
+                case 1:
+                    return true;
+                case 0:
+                    continue;
+                case -1:
+                    goto DiagonalLoop4;
+                default:
+                    print("This code should be impossible");
+                    break;
+            }
+        }
+
+        DiagonalLoop4: { }
+        for (int i = 1; i <= Mathf.Max(units.x, units.y); i++)
+        {
+            Vector2Int lookingAt = new Vector2Int(units.x - i, units.y - i);
+
+            int stepVal = BishopStep(lookingAt);
+
+            switch (stepVal)
+            {
+                case 1:
+                    return true;
+                case 0:
+                    continue;
+                case -1:
+                    return false;
+                default:
+                    print("This code should be impossible");
+                    break;
+            }
+        }
+        return false;        
     }
 
     int BishopStep(Vector2Int target)
@@ -459,54 +429,49 @@ public class King_Piece : Custom_Mono
 
     bool isBeingAttackedByKing(Vector2Int units, bool onExcept = false)
     {
-        try
+
+        if (isTypeAtCoord(new Vector2Int(units.x + 1, units.y), "King"))
         {
-            if (isTypeAtCoord(new Vector2Int(units.x + 1, units.y), "King", onExcept))
-            {
-                return true;
-            }
-
-            if (isTypeAtCoord(new Vector2Int(units.x - 1, units.y), "King", onExcept))
-            {
-                return true;
-            }
-
-            if (isTypeAtCoord(new Vector2Int(units.x, units.y + 1), "King", onExcept))
-            {
-                return true;
-            }
-
-            if (isTypeAtCoord(new Vector2Int(units.x, units.y - 1), "King", onExcept))
-            {
-                return true;
-            }
-
-            if (isTypeAtCoord(new Vector2Int(units.x + 1, units.y + 1), "King", onExcept))
-            {
-                return true;
-            }
-
-            if (isTypeAtCoord(new Vector2Int(units.x - 1, units.y - 1), "King", onExcept))
-            {
-                return true;
-            }
-
-            if (isTypeAtCoord(new Vector2Int(units.x - 1, units.y + 1), "King", onExcept))
-            {
-                return true;
-            }
-
-            if (isTypeAtCoord(new Vector2Int(units.x + 1, units.y - 1), "King", onExcept))
-            {
-                return true;
-            }
-
-            return false;
+            return true;
         }
-        catch (IndexOutOfRangeException)
+
+        if (isTypeAtCoord(new Vector2Int(units.x - 1, units.y), "King"))
         {
-            return onExcept;
+            return true;
         }
+
+        if (isTypeAtCoord(new Vector2Int(units.x, units.y + 1), "King"))
+        {
+            return true;
+        }
+
+        if (isTypeAtCoord(new Vector2Int(units.x, units.y - 1), "King"))
+        {
+            return true;
+        }
+
+        if (isTypeAtCoord(new Vector2Int(units.x + 1, units.y + 1), "King"))
+        {
+            return true;
+        }
+
+        if (isTypeAtCoord(new Vector2Int(units.x - 1, units.y - 1), "King"))
+        {
+            return true;
+        }
+
+        if (isTypeAtCoord(new Vector2Int(units.x - 1, units.y + 1), "King"))
+        {
+            return true;
+        }
+
+        if (isTypeAtCoord(new Vector2Int(units.x + 1, units.y - 1), "King"))
+        {
+            return true;
+        }
+
+        return false;
+        
     }
 
 }

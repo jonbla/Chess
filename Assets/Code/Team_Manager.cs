@@ -10,7 +10,8 @@ public class Team_Manager : Custom_Mono
     King_Piece king;
     Main main;
 
-    public CheckFlags checkInfo { get => GetCheckFlags(); }
+    public CheckFlags CheckInfo { get => GetCheckFlags(); }
+    public bool isInCheck { get => IsinCheck(); }
 
     // Start is called before the first frame update
     void Start()
@@ -24,7 +25,7 @@ public class Team_Manager : Custom_Mono
         main.EndTurn();
     }
 
-    public CheckFlags GetCheckFlags()
+    CheckFlags GetCheckFlags()
     {
         bool check = king.IsBeingAttacked();
         bool mate = check ? king.IsInMate() : false;
@@ -32,10 +33,17 @@ public class Team_Manager : Custom_Mono
         print("check: " + check);
         print("mate: " + mate);
 
-        return new CheckFlags(check, mate);
+        CheckFlags returnVal = new CheckFlags(check, mate);
+        SetCheckFlags(returnVal);
+        return returnVal;
     }
 
-    public void SetCheckFlags(CheckFlags flags)
+    bool IsinCheck()
+    {
+        return king.IsBeingAttacked();
+    }
+
+    void SetCheckFlags(CheckFlags flags)
     {
         checkFlags = flags;
     }

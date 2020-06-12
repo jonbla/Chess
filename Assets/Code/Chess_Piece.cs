@@ -100,6 +100,12 @@ public class Chess_Piece : MonoBehaviour
             return false;
         }
 
+        if (team.isInCheck)
+        {
+            Feedback.SetText("King can be attacked there");
+            return false;
+        }
+
         return true;
     }
 

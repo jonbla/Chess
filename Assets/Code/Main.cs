@@ -68,10 +68,10 @@ public class Main : MonoBehaviour
 
         moves++;
         ToggleTurnState();
-        CheckFlags checkInfo = whiteTeam.hasTurn ? whiteTeam.checkInfo : blackTeam.checkInfo;
+        CheckFlags checkInfo = whiteTeam.hasTurn ? whiteTeam.CheckInfo : blackTeam.CheckInfo;
         if (checkInfo.isInCheck)
         {
-            Feedback.SetText("THE KING IS UNDER CHECK!");
+            Feedback.SetText("LONG LIVE THE KING!");
         }
         if (checkInfo.isInCheckmate)
         {
