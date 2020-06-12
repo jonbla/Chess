@@ -29,6 +29,9 @@ public class Team_Manager : Custom_Mono
         bool check = king.IsBeingAttacked();
         bool mate = check ? king.IsInMate() : false;
 
+        print("check: " + check);
+        print("mate: " + mate);
+
         return new CheckFlags(check, mate);
     }
 

@@ -117,7 +117,7 @@ public class Coord_Manager
             for (int j = 1; j <= 8; j++)
             {
                 Transform temp = pieces[i, j];
-                if (temp.name != "Empty") {
+                if (temp != null && temp.name != "Empty") {
                     if (temp.name == name)
                     {
                         return pieces[i, j];
@@ -133,7 +133,7 @@ public class Coord_Manager
     	for (int i = 1; i <= 8; i++){
     		for (int j = 1; j<= 8; j++){
     			Transform temp = pieces[i, j];
-                if (temp.name != "Empty") {
+                if (temp != null && temp.name != "Empty") {
     				if(temp.name == name){
     					return new Vector2Int(i, j);
     				}
@@ -198,7 +198,7 @@ public class Coord_Manager
     public static string GetNameAt(Vector2Int pos)
     {
         Transform temp = pieces[pos.x, pos.y];
-        if (temp.name != "Empty") {
+        if (temp != null && temp.name != "Empty") {
             return temp.name;
         }
         return null;
@@ -207,7 +207,7 @@ public class Coord_Manager
     public static string GetTypeAt(Vector2Int pos)
     {
         Transform temp = pieces[pos.x, pos.y];
-        if (temp.name != "Empty")
+        if (temp != null && temp.name != "Empty")
         {
             return temp.tag;
         }
@@ -237,7 +237,7 @@ public class Coord_Manager
             for (int j = 0; j <= 8; j++)
             {
             	Transform temp = pieces[i, j];
-                if (temp.name != "Empty") {
+                if (temp != null && temp.name != "Empty") {
                 	if(pieces[i, j].name == name)
                 	{
                     	pieces[i, j] = empty;

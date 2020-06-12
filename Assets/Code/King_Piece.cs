@@ -69,7 +69,7 @@ public class King_Piece : Custom_Mono
                 bool temp = false;
                 Transform lookingAt = Coord_Manager.GetTransformAt(new Vector2Int(pos.x + x - 1, pos.y + y - 1));
 
-                if (lookingAt.name == "Empty")
+                if (lookingAt != null && lookingAt.name == "Empty")
                 {
                     temp = true;
                 }
@@ -98,21 +98,15 @@ public class King_Piece : Custom_Mono
     bool isTypeAtCoord(Vector2Int pos, string type, bool onExcept = false){
 
         Transform obj = Coord_Manager.GetTransformAt(pos);
-        if (obj.name != "Empty" || obj == null)
+        if (obj != null && obj.name != "Empty")
         {
             if (obj.parent != transform.parent)
             {
-                if (obj.tag == type)
-                {
-                    return true;
-                } else
-                {
-                    return false;
-                }
+                return obj.tag == type;
             }
-            return onExcept;
+            return false;
         }
-        return false;
+        return onExcept;
         
     }
 
@@ -216,76 +210,87 @@ public class King_Piece : Custom_Mono
             //Debug.Log("looking right\n");
             for (int i = units.x + 1; i <= 8; i++)
             {
-                if (isTypeAtCoord(new Vector2Int(i, units.y), "Rook", onExcept))
-                {
-                    return true;
-                }
+                Vector2Int lookingAt = new Vector2Int(i, units.y);
 
-                if (isTypeAtCoord(new Vector2Int(i, units.y), "Queen", onExcept))
-                {
-                    return true;
-                }
+                int stepVal = RookStep(lookingAt);
 
-                if (Coord_Manager.GetTransformAt(new Vector2Int(i, units.y)) != null)
+                switch (stepVal)
                 {
-                    break;
+                    case 1:
+                        return true;
+                    case 0:
+                        continue;
+                    case -1:
+                        goto StraightLoop2;
+                    default:
+                        print("This code should be impossible");
+                        break;
                 }
             }
 
             //Debug.Log("looking left\n");
+            StraightLoop2: { }
             for (int i = units.x - 1; i >= 0; i--)
             {
-                if (isTypeAtCoord(new Vector2Int(i, units.y), "Rook", onExcept))
-                {
-                    return true;
-                }
+                Vector2Int lookingAt = new Vector2Int(i, units.y);
 
-                if (isTypeAtCoord(new Vector2Int(i, units.y), "Queen", onExcept))
-                {
-                    return true;
-                }
+                int stepVal = RookStep(lookingAt);
 
-                if (Coord_Manager.GetTransformAt(new Vector2Int(i, units.y)) != null)
+                switch (stepVal)
                 {
-                    break;
+                    case 1:
+                        return true;
+                    case 0:
+                        continue;
+                    case -1:
+                        goto StraightLoop3;
+                    default:
+                        print("This code should be impossible");
+                        break;
                 }
             }
 
             //Debug.Log("looking up\n");
+            StraightLoop3: { }
             for (int i = units.y + 1; i <= 8; i++)
             {
-                if (isTypeAtCoord(new Vector2Int(units.x, i), "Rook", onExcept))
-                {
-                    return true;
-                }
+                Vector2Int lookingAt = new Vector2Int(units.x, i);
 
-                if (isTypeAtCoord(new Vector2Int(units.x, i), "Queen", onExcept))
-                {
-                    return true;
-                }
+                int stepVal = RookStep(lookingAt);
 
-                if (Coord_Manager.GetTransformAt(new Vector2Int(units.x, i)) != null)
+                switch (stepVal)
                 {
-                    break;
+                    case 1:
+                        return true;
+                    case 0:
+                        continue;
+                    case -1:
+                        goto StraightLoop4;
+                    default:
+                        print("This code should be impossible");
+                        break;
                 }
             }
 
             //Debug.Log("looking down\n");
+            StraightLoop4: { }
             for (int i = units.y - 1; i >= 0; i--)
             {
-                if (isTypeAtCoord(new Vector2Int(units.x, i), "Rook", onExcept))
-                {
-                    return true;
-                }
+                Vector2Int lookingAt = new Vector2Int(units.x, i);
 
-                if (isTypeAtCoord(new Vector2Int(units.x, i), "Queen", onExcept))
-                {
-                    return true;
-                }
+                int stepVal = RookStep(lookingAt);
 
-                if (Coord_Manager.GetTransformAt(new Vector2Int(units.x, i)) != null)
+                switch (stepVal)
                 {
-                    break;
+                    case 1:
+                        return true;
+                    case 0:
+                        continue;
+                    case -1:
+                        return false;
+                    default:
+                        print("This code should be impossible");
+                        break;
                 }
             }
 
@@ -295,6 +300,31 @@ public class King_Piece : Custom_Mono
         {
             return onExcept;
         }
+    }
+
+    int RookStep(Vector2Int target)
+    {
+        if (isTypeAtCoord(target, "Rook"))
+        {
+            return 1;
+        }
+
+        if (isTypeAtCoord(target, "Queen"))
+        {
+            return 1;
+        }
+
+        Transform transformBeingLookedAt = Coord_Manager.GetTransformAt(target);
+
+        if (transformBeingLookedAt == null)
+        {
+            return -1;
+        }
+        if (transformBeingLookedAt.name == "Empty")
+        {
+            return 0;
+        }
+        return -1;
     }
 
     bool isBeingAttackedByBishop()
@@ -308,73 +338,83 @@ public class King_Piece : Custom_Mono
         {
             for (int i = 1; i <= 8 - Mathf.Min(units.x, units.y); i++)
             {
-                if (isTypeAtCoord(new Vector2Int(units.x + i, units.y + i), "Bishop", onExcept))
-                {
-                    return true;
-                }
+                Vector2Int lookingAt = new Vector2Int(units.x + i, units.y + i);
 
-                if (isTypeAtCoord(new Vector2Int(units.x + i, units.y + i), "Queen", onExcept))
-                {
-                    return true;
-                }
+                int stepVal = BishopStep(lookingAt);
 
-                if (Coord_Manager.GetTransformAt(new Vector2Int(units.x + i, units.y + i)) != null)
+                switch (stepVal)
                 {
-                    break;
+                    case 1:
+                        return true;
+                    case 0:
+                        continue;
+                    case -1:
+                        goto DiagonalLoop2;
+                    default:
+                        print("This code should be impossible");
+                        break;
                 }
             }
 
+            DiagonalLoop2: { }
             for (int i = 1; i <= 8 - Mathf.Min(units.x, units.y); i++)
             {
-                if (isTypeAtCoord(new Vector2Int(units.x - i, units.y + i), "Bishop", onExcept))
-                {
-                    return true;
-                }
+                Vector2Int lookingAt = new Vector2Int(units.x - i, units.y + i);
 
-                if (isTypeAtCoord(new Vector2Int(units.x - i, units.y + i), "Queen", onExcept))
+                int stepVal = BishopStep(lookingAt);
+                print(stepVal);
+                switch (stepVal)
                 {
-                    return true;
-                }
-
-                if (Coord_Manager.GetTransformAt(new Vector2Int(units.x - i, units.y + i)) != null)
-                {
-                    break;
+                    case 1:
+                        return true;
+                    case 0:
+                        continue;
+                    case -1:
+                        goto DiagonalLoop3;
+                    default:
+                        print("This code should be impossible");
+                        break;
                 }
             }
-
+            DiagonalLoop3: { }
             for (int i = 1; i <= 8 - Mathf.Min(units.x, units.y); i++)
             {
-                if (isTypeAtCoord(new Vector2Int(units.x + i, units.y - i), "Bishop", onExcept))
-                {
-                    return true;
-                }
+                Vector2Int lookingAt = new Vector2Int(units.x + i, units.y - i);
 
-                if (isTypeAtCoord(new Vector2Int(units.x + i, units.y - i), "Queen", onExcept))
-                {
-                    return true;
-                }
+                int stepVal = BishopStep(lookingAt);
 
-                if (Coord_Manager.GetTransformAt(new Vector2Int(units.x + i, units.y - i)) != null)
+                switch (stepVal)
                 {
-                    break;
+                    case 1:
+                        return true;
+                    case 0:
+                        continue;
+                    case -1:
+                        goto DiagonalLoop4;
+                    default:
+                        print("This code should be impossible");
+                        break;
                 }
             }
 
+            DiagonalLoop4: { }
             for (int i = 1; i <= Mathf.Max(units.x, units.y); i++)
             {
-                if (isTypeAtCoord(new Vector2Int(units.x - i, units.y - i), "Bishop", onExcept))
-                {
-                    return true;
-                }
+                Vector2Int lookingAt = new Vector2Int(units.x - i, units.y - i);
 
-                if (isTypeAtCoord(new Vector2Int(units.x - i, units.y - i), "Queen", onExcept))
-                {
-                    return true;
-                }
+                int stepVal = BishopStep(lookingAt);
 
-                if (Coord_Manager.GetTransformAt(new Vector2Int(units.x - i, units.y - i)) != null)
+                switch (stepVal)
                 {
-                    break;
+                    case 1:
+                        return true;
+                    case 0:
+                        continue;
+                    case -1:
+                        return false;
+                    default:
+                        print("This code should be impossible");
+                        break;
                 }
             }
 
@@ -384,6 +424,32 @@ public class King_Piece : Custom_Mono
         {
             return onExcept;
         }
+    }
+
+    int BishopStep(Vector2Int target)
+    {
+
+        if (isTypeAtCoord(target, "Bishop"))
+        {
+            return 1;
+        }
+
+        if (isTypeAtCoord(target, "Queen"))
+        {
+            return 1;
+        }
+
+        Transform transformBeingLookedAt = Coord_Manager.GetTransformAt(target);
+
+        if (transformBeingLookedAt == null)
+        {
+            return -1;
+        }
+        if(transformBeingLookedAt.name == "Empty")
+        {
+            return 0;
+        }
+        return -1;
     }
 
     bool isBeingAttackedByKing()

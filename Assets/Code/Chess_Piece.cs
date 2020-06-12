@@ -122,6 +122,7 @@ public class Chess_Piece : MonoBehaviour
     //Drop piece into closest cell and reset mouse delta
     void DropPiece()
     {
+        print("timestart: "+Time.time);
         mouseIsClicked = false;
         Mouse_Manager.resetMouseDelta();
         CenterPiece();
@@ -134,13 +135,14 @@ public class Chess_Piece : MonoBehaviour
             Coord_Manager.UpdatePosition(transform.name, transform.localPosition);
             team.EndTurn();
         }
+        print("timeend: " + Time.time);
     }
 
     //This is an event sent to piece affected
     //mouse has just been pressed down, begin moving the piece
     private void OnMouseDown()
     {
-        //Debug.Log(transform.name);
+        
         startPos = transform.position;
         MovePiece();
     }
