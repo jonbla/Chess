@@ -12,6 +12,7 @@ public class Main : MonoBehaviour
     GameState state;
     Team_Manager whiteTeam;
     Team_Manager blackTeam;
+    FadeMaster fade;
 
     public Dictionary<Pawn_Piece, int> pawnsToUpdate = new Dictionary<Pawn_Piece, int>();
 
@@ -21,6 +22,8 @@ public class Main : MonoBehaviour
         Coord_Manager.Init();
         whiteTeam = GameObject.Find("White").GetComponent<Team_Manager>();
         blackTeam = GameObject.Find("Black").GetComponent<Team_Manager>();
+
+        fade = GameObject.Find("Fade Master").GetComponent<FadeMaster>();
 
         state = GameState.WhiteTurn;
         whiteTeam.hasTurn = true;
@@ -44,6 +47,8 @@ public class Main : MonoBehaviour
             blackTeam.hasTurn = true;
             Feedback.SetText("Black Turn");
         }
+
+        fade.ToggleFade();
     }
 
     public void EndTurn()

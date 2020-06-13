@@ -66,6 +66,8 @@
     <Compile Include="Assets\Code\Chess_Piece.cs" />
     <Compile Include="Assets\Code\Coord_Manager.cs" />
     <Compile Include="Assets\Code\Custom_Mono.cs" />
+    <Compile Include="Assets\Code\FadeMaster.cs" />
+    <Compile Include="Assets\Code\Fader.cs" />
     <Compile Include="Assets\Code\Feedback.cs" />
     <Compile Include="Assets\Code\Horse_Piece.cs" />
     <Compile Include="Assets\Code\King_Piece.cs" />

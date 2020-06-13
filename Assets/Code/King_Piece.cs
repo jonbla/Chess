@@ -338,7 +338,6 @@ public class King_Piece : Custom_Mono
             Vector2Int lookingAt = new Vector2Int(units.x - i, units.y + i);
 
             int stepVal = BishopStep(lookingAt);
-            print(stepVal);
             switch (stepVal)
             {
                 case 1:
