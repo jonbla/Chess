@@ -19,7 +19,7 @@ public class Fader : Custom_Mono
     void Update()
     {
         float fade = isFadingOut ? 0 : 1;        
-        sp.color = Color.Lerp(sp.color, new Color(sp.color.r, sp.color.g, sp.color.b, fade), .002f);
+        sp.color = Color.Lerp(sp.color, new Color(sp.color.r, sp.color.g, sp.color.b, fade), .01f);
     }
 
     public void ToggleFade()

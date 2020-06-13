@@ -39,6 +39,10 @@ public class Chess_Piece : MonoBehaviour
         {
             MovePiece();
         }
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            Application.Quit();
+        }
     }
 
     //Centre the piece in nearest cell 
