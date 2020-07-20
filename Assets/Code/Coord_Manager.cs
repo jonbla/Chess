@@ -75,7 +75,9 @@ public class Coord_Manager
 
     static Transform[,] pieces = new Transform[9,9];
     //static Transform[,] piecesTemp = new Transform[9, 9];
+
     static Vector2Int hoverPos = new Vector2Int(0, 0);
+    static Vector2Int sourcePos = new Vector2Int(0, 0);
 
     static RowStruct rowTemp1, rowTemp2 = GetRow(0);
 
@@ -203,13 +205,16 @@ public class Coord_Manager
         hoverPos = ChessCoords;
         pieces[old.x, old.y] = empty;
 
+        sourcePos = old;
+
         Debug.Log("updated " + name);
     }
 
-    static void RevertMove()
+    public static void RevertMove()
     {
         InsertRow(rowTemp1);
         InsertRow(rowTemp2);
+        Debug.Log("revertMove");
     }
 
     //Updates pieces table with new position
@@ -217,21 +222,15 @@ public class Coord_Manager
     {    	
         Transform transformObj = GetTransformObject(name);
 
-        Vector2Int ChessCoords = ConvertCoordsToChessUnits(value);
-        Vector2Int old = GetCoordPosition(name);
-
-        pieces[ChessCoords.x, ChessCoords.y] = transformObj;
-        pieces[old.x, old.y] = empty;
-        Debug.Log("Commited "+name+ChessCoords);
+        pieces[hoverPos.x, hoverPos.y] = transformObj;
+        Debug.Log("Commited " + name + hoverPos);
     }
 
     //Compare old position with current position, returns offset
-    public static Vector2Int GetPositionDifference(string name, Vector3 value)
+    public static Vector2Int GetPositionDifference()
     {
-        Vector2 convertedValue = ConvertCoordsToChessUnits(value);
-        Vector2Int transformObj = GetCoordPosition(name);
-        Debug.Log(GetCoordPosition(name));
-        Vector2 temp = convertedValue - transformObj;
+        Vector2 temp = hoverPos - sourcePos;
+        Debug.Log(temp);
         return new Vector2Int((int)temp.x, (int)temp.y);
     }
 
@@ -296,9 +295,9 @@ public class Coord_Manager
     //kills piece by name
     public static void KillPiece(string name)
     {
-        for (int i = 0; i <= 8; i++)
+        for (int i = 1; i <= 8; i++)
         {
-            for (int j = 0; j <= 8; j++)
+            for (int j = 1; j <= 8; j++)
             {
             	Transform temp = pieces[i, j];
                 if (temp != null && temp.name != "Empty") {

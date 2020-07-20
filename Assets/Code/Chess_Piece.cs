@@ -97,7 +97,14 @@ public class Chess_Piece : MonoBehaviour
             return false;
         }
 
-        lastMove = Coord_Manager.GetPositionDifference(transform.name, transform.localPosition);
+        lastMove = Coord_Manager.GetPositionDifference();
+
+        if(lastMove == Vector2Int.zero)
+        {
+            Feedback.SetText("Opps, dropped your piece");
+            return false;
+        }
+
         //is the piece making a move that particular piece is able to do?
         if (!middleMan.IsPieceSpecificMoveValid())
         {
@@ -140,6 +147,7 @@ public class Chess_Piece : MonoBehaviour
         if (!isValidMove())
         {
             transform.position = startPos;
+            Coord_Manager.RevertMove();
         }
         else
         {            
