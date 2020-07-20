@@ -6,6 +6,20 @@ using UnityEngine;
 
 public class Coord_Manager
 {
+
+    struct RowStruct
+    {
+        public Transform[] row;
+        public int rowNum;
+
+        public RowStruct(Transform[] row, int rowNum)
+        {
+            this.row = row;
+            this.rowNum = rowNum;
+        }
+    }
+
+
     public static Coord_Manager Coord_Man; //makes this a publicly accessable object    
     //converts real coords to board coords
     static Dictionary<float, int> map = new Dictionary<float, int>() { 
@@ -60,6 +74,10 @@ public class Coord_Manager
     static List<string> deadPieces = new List<string>();
 
     static Transform[,] pieces = new Transform[9,9];
+    //static Transform[,] piecesTemp = new Transform[9, 9];
+    static Vector2Int hoverPos = new Vector2Int(0, 0);
+
+    static RowStruct rowTemp1, rowTemp2 = GetRow(0);
 
     static Transform empty = new GameObject("Empty").transform;
 
@@ -86,6 +104,33 @@ public class Coord_Manager
                 Debug.Log(pieces[i,j]);
             }
 
+        }
+        //ClearTempBoard();
+    }
+
+    /*static void ClearTempBoard()
+    {
+        piecesTemp = pieces;
+    }*/
+
+    static RowStruct GetRow(int rowNum)
+    {
+        Transform[] row = new Transform[9];
+        Debug.LogWarning("Starting");
+        for (int i = 1; i <= 8; i++)
+        {
+            row[i] = pieces[i, rowNum];
+            Debug.Log(pieces[i, rowNum]);
+        }
+        Debug.LogWarning("Ending");
+        return new RowStruct(row, rowNum);
+    }
+
+    static void InsertRow(RowStruct row)
+    {
+        for (int i = 1; i <= 8; i++)
+        {
+            pieces[i, row.rowNum] = row.row[i];
         }
     }
 
@@ -143,10 +188,33 @@ public class Coord_Manager
     	return Vector2Int.one * -1;
     }
 
-    //Updates pieces table with new position
+
+
     public static void UpdatePosition(string name, Vector3 value)
     {
-    	Debug.Log("updated");
+        Transform transformObj = GetTransformObject(name);
+
+        Vector2Int ChessCoords = ConvertCoordsToChessUnits(value);
+        Vector2Int old = GetCoordPosition(name);
+
+        rowTemp1 = GetRow(ChessCoords.y);
+        rowTemp2 = GetRow(old.y);
+
+        hoverPos = ChessCoords;
+        pieces[old.x, old.y] = empty;
+
+        Debug.Log("updated " + name);
+    }
+
+    static void RevertMove()
+    {
+        InsertRow(rowTemp1);
+        InsertRow(rowTemp2);
+    }
+
+    //Updates pieces table with new position
+    public static void CommitPositionUpdate(string name, Vector3 value)
+    {    	
         Transform transformObj = GetTransformObject(name);
 
         Vector2Int ChessCoords = ConvertCoordsToChessUnits(value);
@@ -154,6 +222,7 @@ public class Coord_Manager
 
         pieces[ChessCoords.x, ChessCoords.y] = transformObj;
         pieces[old.x, old.y] = empty;
+        Debug.Log("Commited "+name+ChessCoords);
     }
 
     //Compare old position with current position, returns offset
@@ -166,12 +235,7 @@ public class Coord_Manager
         return new Vector2Int((int)temp.x, (int)temp.y);
     }
 
-    //Checks if piece is currently colliding with another piece
-    //returns 2 flags as a vector 2
-    //(0, 0, 0) = no collition
-    //(1, 0, 0) = colliding with opposite colour
-    //(1, 1, 0) = colliding with own colour
-    //(1, 0, 1) = colliding with king
+    //Checks if piece is currently colliding with another piece    
     public static ColInfo CheckCollition(Transform piece) 
     {
         Vector2Int chessCoords = ConvertCoordsToChessUnits(piece.localPosition);

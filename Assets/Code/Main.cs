@@ -54,6 +54,24 @@ public class Main : MonoBehaviour
 
     public void EndTurn()
     {
+
+        UpdatePassantList();
+
+        moves++;
+        ToggleTurnState();
+        CheckFlags checkInfo = whiteTeam.hasTurn ? whiteTeam.CheckInfo : blackTeam.CheckInfo;
+        if (checkInfo.isInCheck)
+        {
+            Feedback.SetText("LONG LIVE THE KING!");
+        }
+        if (checkInfo.isInCheckmate)
+        {
+            Feedback.SetText("THE KING IS DEAD!");
+        }
+    }
+
+    void UpdatePassantList()
+    {
         Dictionary<Pawn_Piece, int> tempDict = pawnsToUpdate;
         foreach (var entry in pawnsToUpdate.ToList())
         {
@@ -70,18 +88,5 @@ public class Main : MonoBehaviour
             }
         }
         pawnsToUpdate = tempDict;
-
-
-        moves++;
-        ToggleTurnState();
-        CheckFlags checkInfo = whiteTeam.hasTurn ? whiteTeam.CheckInfo : blackTeam.CheckInfo;
-        if (checkInfo.isInCheck)
-        {
-            Feedback.SetText("LONG LIVE THE KING!");
-        }
-        if (checkInfo.isInCheckmate)
-        {
-            Feedback.SetText("THE KING IS DEAD!");
-        }
     }
 }

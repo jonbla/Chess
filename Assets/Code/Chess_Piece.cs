@@ -136,13 +136,14 @@ public class Chess_Piece : MonoBehaviour
         mouseIsClicked = false;
         Mouse_Manager.resetMouseDelta();
         CenterPiece();
+        Coord_Manager.UpdatePosition(transform.name, transform.localPosition);
         if (!isValidMove())
         {
             transform.position = startPos;
         }
         else
         {            
-            Coord_Manager.UpdatePosition(transform.name, transform.localPosition);
+            Coord_Manager.CommitPositionUpdate(transform.name, transform.localPosition);
             team.EndTurn();
         }
         print("timeend: " + Time.time);
