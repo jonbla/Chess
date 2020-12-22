@@ -76,8 +76,8 @@ public class Coord_Manager
     static Transform[,] pieces = new Transform[9,9];
     //static Transform[,] piecesTemp = new Transform[9, 9];
 
-    static Vector2Int hoverPos = new Vector2Int(0, 0);
-    static Vector2Int sourcePos = new Vector2Int(0, 0);
+    public static Vector2Int hoverPos = new Vector2Int(0, 0);
+    public static Vector2Int sourcePos = new Vector2Int(0, 0);
 
     static RowStruct rowTemp1, rowTemp2 = GetRow(0);
 

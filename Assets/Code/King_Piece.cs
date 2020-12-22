@@ -182,7 +182,7 @@ public class King_Piece : Custom_Mono
 
         return false;        
     }
-
+    //Is the King being attacked by a Rook
     bool isBeingAttackedByRook()
     {
         return isBeingAttackedByRook(Coord_Manager.ConvertCoordsToChessUnits(transform.localPosition));
@@ -280,7 +280,8 @@ public class King_Piece : Custom_Mono
         return false;        
     }
 
-    int RookStep(Vector2Int target)
+    //support method to make the Rook check smaller
+    private int RookStep(Vector2Int target)
     {
         if (isTypeAtCoord(target, "Rook"))
         {
