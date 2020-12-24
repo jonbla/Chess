@@ -1,24 +1,34 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using ExtraChessStructures;
+﻿using ExtraChessStructures;
 using UnityEngine;
 
+/// <summary>
+/// Queen Chess Piece
+/// </summary>
 public class Queen_Piece : Custom_Mono
 {
+    /// <summary>
+    /// Indicates if the Queen moved diagonally or horizontally
+    /// </summary>
     public bool isDiagonal;
-    public bool isValidQueenMove()
+
+    /// <summary>
+    /// Checks if this move is valid for a Queen
+    /// </summary>
+    /// <returns>Validity of move</returns>
+    public bool IsValidQueenMove()
     {
         Vector2Int lastMove = CP.lastMove;
         ColInfo flags = CP.CollisionInfo;
 
         isDiagonal = true;
 
-        if (Mathf.Abs(lastMove.x) != Mathf.Abs(lastMove.y)) 
+        if (Mathf.Abs(lastMove.x) != Mathf.Abs(lastMove.y))
         {
             if (lastMove.x != 0 && lastMove.y != 0)
             {
                 return false;
-            } else
+            }
+            else
             {
                 isDiagonal = false;
             }

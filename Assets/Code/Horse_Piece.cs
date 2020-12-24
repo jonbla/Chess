@@ -1,11 +1,16 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using ExtraChessStructures;
+﻿using ExtraChessStructures;
 using UnityEngine;
 
+/// <summary>
+/// Horse Chess Piece
+/// </summary>
 public class Horse_Piece : Custom_Mono
 {
-    public bool isValidHorseMove()
+    /// <summary>
+    /// Checks if this move is valid for a Horse
+    /// </summary>
+    /// <returns>Validity of move</returns>
+    public bool IsValidHorseMove()
     {
         Vector2Int lastMove = CP.lastMove;
         ColInfo flags = CP.CollisionInfo;

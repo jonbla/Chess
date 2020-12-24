@@ -1,19 +1,22 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using ExtraChessStructures;
-using System;
+﻿using ExtraChessStructures;
 using UnityEngine;
 
+/// <summary>
+/// King Chess Piece
+/// </summary>
 public class King_Piece : Custom_Mono
 {
-    //Is this move valid for a king
-    public bool isValidKingMove()
+    /// <summary>
+    /// Checks if this move is valid for a King
+    /// </summary>
+    /// <returns>Validity of move</returns>
+    public bool IsValidKingMove()
     {
         Vector2Int lastMove = CP.lastMove;
         ColInfo flags = CP.CollisionInfo;
 
         //If king moves more than 2 spaces, then invalid
-        if(Mathf.Abs(lastMove.x) > 1 || Mathf.Abs(lastMove.y) > 1)
+        if (Mathf.Abs(lastMove.x) > 1 || Mathf.Abs(lastMove.y) > 1)
         {
             Feedback.SetText("Invalid move for King");
             return false;
@@ -39,28 +42,40 @@ public class King_Piece : Custom_Mono
         return true;
     }
 
-    //Check if king is being attacked
+    /// <summary>
+    /// Check if the king is being attacked
+    /// </summary>
+    /// <returns>True if being attacked, False if it is not</returns>
     public bool IsBeingAttacked()
     {
-        return isBeingAttackedByPawn() || isBeingAttackedByHorse() || isBeingAttackedByRook() || isBeingAttackedByBishop() || isBeingAttackedByKing();
+        return IsBeingAttackedByPawn() || IsBeingAttackedByHorse() || IsBeingAttackedByRook() || IsBeingAttackedByBishop() || IsBeingAttackedByKing();
     }
 
+    /// <summary>
+    /// Check if input location is being attacked
+    /// </summary>
+    /// <param name="space">Target location</param>
+    /// <returns>True if being attacked, False if it is not</returns>
     public bool IsBeingAttacked(Vector2Int space)
     {
-        return isBeingAttackedByPawn(space) || isBeingAttackedByHorse(space) || isBeingAttackedByRook(space) || isBeingAttackedByBishop(space) || isBeingAttackedByKing(space);
+        return IsBeingAttackedByPawn(space) || IsBeingAttackedByHorse(space) || IsBeingAttackedByRook(space) || IsBeingAttackedByBishop(space) || IsBeingAttackedByKing(space);
     }
 
+    /// <summary>
+    /// Check if the king is in mate
+    /// </summary>
+    /// <returns>Mate status of king</returns>
     public bool IsInMate()
     {
         Vector2Int pos = Coord_Manager.ConvertCoordsToChessUnits(transform.localPosition);
         bool returnVal = true;
-        bool[,] emptySpaces = new bool[3,3];
+        bool[,] emptySpaces = new bool[3, 3];
 
         for (int x = 0; x < 3; x++)
         {
             for (int y = 0; y < 3; y++)
             {
-                if(x == 1 && y == 1)
+                if (x == 1 && y == 1)
                 {
                     emptySpaces[x, y] = false;
                     continue;
@@ -76,13 +91,13 @@ public class King_Piece : Custom_Mono
                 emptySpaces[x, y] = temp;
             }
         }
-        
+
 
         for (int x = 0; x < 3; x++)
         {
             for (int y = 0; y < 3; y++)
             {
-                print("x: " + x + "y: " +y+ "  " + emptySpaces[x, y]);
+                print("x: " + x + "y: " + y + "  " + emptySpaces[x, y]);
                 if (x == 1 && y == 1) continue;
                 if (emptySpaces[x, y])
                 {
@@ -95,7 +110,15 @@ public class King_Piece : Custom_Mono
     }
 
     //Check if type of object exists at positions
-    bool isTypeAtCoord(Vector2Int pos, string type){
+
+    /// <summary>
+    /// Check if Object type exists at coord
+    /// </summary>
+    /// <param name="pos">Target position</param>
+    /// <param name="type">Target type</param>
+    /// <returns>True if type found at location, false otherwise</returns>
+    bool IsTypeAtCoord(Vector2Int pos, string type)
+    {
 
         Transform obj = Coord_Manager.GetTransformAt(pos);
         if (obj != null && obj.name != "Empty")
@@ -103,92 +126,118 @@ public class King_Piece : Custom_Mono
             if (obj.parent != transform.parent)
             {
                 return obj.tag == type;
-            }            
+            }
         }
         return false;
-        
+
     }
 
-    //Check if king is being attacked by pawn
-    bool isBeingAttackedByPawn()
+    /// <summary>
+    /// Check if king is being attacked by pawn
+    /// </summary>
+    /// <returns>True if being attacked, False if it is not</returns>
+    bool IsBeingAttackedByPawn()
     {
-        return isBeingAttackedByPawn(Coord_Manager.ConvertCoordsToChessUnits(transform.localPosition));
+        return IsBeingAttackedByPawn(Coord_Manager.ConvertCoordsToChessUnits(transform.localPosition));
     }
 
-    bool isBeingAttackedByPawn(Vector2Int units)
+    /// <summary>
+    /// Check if king is being attacked by pawn at Target
+    /// </summary>
+    /// <param name="units">Target</param>
+    /// <returns>True if being attacked, False if it is not</returns>
+    bool IsBeingAttackedByPawn(Vector2Int units)
     {
         bool isBlack = GetIsBlack();
 
-        if (isTypeAtCoord(new Vector2Int(units.x + 1, units.y + (isBlack ? -1 : 1)), "Pawn"))
+        if (IsTypeAtCoord(new Vector2Int(units.x + 1, units.y + (isBlack ? -1 : 1)), "Pawn"))
         {
             return true;
         }
 
-        if (isTypeAtCoord(new Vector2Int(units.x + -1, units.y + (isBlack ? -1 : 1)), "Pawn"))
+        if (IsTypeAtCoord(new Vector2Int(units.x + -1, units.y + (isBlack ? -1 : 1)), "Pawn"))
         {
             return true;
         }
 
-        return false;        
+        return false;
     }
 
-    bool isBeingAttackedByHorse()
+    /// <summary>
+    /// Check if king is being attacked by Horse
+    /// </summary>
+    /// <returns>True if being attacked, False if it is not</returns>
+    bool IsBeingAttackedByHorse()
     {
-        return isBeingAttackedByHorse(Coord_Manager.ConvertCoordsToChessUnits(transform.localPosition));
-        
+        return IsBeingAttackedByHorse(Coord_Manager.ConvertCoordsToChessUnits(transform.localPosition));
+
     }
 
-    bool isBeingAttackedByHorse(Vector2Int units, bool onExcept = false)
+    /// <summary>
+    /// Check if king is being attacked by Horse at Target
+    /// </summary>
+    /// <param name="units">Target</param>
+    /// <returns>True if being attacked, False if it is not</returns>
+    bool IsBeingAttackedByHorse(Vector2Int units, bool onExcept = false)
     {
-        if (isTypeAtCoord(new Vector2Int(units.x + 1, units.y + 2), "Horse"))
+        if (IsTypeAtCoord(new Vector2Int(units.x + 1, units.y + 2), "Horse"))
         {
             return true;
         }
 
-        if (isTypeAtCoord(new Vector2Int(units.x + 1, units.y - 2), "Horse"))
+        if (IsTypeAtCoord(new Vector2Int(units.x + 1, units.y - 2), "Horse"))
         {
             return true;
         }
 
-        if (isTypeAtCoord(new Vector2Int(units.x - 1, units.y - 2), "Horse"))
+        if (IsTypeAtCoord(new Vector2Int(units.x - 1, units.y - 2), "Horse"))
         {
             return true;
         }
 
-        if (isTypeAtCoord(new Vector2Int(units.x - 1, units.y + 2), "Horse"))
+        if (IsTypeAtCoord(new Vector2Int(units.x - 1, units.y + 2), "Horse"))
         {
             return true;
         }
 
-        if (isTypeAtCoord(new Vector2Int(units.x + 2, units.y + 1), "Horse"))
+        if (IsTypeAtCoord(new Vector2Int(units.x + 2, units.y + 1), "Horse"))
         {
             return true;
         }
 
-        if (isTypeAtCoord(new Vector2Int(units.x + 2, units.y - 1), "Horse"))
+        if (IsTypeAtCoord(new Vector2Int(units.x + 2, units.y - 1), "Horse"))
         {
             return true;
         }
 
-        if (isTypeAtCoord(new Vector2Int(units.x - 2, units.y - 1), "Horse"))
+        if (IsTypeAtCoord(new Vector2Int(units.x - 2, units.y - 1), "Horse"))
         {
             return true;
         }
 
-        if (isTypeAtCoord(new Vector2Int(units.x - 2, units.y + 1), "Horse"))
+        if (IsTypeAtCoord(new Vector2Int(units.x - 2, units.y + 1), "Horse"))
         {
             return true;
         }
 
-        return false;        
+        return false;
     }
-    //Is the King being attacked by a Rook
-    bool isBeingAttackedByRook()
+
+    /// <summary>
+    /// Check if king is being attacked by Rook
+    /// </summary>
+    /// <returns>True if being attacked, False if it is not</returns>
+    bool IsBeingAttackedByRook()
     {
-        return isBeingAttackedByRook(Coord_Manager.ConvertCoordsToChessUnits(transform.localPosition));
+        return IsBeingAttackedByRook(Coord_Manager.ConvertCoordsToChessUnits(transform.localPosition));
     }
 
-    bool isBeingAttackedByRook(Vector2Int units)
+    /// <summary>
+    /// Check if king is being attacked by Rook at Target
+    /// </summary>
+    /// <param name="units">Target</param>
+    /// <returns>True if being attacked, False if it is not</returns>
+    bool IsBeingAttackedByRook(Vector2Int units)
     {
         //Debug.Log("looking right\n");
         for (int i = units.x + 1; i <= 8; i++)
@@ -211,8 +260,8 @@ public class King_Piece : Custom_Mono
             }
         }
 
-        //Debug.Log("looking left\n");
-        StraightLoop2: { }
+    //Debug.Log("looking left\n");
+    StraightLoop2: { }
         for (int i = units.x - 1; i >= 0; i--)
         {
             Vector2Int lookingAt = new Vector2Int(i, units.y);
@@ -233,8 +282,8 @@ public class King_Piece : Custom_Mono
             }
         }
 
-        //Debug.Log("looking up\n");
-        StraightLoop3: { }
+    //Debug.Log("looking up\n");
+    StraightLoop3: { }
         for (int i = units.y + 1; i <= 8; i++)
         {
             Vector2Int lookingAt = new Vector2Int(units.x, i);
@@ -255,8 +304,8 @@ public class King_Piece : Custom_Mono
             }
         }
 
-        //Debug.Log("looking down\n");
-        StraightLoop4: { }
+    //Debug.Log("looking down\n");
+    StraightLoop4: { }
         for (int i = units.y - 1; i >= 0; i--)
         {
             Vector2Int lookingAt = new Vector2Int(units.x, i);
@@ -277,18 +326,22 @@ public class King_Piece : Custom_Mono
             }
         }
 
-        return false;        
+        return false;
     }
 
-    //support method to make the Rook check smaller
+    /// <summary>
+    /// Support method to make the Rook check smaller
+    /// </summary>
+    /// <param name="target">Target Coord</param>
+    /// <returns>1 if found, -1 if null, 0 if empty space</returns>
     private int RookStep(Vector2Int target)
     {
-        if (isTypeAtCoord(target, "Rook"))
+        if (IsTypeAtCoord(target, "Rook"))
         {
             return 1;
         }
 
-        if (isTypeAtCoord(target, "Queen"))
+        if (IsTypeAtCoord(target, "Queen"))
         {
             return 1;
         }
@@ -306,12 +359,21 @@ public class King_Piece : Custom_Mono
         return -1;
     }
 
-    bool isBeingAttackedByBishop()
+    /// <summary>
+    /// Check if king is being attacked by Bishop
+    /// </summary>
+    /// <returns>True if being attacked, False if it is not</returns>
+    bool IsBeingAttackedByBishop()
     {
-        return isBeingAttackedByBishop(Coord_Manager.ConvertCoordsToChessUnits(transform.localPosition));
+        return IsBeingAttackedByBishop(Coord_Manager.ConvertCoordsToChessUnits(transform.localPosition));
     }
 
-    bool isBeingAttackedByBishop(Vector2Int units)
+    /// <summary>
+    /// Check if king is being attacked by Bishop at Target
+    /// </summary>
+    /// <param name="units">Target</param>
+    /// <returns>True if being attacked, False if it is not</returns>
+    bool IsBeingAttackedByBishop(Vector2Int units)
     {
         for (int i = 1; i <= 8 - Mathf.Min(units.x, units.y); i++)
         {
@@ -333,7 +395,7 @@ public class King_Piece : Custom_Mono
             }
         }
 
-        DiagonalLoop2: { }
+    DiagonalLoop2: { }
         for (int i = 1; i <= 8 - Mathf.Min(units.x, units.y); i++)
         {
             Vector2Int lookingAt = new Vector2Int(units.x - i, units.y + i);
@@ -352,7 +414,7 @@ public class King_Piece : Custom_Mono
                     break;
             }
         }
-        DiagonalLoop3: { }
+    DiagonalLoop3: { }
         for (int i = 1; i <= 8 - Mathf.Min(units.x, units.y); i++)
         {
             Vector2Int lookingAt = new Vector2Int(units.x + i, units.y - i);
@@ -373,7 +435,7 @@ public class King_Piece : Custom_Mono
             }
         }
 
-        DiagonalLoop4: { }
+    DiagonalLoop4: { }
         for (int i = 1; i <= Mathf.Max(units.x, units.y); i++)
         {
             Vector2Int lookingAt = new Vector2Int(units.x - i, units.y - i);
@@ -393,18 +455,23 @@ public class King_Piece : Custom_Mono
                     break;
             }
         }
-        return false;        
+        return false;
     }
 
+    /// <summary>
+    /// Support method to make the Bishop check smaller
+    /// </summary>
+    /// <param name="target">Target Coord</param>
+    /// <returns>1 if found, -1 if null, 0 if empty space</returns>
     int BishopStep(Vector2Int target)
     {
 
-        if (isTypeAtCoord(target, "Bishop"))
+        if (IsTypeAtCoord(target, "Bishop"))
         {
             return 1;
         }
 
-        if (isTypeAtCoord(target, "Queen"))
+        if (IsTypeAtCoord(target, "Queen"))
         {
             return 1;
         }
@@ -415,63 +482,72 @@ public class King_Piece : Custom_Mono
         {
             return -1;
         }
-        if(transformBeingLookedAt.name == "Empty")
+        if (transformBeingLookedAt.name == "Empty")
         {
             return 0;
         }
         return -1;
     }
 
-    bool isBeingAttackedByKing()
+    /// <summary>
+    /// Check if king is being attacked by King
+    /// </summary>
+    /// <returns>True if being attacked, False if it is not</returns>
+    bool IsBeingAttackedByKing()
     {
-        return isBeingAttackedByKing(Coord_Manager.ConvertCoordsToChessUnits(transform.localPosition));
+        return IsBeingAttackedByKing(Coord_Manager.ConvertCoordsToChessUnits(transform.localPosition));
     }
 
-    bool isBeingAttackedByKing(Vector2Int units, bool onExcept = false)
+    /// <summary>
+    /// Check if king is being attacked by King at Target
+    /// </summary>
+    /// <param name="units">Target</param>
+    /// <returns>True if being attacked, False if it is not</returns>
+    bool IsBeingAttackedByKing(Vector2Int units, bool onExcept = false)
     {
 
-        if (isTypeAtCoord(new Vector2Int(units.x + 1, units.y), "King"))
+        if (IsTypeAtCoord(new Vector2Int(units.x + 1, units.y), "King"))
         {
             return true;
         }
 
-        if (isTypeAtCoord(new Vector2Int(units.x - 1, units.y), "King"))
+        if (IsTypeAtCoord(new Vector2Int(units.x - 1, units.y), "King"))
         {
             return true;
         }
 
-        if (isTypeAtCoord(new Vector2Int(units.x, units.y + 1), "King"))
+        if (IsTypeAtCoord(new Vector2Int(units.x, units.y + 1), "King"))
         {
             return true;
         }
 
-        if (isTypeAtCoord(new Vector2Int(units.x, units.y - 1), "King"))
+        if (IsTypeAtCoord(new Vector2Int(units.x, units.y - 1), "King"))
         {
             return true;
         }
 
-        if (isTypeAtCoord(new Vector2Int(units.x + 1, units.y + 1), "King"))
+        if (IsTypeAtCoord(new Vector2Int(units.x + 1, units.y + 1), "King"))
         {
             return true;
         }
 
-        if (isTypeAtCoord(new Vector2Int(units.x - 1, units.y - 1), "King"))
+        if (IsTypeAtCoord(new Vector2Int(units.x - 1, units.y - 1), "King"))
         {
             return true;
         }
 
-        if (isTypeAtCoord(new Vector2Int(units.x - 1, units.y + 1), "King"))
+        if (IsTypeAtCoord(new Vector2Int(units.x - 1, units.y + 1), "King"))
         {
             return true;
         }
 
-        if (isTypeAtCoord(new Vector2Int(units.x + 1, units.y - 1), "King"))
+        if (IsTypeAtCoord(new Vector2Int(units.x + 1, units.y - 1), "King"))
         {
             return true;
         }
 
         return false;
-        
+
     }
 
 }

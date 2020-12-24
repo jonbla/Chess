@@ -1,7 +1,8 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
+/// <summary>
+/// Class responsible for validating piece specific moves
+/// </summary>
 public class Piece_Middle_manager : MonoBehaviour
 {
     //1  = White Pawn
@@ -17,8 +18,15 @@ public class Piece_Middle_manager : MonoBehaviour
     //10 = Black Horse
     //11 = Black Queen
     //12 = Black King
+
+    /// <summary>
+    /// Numerical representation of pieces
+    /// </summary>
     int PieceTypeID;
 
+    /// <summary>
+    /// error message base
+    /// </summary>
     const string errorMessage = "Invalid move for ";
 
     Pawn_Piece pawn;
@@ -67,19 +75,16 @@ public class Piece_Middle_manager : MonoBehaviour
                 break;
         }
 
-        if(transform.parent.name == "Black")
+        if (transform.parent.name == "Black")
         {
             PieceTypeID += 6;
         }
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
-    //call on the appropriate validation
+    /// <summary>
+    /// Checks if move valid for the appropriate piece
+    /// </summary>
+    /// <returns>Validity</returns>
     public bool IsPieceSpecificMoveValid()
     {
         bool response;
@@ -97,7 +102,7 @@ public class Piece_Middle_manager : MonoBehaviour
 
             case 2:
             case 8:
-                response = rook.isValidRookMove();
+                response = rook.IsValidRookMove();
                 if (response == false)
                 {
                     Feedback.SetText(errorMessage + transform.tag);
@@ -107,7 +112,7 @@ public class Piece_Middle_manager : MonoBehaviour
 
             case 3:
             case 9:
-                response = bishop.isValidBishopMove();
+                response = bishop.IsValidBishopMove();
                 if (response == false)
                 {
                     Feedback.SetText(errorMessage + transform.tag);
@@ -117,7 +122,7 @@ public class Piece_Middle_manager : MonoBehaviour
 
             case 4:
             case 10:
-                response = horse.isValidHorseMove();
+                response = horse.IsValidHorseMove();
                 if (response == false)
                 {
                     Feedback.SetText(errorMessage + transform.tag);
@@ -127,7 +132,7 @@ public class Piece_Middle_manager : MonoBehaviour
 
             case 5:
             case 11:
-                response = queen.isValidQueenMove();
+                response = queen.IsValidQueenMove();
                 if (response == false)
                 {
                     Feedback.SetText(errorMessage + transform.tag);
@@ -137,7 +142,7 @@ public class Piece_Middle_manager : MonoBehaviour
 
             case 6:
             case 12:
-                return king.isValidKingMove();
+                return king.IsValidKingMove();
             case 7:
                 response = pawn.IsValidPawnMove(true);
                 if (response == false)

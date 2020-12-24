@@ -1,15 +1,28 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
+/// <summary>
+/// Script responsible for mouse clicks
+/// </summary>
 public class Mouse_Manager
 {
-    public static Mouse_Manager Mouse_Man; //makes this a publicly accessable object
-    public static Vector2 prevMousePos = Vector2.zero; //value of previous frame 
+    /// <summary>
+    /// Static reference to class
+    /// </summary>
+    public static Mouse_Manager Mouse_Man;
+
+    /// <summary>
+    /// Mouse location last frame
+    /// </summary>
+    public static Vector2 prevMousePos = Vector2.zero;
 
     //Calculate mouse delta as a vector 2 and return it. 
     //Vectors can not be null, therefor I am treating vector zero as null since getting exactly (0,0) is unlikely and negligable
-    public static Vector2 getMouseDelta()
+
+    /// <summary>
+    /// Get change in coords of mouse since last frame
+    /// </summary>
+    /// <returns>Vector reprisenting mouse movement</returns>
+    public static Vector2 GetMouseDelta()
     {
         Vector3 currentMouseRaw = Input.mousePosition;
         Vector2 currentMouse = Camera.main.ScreenToWorldPoint(currentMouseRaw);
@@ -24,8 +37,10 @@ public class Mouse_Manager
         return delta;
     }
 
-    //reset for next click
-    public static void resetMouseDelta()
+    /// <summary>
+    /// resets mouse anchor for next click
+    /// </summary>
+    public static void ResetMouseDelta()
     {
         prevMousePos = Vector2.zero;
     }
