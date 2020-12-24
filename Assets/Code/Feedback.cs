@@ -1,13 +1,10 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.UI;
+﻿using UnityEngine;
 
 public static class Feedback// : MonoBehaviour
 {
     static TextMesh line;
 
-    public static void init()
+    public static void Init()
     {
         line = GameObject.Find("Display").GetComponent<TextMesh>();
         SetText("Welcome to Chess");

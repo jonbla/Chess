@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using ExtraChessStructures;
+﻿using ExtraChessStructures;
 using UnityEngine;
 
 public class Team_Manager : Custom_Mono

@@ -1,11 +1,9 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using ExtraChessStructures;
+﻿using ExtraChessStructures;
 using UnityEngine;
 
 public class Horse_Piece : Custom_Mono
 {
-    public bool isValidHorseMove()
+    public bool IsValidHorseMove()
     {
         Vector2Int lastMove = CP.lastMove;
         ColInfo flags = CP.CollisionInfo;

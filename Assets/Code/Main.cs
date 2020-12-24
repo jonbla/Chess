@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using ExtraChessStructures;
 using UnityEngine;
@@ -29,19 +28,19 @@ public class Main : MonoBehaviour
         state = GameState.WhiteTurn;
         whiteTeam.hasTurn = true;
 
-        Feedback.init();
-    }    
+        Feedback.Init();
+    }
 
     void ToggleTurnState()
     {
-        if(state == GameState.BlackTurn)
+        if (state == GameState.BlackTurn)
         {
             state = GameState.WhiteTurn;
             whiteTeam.hasTurn = true;
             blackTeam.hasTurn = false;
             Feedback.SetText("White Turn");
         }
-        else if(state == GameState.WhiteTurn)
+        else if (state == GameState.WhiteTurn)
         {
             state = GameState.BlackTurn;
             whiteTeam.hasTurn = false;

@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using ExtraChessStructures;
+﻿using ExtraChessStructures;
 using UnityEngine;
 
 public class Rook_Piece : Custom_Mono
@@ -10,14 +8,14 @@ public class Rook_Piece : Custom_Mono
         Vector2Int lastMove = CP.lastMove;
         ColInfo flags = CP.CollisionInfo;
 
-        if(lastMove.x != 0 && lastMove.y != 0)
+        if (lastMove.x != 0 && lastMove.y != 0)
         {
             return false;
         }
 
         Vector2Int currentCoord = Coord_Manager.ConvertCoordsToChessUnits(transform.localPosition);
 
-        if(lastMove.y != 0)
+        if (lastMove.y != 0)
         {
             for (int i = 1; i < Mathf.Abs(lastMove.y); i++)
             {

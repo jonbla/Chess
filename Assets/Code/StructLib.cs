@@ -1,8 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-namespace ExtraChessStructures
+﻿namespace ExtraChessStructures
 {
     public struct ColInfo
     {
@@ -16,7 +12,7 @@ namespace ExtraChessStructures
             isCollidingWithOwnTeam = colTeam;
             isCollidingWithKing = colKing;
         }
-        
+
     }
 
     public struct CheckFlags

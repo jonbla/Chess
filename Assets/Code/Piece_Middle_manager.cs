@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class Piece_Middle_manager : MonoBehaviour
 {
@@ -117,7 +115,7 @@ public class Piece_Middle_manager : MonoBehaviour
 
             case 4:
             case 10:
-                response = horse.isValidHorseMove();
+                response = horse.IsValidHorseMove();
                 if (response == false)
                 {
                     Feedback.SetText(errorMessage + transform.tag);
@@ -137,7 +135,7 @@ public class Piece_Middle_manager : MonoBehaviour
 
             case 6:
             case 12:
-                return king.isValidKingMove();
+                return king.IsValidKingMove();
             case 7:
                 response = pawn.IsValidPawnMove(true);
                 if (response == false)
