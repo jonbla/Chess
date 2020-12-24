@@ -1,8 +1,15 @@
 ﻿using ExtraChessStructures;
 using UnityEngine;
 
+/// <summary>
+/// Horse Chess Piece
+/// </summary>
 public class Horse_Piece : Custom_Mono
 {
+    /// <summary>
+    /// Checks if this move is valid for a Horse
+    /// </summary>
+    /// <returns>Validity of move</returns>
     public bool IsValidHorseMove()
     {
         Vector2Int lastMove = CP.lastMove;

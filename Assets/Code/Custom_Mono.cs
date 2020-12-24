@@ -1,9 +1,14 @@
 using System;
 using UnityEngine;
 
-
+/// <summary>
+/// Adapter class that adds common functionality to MonoBehaviour
+/// </summary>
 public class Custom_Mono : MonoBehaviour
 {
+    /// <summary>
+    /// Chess Piece attached to this object
+    /// </summary>
     [HideInInspector]
     public Chess_Piece CP;
 
@@ -13,6 +18,9 @@ public class Custom_Mono : MonoBehaviour
         CP = transform.GetComponent<Chess_Piece>();
     }
 
+    /// <summary>
+    /// Kill piece at current location (assumes piece at current location isn't itself)
+    /// </summary>
     public void KillAtLocation()
     {
         bool isBlack = GetIsBlack();
@@ -21,15 +29,19 @@ public class Custom_Mono : MonoBehaviour
         //Coord_Manager.getTransformAt()
         if (isBlack)
         {
-            transform.parent.parent.Find("White").Find(targetName).GetComponent<Chess_Piece>().getKilled();
+            transform.parent.parent.Find("White").Find(targetName).GetComponent<Chess_Piece>().GetKilled();
         }
         else
         {
-            transform.parent.parent.Find("Black").Find(targetName).GetComponent<Chess_Piece>().getKilled();
+            transform.parent.parent.Find("Black").Find(targetName).GetComponent<Chess_Piece>().GetKilled();
         }
-        
+
     }
 
+    /// <summary>
+    /// Returns the team colour of piece
+    /// </summary>
+    /// <returns>True if black, False if White</returns>
     public bool GetIsBlack()
     {
         bool isBlack = false;
@@ -40,6 +52,10 @@ public class Custom_Mono : MonoBehaviour
         return isBlack;
     }
 
+    /// <summary>
+    /// Check if object is elegable for en passant
+    /// </summary>
+    /// <returns>True if it can, False if it can not, Null if error</returns>
     public bool IsEnPassant()
     {
         int direction = 1;
@@ -59,9 +75,9 @@ public class Custom_Mono : MonoBehaviour
                 {
                     if (obj.GetComponent<Pawn_Piece>().canBePassanted)
                     {
-                        obj.GetComponent<Chess_Piece>().getKilled();
+                        obj.GetComponent<Chess_Piece>().GetKilled();
                         return true;
-                    }                    
+                    }
                 }
             }
             return false;

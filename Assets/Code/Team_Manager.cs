@@ -1,15 +1,40 @@
 ﻿using ExtraChessStructures;
 using UnityEngine;
 
+/// <summary>
+/// Class that manages team functions. There should be 2 instantiated instances
+/// </summary>
 public class Team_Manager : Custom_Mono
 {
+    /// <summary>
+    /// Indicates if it is this team's turn
+    /// </summary>
     public bool hasTurn = false;
+
+    /// <summary>
+    /// Mate status of this team
+    /// </summary>
     CheckFlags checkFlags;
+
+    /// <summary>
+    /// Reference to this team's king
+    /// </summary>
     King_Piece king;
+
+    /// <summary>
+    /// reference to main
+    /// </summary>
     Main main;
 
+    /// <summary>
+    /// Gets mate status of this team
+    /// </summary>
     public CheckFlags CheckInfo { get => GetCheckFlags(); }
-    public bool isInCheck { get => IsinCheck(); }
+
+    /// <summary>
+    /// Indicates if this team is in check
+    /// </summary>
+    public bool IsInCheck { get => IsinCheck(); }
 
     // Start is called before the first frame update
     void Start()
@@ -41,6 +66,10 @@ public class Team_Manager : Custom_Mono
         return king.IsBeingAttacked();
     }
 
+    /// <summary>
+    /// Manually set check flags
+    /// </summary>
+    /// <param name="flags"></param>
     void SetCheckFlags(CheckFlags flags)
     {
         checkFlags = flags;

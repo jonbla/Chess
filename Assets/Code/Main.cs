@@ -31,6 +31,9 @@ public class Main : MonoBehaviour
         Feedback.Init();
     }
 
+    /// <summary>
+    /// Toggles the turn
+    /// </summary>
     void ToggleTurnState()
     {
         if (state == GameState.BlackTurn)
@@ -51,6 +54,9 @@ public class Main : MonoBehaviour
         fade.ToggleFade();
     }
 
+    /// <summary>
+    /// Preform end-turn functions
+    /// </summary>
     public void EndTurn()
     {
 
@@ -69,6 +75,9 @@ public class Main : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Update list of pieces eligable for en-passant
+    /// </summary>
     void UpdatePassantList()
     {
         Dictionary<Pawn_Piece, int> tempDict = pawnsToUpdate;

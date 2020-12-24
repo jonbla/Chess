@@ -1,20 +1,44 @@
 using ExtraChessStructures;
 using UnityEngine;
 
+/// <summary>
+/// Universal Chess Piece
+/// </summary>
 public class Chess_Piece : MonoBehaviour
 {
-    Piece_Middle_manager middleMan; // handles piece specific functions
+    /// <summary>
+    /// Handles piece specific functions
+    /// </summary>
+    Piece_Middle_manager middleMan;
 
-    private bool mouseIsClicked = false; //used for making the piece move while mouse is being held down
+    /// <summary>
+    /// Used for moving the piece while mouse is being held down
+    /// </summary>
+    private bool mouseIsClicked = false;
 
-    public ColInfo CollisionInfo; //3 flags describing collition status
-    Vector3 startPos; //used for determining offset
-   
+    /// <summary>
+    /// Struct describing collition status
+    /// </summary>
+    public ColInfo CollisionInfo;
 
-    public Vector2Int lastMove; //last move in chessboard units
+    /// <summary>
+    /// Used for determining offset
+    /// </summary>
+    Vector3 startPos;
 
+    /// <summary>
+    /// Last move in chessboard units
+    /// </summary>
+    public Vector2Int lastMove; 
+
+    /// <summary>
+    /// Flag showing if this piece is in play or dead
+    /// </summary>
     public bool isDead = false;
 
+    /// <summary>
+    /// Reference to TeamManager class
+    /// </summary>
     Team_Manager team;
 
 
@@ -35,7 +59,7 @@ public class Chess_Piece : MonoBehaviour
         //Keep running this function while mouse is being held down
         if (mouseIsClicked)
         {
-            MovePiece();
+            MovePieceWithMouse();
         }
         if (Input.GetKeyDown(KeyCode.Escape))
         {
@@ -43,7 +67,9 @@ public class Chess_Piece : MonoBehaviour
         }
     }
 
-    //Centre the piece in nearest cell 
+    /// <summary>
+    /// Locate the nearest cell and centre the piece into it
+    /// </summary>
     void CenterPiece()
     {
         Grid grid = transform.parent.parent.parent.GetComponent<Grid>();
@@ -52,8 +78,11 @@ public class Chess_Piece : MonoBehaviour
         transform.localPosition = new Vector3(transform.localPosition.x, transform.localPosition.y, -1);
     }
 
-    //check if piece is on the board
-    bool isInBounds()
+    /// <summary>
+    /// Checks if piece is in playable area
+    /// </summary>
+    /// <returns>True if on board, False otherwise</returns>
+    bool IsInBounds()
     {
         if(Mathf.Abs(transform.localPosition.x) > 4.1 || Mathf.Abs(transform.localPosition.y) > 4.1)
         {
@@ -65,12 +94,15 @@ public class Chess_Piece : MonoBehaviour
         }
     }
 
-    //employ various constraints to check if the move just made was valid
-    bool isValidMove()
+    /// <summary>
+    /// Checks if the last move was valid
+    /// </summary>
+    /// <returns>Validity of last move</returns>
+    bool IsValidMove()
     {
 
         //is the piece on the board?
-        if (!isInBounds())
+        if (!IsInBounds())
         {
             Feedback.SetText("Out of Bounds");
             return false;
@@ -109,7 +141,7 @@ public class Chess_Piece : MonoBehaviour
             return false;
         }
 
-        if (team.isInCheck)
+        if (team.IsInCheck)
         {
             Feedback.SetText("King can be attacked there");
             return false;
@@ -118,31 +150,37 @@ public class Chess_Piece : MonoBehaviour
         return true;
     }
 
-    //function called by other pieces when this piece is being killed
-    public void getKilled()
+    /// <summary>
+    /// Function called by other pieces when this piece is being killed
+    /// </summary>
+    public void GetKilled()
     {
         Coord_Manager.KillPiece(transform.name);
         isDead = true;
         transform.localPosition = new Vector3(-5.22f, transform.localPosition.y, transform.localPosition.z);
     }
 
-    //Move the piece with the mouse
-    void MovePiece()
+    /// <summary>
+    /// Move the piece with the mouse
+    /// </summary>
+    void MovePieceWithMouse()
     {
         mouseIsClicked = true;
-        Vector2 temp = Mouse_Manager.getMouseDelta();
+        Vector2 temp = Mouse_Manager.GetMouseDelta();
         transform.position = new Vector3(transform.position.x + temp.x, transform.position.y + temp.y, -1);
     }
 
-    //Drop piece into closest cell and reset mouse delta
+    /// <summary>
+    /// End piece move, calculate move made and execute it
+    /// </summary>
     void DropPiece()
     {
         print("timestart: "+Time.time);
         mouseIsClicked = false;
-        Mouse_Manager.resetMouseDelta();
+        Mouse_Manager.ResetMouseDelta();
         CenterPiece();
         Coord_Manager.UpdatePosition(transform.name, transform.localPosition);
-        if (!isValidMove())
+        if (!IsValidMove())
         {
             transform.position = startPos;
             Coord_Manager.RevertMove();
@@ -155,16 +193,19 @@ public class Chess_Piece : MonoBehaviour
         print("timeend: " + Time.time);
     }
 
-    //This is an event sent to piece affected
-    //mouse has just been pressed down, begin moving the piece
+    /// <summary>
+    /// Event called when mouse is down
+    /// </summary>
     private void OnMouseDown()
     {
         
         startPos = transform.position;
-        MovePiece();
+        MovePieceWithMouse();
     }
 
-    //The mouse has just been lifted, drop the piece into the closest cell
+    /// <summary>
+    /// Event called when mouse is let go
+    /// </summary>
     private void OnMouseUp()
     {
         DropPiece();

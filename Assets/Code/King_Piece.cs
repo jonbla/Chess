@@ -1,9 +1,15 @@
 ﻿using ExtraChessStructures;
 using UnityEngine;
 
+/// <summary>
+/// King Chess Piece
+/// </summary>
 public class King_Piece : Custom_Mono
 {
-    //Is this move valid for a king
+    /// <summary>
+    /// Checks if this move is valid for a King
+    /// </summary>
+    /// <returns>Validity of move</returns>
     public bool IsValidKingMove()
     {
         Vector2Int lastMove = CP.lastMove;
@@ -36,17 +42,29 @@ public class King_Piece : Custom_Mono
         return true;
     }
 
-    //Check if king is being attacked
+    /// <summary>
+    /// Check if the king is being attacked
+    /// </summary>
+    /// <returns>True if being attacked, False if it is not</returns>
     public bool IsBeingAttacked()
     {
-        return IsBeingAttackedByPawn() || isBeingAttackedByHorse() || IsBeingAttackedByRook() || IsBeingAttackedByBishop() || IsBeingAttackedByKing();
+        return IsBeingAttackedByPawn() || IsBeingAttackedByHorse() || IsBeingAttackedByRook() || IsBeingAttackedByBishop() || IsBeingAttackedByKing();
     }
 
+    /// <summary>
+    /// Check if input location is being attacked
+    /// </summary>
+    /// <param name="space">Target location</param>
+    /// <returns>True if being attacked, False if it is not</returns>
     public bool IsBeingAttacked(Vector2Int space)
     {
         return IsBeingAttackedByPawn(space) || IsBeingAttackedByHorse(space) || IsBeingAttackedByRook(space) || IsBeingAttackedByBishop(space) || IsBeingAttackedByKing(space);
     }
 
+    /// <summary>
+    /// Check if the king is in mate
+    /// </summary>
+    /// <returns>Mate status of king</returns>
     public bool IsInMate()
     {
         Vector2Int pos = Coord_Manager.ConvertCoordsToChessUnits(transform.localPosition);
@@ -92,6 +110,13 @@ public class King_Piece : Custom_Mono
     }
 
     //Check if type of object exists at positions
+
+    /// <summary>
+    /// Check if Object type exists at coord
+    /// </summary>
+    /// <param name="pos">Target position</param>
+    /// <param name="type">Target type</param>
+    /// <returns>True if type found at location, false otherwise</returns>
     bool IsTypeAtCoord(Vector2Int pos, string type)
     {
 
@@ -107,12 +132,20 @@ public class King_Piece : Custom_Mono
 
     }
 
-    //Check if king is being attacked by pawn
+    /// <summary>
+    /// Check if king is being attacked by pawn
+    /// </summary>
+    /// <returns>True if being attacked, False if it is not</returns>
     bool IsBeingAttackedByPawn()
     {
         return IsBeingAttackedByPawn(Coord_Manager.ConvertCoordsToChessUnits(transform.localPosition));
     }
 
+    /// <summary>
+    /// Check if king is being attacked by pawn at Target
+    /// </summary>
+    /// <param name="units">Target</param>
+    /// <returns>True if being attacked, False if it is not</returns>
     bool IsBeingAttackedByPawn(Vector2Int units)
     {
         bool isBlack = GetIsBlack();
@@ -130,12 +163,21 @@ public class King_Piece : Custom_Mono
         return false;
     }
 
-    bool isBeingAttackedByHorse()
+    /// <summary>
+    /// Check if king is being attacked by Horse
+    /// </summary>
+    /// <returns>True if being attacked, False if it is not</returns>
+    bool IsBeingAttackedByHorse()
     {
         return IsBeingAttackedByHorse(Coord_Manager.ConvertCoordsToChessUnits(transform.localPosition));
 
     }
 
+    /// <summary>
+    /// Check if king is being attacked by Horse at Target
+    /// </summary>
+    /// <param name="units">Target</param>
+    /// <returns>True if being attacked, False if it is not</returns>
     bool IsBeingAttackedByHorse(Vector2Int units, bool onExcept = false)
     {
         if (IsTypeAtCoord(new Vector2Int(units.x + 1, units.y + 2), "Horse"))
@@ -180,12 +222,21 @@ public class King_Piece : Custom_Mono
 
         return false;
     }
-    //Is the King being attacked by a Rook
+
+    /// <summary>
+    /// Check if king is being attacked by Rook
+    /// </summary>
+    /// <returns>True if being attacked, False if it is not</returns>
     bool IsBeingAttackedByRook()
     {
         return IsBeingAttackedByRook(Coord_Manager.ConvertCoordsToChessUnits(transform.localPosition));
     }
 
+    /// <summary>
+    /// Check if king is being attacked by Rook at Target
+    /// </summary>
+    /// <param name="units">Target</param>
+    /// <returns>True if being attacked, False if it is not</returns>
     bool IsBeingAttackedByRook(Vector2Int units)
     {
         //Debug.Log("looking right\n");
@@ -278,7 +329,11 @@ public class King_Piece : Custom_Mono
         return false;
     }
 
-    //support method to make the Rook check smaller
+    /// <summary>
+    /// Support method to make the Rook check smaller
+    /// </summary>
+    /// <param name="target">Target Coord</param>
+    /// <returns>1 if found, -1 if null, 0 if empty space</returns>
     private int RookStep(Vector2Int target)
     {
         if (IsTypeAtCoord(target, "Rook"))
@@ -304,11 +359,20 @@ public class King_Piece : Custom_Mono
         return -1;
     }
 
+    /// <summary>
+    /// Check if king is being attacked by Bishop
+    /// </summary>
+    /// <returns>True if being attacked, False if it is not</returns>
     bool IsBeingAttackedByBishop()
     {
         return IsBeingAttackedByBishop(Coord_Manager.ConvertCoordsToChessUnits(transform.localPosition));
     }
 
+    /// <summary>
+    /// Check if king is being attacked by Bishop at Target
+    /// </summary>
+    /// <param name="units">Target</param>
+    /// <returns>True if being attacked, False if it is not</returns>
     bool IsBeingAttackedByBishop(Vector2Int units)
     {
         for (int i = 1; i <= 8 - Mathf.Min(units.x, units.y); i++)
@@ -394,6 +458,11 @@ public class King_Piece : Custom_Mono
         return false;
     }
 
+    /// <summary>
+    /// Support method to make the Bishop check smaller
+    /// </summary>
+    /// <param name="target">Target Coord</param>
+    /// <returns>1 if found, -1 if null, 0 if empty space</returns>
     int BishopStep(Vector2Int target)
     {
 
@@ -420,11 +489,20 @@ public class King_Piece : Custom_Mono
         return -1;
     }
 
+    /// <summary>
+    /// Check if king is being attacked by King
+    /// </summary>
+    /// <returns>True if being attacked, False if it is not</returns>
     bool IsBeingAttackedByKing()
     {
         return IsBeingAttackedByKing(Coord_Manager.ConvertCoordsToChessUnits(transform.localPosition));
     }
 
+    /// <summary>
+    /// Check if king is being attacked by King at Target
+    /// </summary>
+    /// <param name="units">Target</param>
+    /// <returns>True if being attacked, False if it is not</returns>
     bool IsBeingAttackedByKing(Vector2Int units, bool onExcept = false)
     {
 

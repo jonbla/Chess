@@ -1,11 +1,17 @@
 ﻿using ExtraChessStructures;
 using UnityEngine;
 
+/// <summary>
+/// Bishop Chess Piece
+/// </summary>
 public class Bishop_Piece : Custom_Mono
 {
-    
 
-    public bool isValidBishopMove()
+    /// <summary>
+    /// Checks if this move is valid for a bishop
+    /// </summary>
+    /// <returns>Validity of move</returns>
+    public bool IsValidBishopMove()
     {
         Vector2Int lastMove = CP.lastMove;
         ColInfo flags = CP.CollisionInfo;

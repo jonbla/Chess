@@ -1,9 +1,16 @@
 ﻿using ExtraChessStructures;
 using UnityEngine;
 
+/// <summary>
+/// Rook Chess Piece
+/// </summary>
 public class Rook_Piece : Custom_Mono
 {
-    public bool isValidRookMove()
+    /// <summary>
+    /// Checks if this move is valid for a Rook
+    /// </summary>
+    /// <returns>Validity of move</returns>
+    public bool IsValidRookMove()
     {
         Vector2Int lastMove = CP.lastMove;
         ColInfo flags = CP.CollisionInfo;
