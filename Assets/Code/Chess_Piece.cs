@@ -104,6 +104,7 @@ public class Chess_Piece : MonoBehaviour
         //is the piece on the board?
         if (!IsInBounds())
         {
+            Debug.LogWarning("Out of Bounds");
             Feedback.SetText("Out of Bounds");
             return false;
         }
@@ -111,6 +112,7 @@ public class Chess_Piece : MonoBehaviour
         //is it your turn to go?
         if (!team.hasTurn)
         {
+            Debug.LogWarning("Not your turn");
             Feedback.SetText("Not your turn");
             return false;
         }
@@ -123,6 +125,7 @@ public class Chess_Piece : MonoBehaviour
         //is the piece trying to kill it's own team?
         if (isCollidingWithOwnTeam)
         {
+            Debug.LogWarning("Can't kill your own piece");
             Feedback.SetText("Can't kill your own piece");
             return false;
         }
@@ -131,19 +134,14 @@ public class Chess_Piece : MonoBehaviour
 
         if(lastMove == Vector2Int.zero)
         {
-            Feedback.SetText("Opps, dropped your piece");
+            Debug.LogWarning("Oops, dropped your piece");
+            Feedback.SetText("Oops, dropped your piece");
             return false;
         }
 
         //is the piece making a move that particular piece is able to do?
         if (!middleMan.IsPieceSpecificMoveValid())
         {
-            return false;
-        }
-
-        if (team.IsInCheck)
-        {
-            Feedback.SetText("King can be attacked there");
             return false;
         }
 
@@ -180,6 +178,8 @@ public class Chess_Piece : MonoBehaviour
         Mouse_Manager.ResetMouseDelta();
         CenterPiece();
         Coord_Manager.UpdatePosition(transform.name, transform.localPosition);
+
+
         if (!IsValidMove())
         {
             transform.position = startPos;
@@ -187,7 +187,7 @@ public class Chess_Piece : MonoBehaviour
         }
         else
         {            
-            Coord_Manager.CommitPositionUpdate(transform.name, transform.localPosition);
+            Coord_Manager.CommitPositionUpdate();
             team.EndTurn();
         }
         print("timeend: " + Time.time);

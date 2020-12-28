@@ -91,13 +91,17 @@ public class Coord_Manager
     /// <summary>
     /// List of elements that are out of play
     /// </summary>
-    static List<string> deadPieces = new List<string>();
+    static List<string> deadPieces, tempDead = new List<string>();
 
     /// <summary>
     /// 8x8 Table of pieces 
     /// </summary>
-    static readonly Transform[,] pieces = new Transform[9, 9];
-    //static Transform[,] piecesTemp = new Transform[9, 9];
+    private static Transform[,] board = new Transform[9, 9];
+
+    /// <summary>
+    /// 8x8 Table of pieces 
+    /// </summary>
+    private static Transform[,] tempBoard = new Transform[9, 9];
 
     /// <summary>
     /// Where the piece is being dropped over
@@ -112,7 +116,7 @@ public class Coord_Manager
     /// <summary>
     /// Temp Row Struct used for undoing
     /// </summary>
-    static RowStruct rowTemp1, rowTemp2 = GetRow(0);
+    //static RowStruct rowTemp1, rowTemp2 = GetRow(0);
 
     /// <summary>
     /// Representation of an empty row
@@ -131,7 +135,7 @@ public class Coord_Manager
             foreach (Transform piece in colour)
             {
                 Vector2Int chessCoord = ConvertCoordsToChessUnits(piece.localPosition);
-                pieces[chessCoord.x, chessCoord.y] = piece;
+                board[chessCoord.x, chessCoord.y] = piece;
             }
         }
 
@@ -139,22 +143,27 @@ public class Coord_Manager
         {
             for (int j = 1; j <= 8; j++)
             {
-                if (pieces[i, j] == null)
+                if (board[i, j] == null)
                 {
-                    pieces[i, j] = empty;
+                    board[i, j] = empty;
                 }
-                Debug.Log(pieces[i, j]);
+                //Debug.Log(pieces[i, j]);
             }
 
         }
-        //ClearTempBoard();
+        ClearTempBoard();
     }
 
-    /*static void ClearTempBoard()
+    /// <summary>
+    /// Sets the tempboard to the currect board
+    /// </summary>
+    static void ClearTempBoard()
     {
-        piecesTemp = pieces;
-    }*/
+        tempBoard = board;
+        tempDead = deadPieces;
+    }
 
+    /*
     /// <summary>
     /// Get row by number
     /// </summary>
@@ -163,13 +172,13 @@ public class Coord_Manager
     static RowStruct GetRow(int rowNum)
     {
         Transform[] row = new Transform[9];
-        Debug.LogWarning("Starting");
+        Debug.LogWarning("Starting Row Get");
         for (int i = 1; i <= 8; i++)
         {
-            row[i] = pieces[i, rowNum];
-            Debug.Log(pieces[i, rowNum]);
+            row[i] = board[i, rowNum];
+            //Debug.Log(pieces[i, rowNum]);
         }
-        Debug.LogWarning("Ending");
+        Debug.LogWarning("Ending Row Get");
         return new RowStruct(row, rowNum);
     }
 
@@ -181,9 +190,9 @@ public class Coord_Manager
     {
         for (int i = 1; i <= 8; i++)
         {
-            pieces[i, row.rowNum] = row.row[i];
+            board[i, row.rowNum] = row.row[i];
         }
-    }
+    }*/
 
 
 
@@ -214,19 +223,21 @@ public class Coord_Manager
     /// Finds piece by its name
     /// </summary>
     /// <param name="name">Name of piece to find</param>
+    /// <param name="main">Main board, or temp board target</param>
     /// <returns>Found piece Transform, null if not found</returns>
-    static Transform GetTransformObject(string name)
+    static Transform GetTransformObject(string name, bool main = false)
     {
+        Transform[,] targetBoard = main ? board : tempBoard;
         for (int i = 1; i <= 8; i++)
         {
             for (int j = 1; j <= 8; j++)
             {
-                Transform temp = pieces[i, j];
+                Transform temp = targetBoard[i, j];
                 if (temp != null && temp.name != "Empty")
                 {
                     if (temp.name == name)
                     {
-                        return pieces[i, j];
+                        return targetBoard[i, j];
                     }
                 }
             }
@@ -240,14 +251,16 @@ public class Coord_Manager
     /// Find coordinates of a piece from its name
     /// </summary>
     /// <param name="name">Name of piece to find</param>
+    /// <param name="main">Main board, or temp board target</param>
     /// <returns>Coodinates of found piece, returns (-1,-1) if not found</returns>
-    static Vector2Int GetCoordPosition(string name)
+    static Vector2Int GetCoordPosition(string name, bool main = false)
     {
+        Transform[,] targetBoard = main ? board : tempBoard;
         for (int i = 1; i <= 8; i++)
         {
             for (int j = 1; j <= 8; j++)
             {
-                Transform temp = pieces[i, j];
+                Transform temp = targetBoard[i, j];
                 if (temp != null && temp.name != "Empty")
                 {
                     if (temp.name == name)
@@ -273,26 +286,50 @@ public class Coord_Manager
         Vector2Int ChessCoords = ConvertCoordsToChessUnits(value);
         Vector2Int old = GetCoordPosition(name);
 
-        rowTemp1 = GetRow(ChessCoords.y);
-        rowTemp2 = GetRow(old.y);
-
         hoverPos = ChessCoords;
-        pieces[old.x, old.y] = empty;
+
+        Debug.Log(old.x + ", " + old.y + ", " + name);
+        tempBoard[old.x, old.y] = empty;
 
         sourcePos = old;
 
         Debug.Log("updated " + name);
     }
 
+    //public static void UpdatePosition(string name, Vector3 value)
+    //{
+    //    Transform transformObj = GetTransformObject(name);
+
+    //    Vector2Int ChessCoords = ConvertCoordsToChessUnits(value);
+    //    Vector2Int old = GetCoordPosition(name);
+
+    //    rowTemp1 = GetRow(ChessCoords.y);
+    //    rowTemp2 = GetRow(old.y);
+
+    //    hoverPos = ChessCoords;
+    //    board[old.x, old.y] = empty;
+
+    //    sourcePos = old;
+
+    //    Debug.Log("updated " + name);
+    //}
+
     /// <summary>
     /// Undo Function, can only go back 1 move
     /// </summary>
+
     public static void RevertMove()
     {
-        InsertRow(rowTemp1);
-        InsertRow(rowTemp2);
+        ClearTempBoard();
         Debug.Log("revertMove");
     }
+
+    //public static void RevertMove()
+    //{
+    //    InsertRow(rowTemp1);
+    //    InsertRow(rowTemp2);
+    //    Debug.Log("revertMove");
+    //}
 
     /// <summary>
     /// Tell board to commit move to permanent moves
@@ -303,8 +340,17 @@ public class Coord_Manager
     {
         Transform transformObj = GetTransformObject(name);
 
-        pieces[hoverPos.x, hoverPos.y] = transformObj;
+        board[hoverPos.x, hoverPos.y] = transformObj;
         Debug.Log("Commited " + name + hoverPos);
+    }
+
+    /// <summary>
+    /// Tell board to commit temp to permanent board
+    /// </summary>
+    public static void CommitPositionUpdate()
+    {
+        board = tempBoard;
+        deadPieces = tempDead;
     }
 
     //Compare old position with current position, returns offset
@@ -326,13 +372,15 @@ public class Coord_Manager
     /// Build and return collition struct
     /// </summary>
     /// <param name="piece">Piece to get collition information from</param>
+    /// <param name="main">Main board, or temp board target</param>
     /// <returns>Col info</returns>
-    public static ColInfo CheckCollition(Transform piece)
+    public static ColInfo CheckCollition(Transform piece, bool main = true)
     {
+        Transform[,] targetBoard = main ? board : tempBoard;
         Vector2Int chessCoords = ConvertCoordsToChessUnits(piece.localPosition);
         ColInfo flags = new ColInfo(false, false, false);
 
-        Transform col = pieces[chessCoords.x, chessCoords.y];
+        Transform col = targetBoard[chessCoords.x, chessCoords.y];
 
         if (col.name != "Empty")
         {
@@ -355,10 +403,12 @@ public class Coord_Manager
     /// Find name of piece at coord
     /// </summary>
     /// <param name="pos">Position to look at</param>
+    /// <param name="main">Main board, or temp board target</param>
     /// <returns>Name of piece at location, null if empty</returns>
-    public static string GetNameAt(Vector2Int pos)
+    public static string GetNameAt(Vector2Int pos, bool main = false)
     {
-        Transform temp = pieces[pos.x, pos.y];
+        Transform[,] targetBoard = main ? board : tempBoard;
+        Transform temp = targetBoard[pos.x, pos.y];
         if (temp != null && temp.name != "Empty")
         {
             return temp.name;
@@ -370,10 +420,12 @@ public class Coord_Manager
     /// Find type of piece at coord
     /// </summary>
     /// <param name="pos">Position to look at</param>
+    /// <param name="main">Main board, or temp board target</param>
     /// <returns>Type of piece at location, null if empty</returns>
-    public static string GetTypeAt(Vector2Int pos)
+    public static string GetTypeAt(Vector2Int pos, bool main = false)
     {
-        Transform temp = pieces[pos.x, pos.y];
+        Transform[,] targetBoard = main ? board : tempBoard;
+        Transform temp = targetBoard[pos.x, pos.y];
         if (temp != null && temp.name != "Empty")
         {
             return temp.tag;
@@ -385,12 +437,14 @@ public class Coord_Manager
     /// Find piece at coord
     /// </summary>
     /// <param name="pos">Position to look at</param>
+    /// <param name="main">Main board, or temp board target</param>
     /// <returns>Piece at location, null if empty</returns>
-    public static Transform GetTransformAt(Vector2Int pos)
+    public static Transform GetTransformAt(Vector2Int pos, bool main = false)
     {
+        Transform[,] targetBoard = main ? board : tempBoard;
         try
         {
-            return pieces[pos.x, pos.y];
+            return tempBoard[pos.x, pos.y];
         }
         catch (System.IndexOutOfRangeException)
         {
@@ -405,22 +459,41 @@ public class Coord_Manager
     /// Kills named piece
     /// </summary>
     /// <param name="name">Name of piece to kill</param>
-    public static void KillPiece(string name)
+    /// <param name="main">Main board, or temp board target</param>
+    public static void KillPiece(string name, bool main = false)
     {
+        List<string> targetDeadList = main ? deadPieces : tempDead;
+        Transform[,] targetBoard = main ? board : tempBoard;
         for (int i = 1; i <= 8; i++)
         {
             for (int j = 1; j <= 8; j++)
             {
-                Transform temp = pieces[i, j];
+                Transform temp = targetBoard[i, j];
                 if (temp != null && temp.name != "Empty")
                 {
-                    if (pieces[i, j].name == name)
+                    if (targetBoard[i, j].name == name)
                     {
-                        pieces[i, j] = empty;
+                        targetBoard[i, j] = empty;
                     }
                 }
             }
         }
-        deadPieces.Add(name);
+        targetDeadList.Add(name);
     }
+
+    /// <summary>
+    /// Finds information about King's check status
+    /// </summary>
+    /// <returns>Check Flags describing kings check status</returns>
+    public CheckFlags GetCheckInfo()
+    {
+        CheckFlags flags = new CheckFlags();
+
+
+
+
+
+        return flags;
+    }
+
 }

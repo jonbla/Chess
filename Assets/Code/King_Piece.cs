@@ -7,6 +7,16 @@ using UnityEngine;
 public class King_Piece : Custom_Mono
 {
     /// <summary>
+    /// Coord Helper for extra coord functions
+    /// </summary>
+    public Coord_Helper CoordHelper;
+    private void Start()
+    {
+        CoordHelper = GameObject.Find("ExtraCode").transform.Find("Coord_Helper").GetComponent<Coord_Helper>();
+    }
+
+
+    /// <summary>
     /// Checks if this move is valid for a King
     /// </summary>
     /// <returns>Validity of move</returns>
@@ -109,29 +119,6 @@ public class King_Piece : Custom_Mono
         return returnVal;
     }
 
-    //Check if type of object exists at positions
-
-    /// <summary>
-    /// Check if Object type exists at coord
-    /// </summary>
-    /// <param name="pos">Target position</param>
-    /// <param name="type">Target type</param>
-    /// <returns>True if type found at location, false otherwise</returns>
-    bool IsTypeAtCoord(Vector2Int pos, string type)
-    {
-
-        Transform obj = Coord_Manager.GetTransformAt(pos);
-        if (obj != null && obj.name != "Empty")
-        {
-            if (obj.parent != transform.parent)
-            {
-                return obj.tag == type;
-            }
-        }
-        return false;
-
-    }
-
     /// <summary>
     /// Check if king is being attacked by pawn
     /// </summary>
@@ -150,12 +137,12 @@ public class King_Piece : Custom_Mono
     {
         bool isBlack = GetIsBlack();
 
-        if (IsTypeAtCoord(new Vector2Int(units.x + 1, units.y + (isBlack ? -1 : 1)), "Pawn"))
+        if (CoordHelper.IsTypeAtCoord(new Vector2Int(units.x + 1, units.y + (isBlack ? -1 : 1)), "Pawn"))
         {
             return true;
         }
 
-        if (IsTypeAtCoord(new Vector2Int(units.x + -1, units.y + (isBlack ? -1 : 1)), "Pawn"))
+        if (CoordHelper.IsTypeAtCoord(new Vector2Int(units.x + -1, units.y + (isBlack ? -1 : 1)), "Pawn"))
         {
             return true;
         }
@@ -180,42 +167,42 @@ public class King_Piece : Custom_Mono
     /// <returns>True if being attacked, False if it is not</returns>
     bool IsBeingAttackedByHorse(Vector2Int units, bool onExcept = false)
     {
-        if (IsTypeAtCoord(new Vector2Int(units.x + 1, units.y + 2), "Horse"))
+        if (CoordHelper.IsTypeAtCoord(new Vector2Int(units.x + 1, units.y + 2), "Horse"))
         {
             return true;
         }
 
-        if (IsTypeAtCoord(new Vector2Int(units.x + 1, units.y - 2), "Horse"))
+        if (CoordHelper.IsTypeAtCoord(new Vector2Int(units.x + 1, units.y - 2), "Horse"))
         {
             return true;
         }
 
-        if (IsTypeAtCoord(new Vector2Int(units.x - 1, units.y - 2), "Horse"))
+        if (CoordHelper.IsTypeAtCoord(new Vector2Int(units.x - 1, units.y - 2), "Horse"))
         {
             return true;
         }
 
-        if (IsTypeAtCoord(new Vector2Int(units.x - 1, units.y + 2), "Horse"))
+        if (CoordHelper.IsTypeAtCoord(new Vector2Int(units.x - 1, units.y + 2), "Horse"))
         {
             return true;
         }
 
-        if (IsTypeAtCoord(new Vector2Int(units.x + 2, units.y + 1), "Horse"))
+        if (CoordHelper.IsTypeAtCoord(new Vector2Int(units.x + 2, units.y + 1), "Horse"))
         {
             return true;
         }
 
-        if (IsTypeAtCoord(new Vector2Int(units.x + 2, units.y - 1), "Horse"))
+        if (CoordHelper.IsTypeAtCoord(new Vector2Int(units.x + 2, units.y - 1), "Horse"))
         {
             return true;
         }
 
-        if (IsTypeAtCoord(new Vector2Int(units.x - 2, units.y - 1), "Horse"))
+        if (CoordHelper.IsTypeAtCoord(new Vector2Int(units.x - 2, units.y - 1), "Horse"))
         {
             return true;
         }
 
-        if (IsTypeAtCoord(new Vector2Int(units.x - 2, units.y + 1), "Horse"))
+        if (CoordHelper.IsTypeAtCoord(new Vector2Int(units.x - 2, units.y + 1), "Horse"))
         {
             return true;
         }
@@ -336,12 +323,12 @@ public class King_Piece : Custom_Mono
     /// <returns>1 if found, -1 if null, 0 if empty space</returns>
     private int RookStep(Vector2Int target)
     {
-        if (IsTypeAtCoord(target, "Rook"))
+        if (CoordHelper.IsTypeAtCoord(target, "Rook"))
         {
             return 1;
         }
 
-        if (IsTypeAtCoord(target, "Queen"))
+        if (CoordHelper.IsTypeAtCoord(target, "Queen"))
         {
             return 1;
         }
@@ -466,12 +453,12 @@ public class King_Piece : Custom_Mono
     int BishopStep(Vector2Int target)
     {
 
-        if (IsTypeAtCoord(target, "Bishop"))
+        if (CoordHelper.IsTypeAtCoord(target, "Bishop"))
         {
             return 1;
         }
 
-        if (IsTypeAtCoord(target, "Queen"))
+        if (CoordHelper.IsTypeAtCoord(target, "Queen"))
         {
             return 1;
         }
@@ -506,42 +493,42 @@ public class King_Piece : Custom_Mono
     bool IsBeingAttackedByKing(Vector2Int units, bool onExcept = false)
     {
 
-        if (IsTypeAtCoord(new Vector2Int(units.x + 1, units.y), "King"))
+        if (CoordHelper.IsTypeAtCoord(new Vector2Int(units.x + 1, units.y), "King"))
         {
             return true;
         }
 
-        if (IsTypeAtCoord(new Vector2Int(units.x - 1, units.y), "King"))
+        if (CoordHelper.IsTypeAtCoord(new Vector2Int(units.x - 1, units.y), "King"))
         {
             return true;
         }
 
-        if (IsTypeAtCoord(new Vector2Int(units.x, units.y + 1), "King"))
+        if (CoordHelper.IsTypeAtCoord(new Vector2Int(units.x, units.y + 1), "King"))
         {
             return true;
         }
 
-        if (IsTypeAtCoord(new Vector2Int(units.x, units.y - 1), "King"))
+        if (CoordHelper.IsTypeAtCoord(new Vector2Int(units.x, units.y - 1), "King"))
         {
             return true;
         }
 
-        if (IsTypeAtCoord(new Vector2Int(units.x + 1, units.y + 1), "King"))
+        if (CoordHelper.IsTypeAtCoord(new Vector2Int(units.x + 1, units.y + 1), "King"))
         {
             return true;
         }
 
-        if (IsTypeAtCoord(new Vector2Int(units.x - 1, units.y - 1), "King"))
+        if (CoordHelper.IsTypeAtCoord(new Vector2Int(units.x - 1, units.y - 1), "King"))
         {
             return true;
         }
 
-        if (IsTypeAtCoord(new Vector2Int(units.x - 1, units.y + 1), "King"))
+        if (CoordHelper.IsTypeAtCoord(new Vector2Int(units.x - 1, units.y + 1), "King"))
         {
             return true;
         }
 
-        if (IsTypeAtCoord(new Vector2Int(units.x + 1, units.y - 1), "King"))
+        if (CoordHelper.IsTypeAtCoord(new Vector2Int(units.x + 1, units.y - 1), "King"))
         {
             return true;
         }

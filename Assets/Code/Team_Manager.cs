@@ -26,16 +26,6 @@ public class Team_Manager : Custom_Mono
     /// </summary>
     Main main;
 
-    /// <summary>
-    /// Gets mate status of this team
-    /// </summary>
-    public CheckFlags CheckInfo { get => GetCheckFlags(); }
-
-    /// <summary>
-    /// Indicates if this team is in check
-    /// </summary>
-    public bool IsInCheck { get => IsinCheck(); }
-
     // Start is called before the first frame update
     void Start()
     {
@@ -47,32 +37,4 @@ public class Team_Manager : Custom_Mono
     {
         main.EndTurn();
     }
-
-    CheckFlags GetCheckFlags()
-    {
-        bool check = king.IsBeingAttacked();
-        bool mate = check ? king.IsInMate() : false;
-
-        print("check: " + check);
-        print("mate: " + mate);
-
-        CheckFlags returnVal = new CheckFlags(check, mate);
-        SetCheckFlags(returnVal);
-        return returnVal;
-    }
-
-    bool IsinCheck()
-    {
-        return king.IsBeingAttacked();
-    }
-
-    /// <summary>
-    /// Manually set check flags
-    /// </summary>
-    /// <param name="flags"></param>
-    void SetCheckFlags(CheckFlags flags)
-    {
-        checkFlags = flags;
-    }
-
 }
