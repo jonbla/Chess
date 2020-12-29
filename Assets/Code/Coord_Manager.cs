@@ -91,17 +91,22 @@ public class Coord_Manager
     /// <summary>
     /// List of elements that are out of play
     /// </summary>
-    static List<string> deadPieces, tempDead = new List<string>();
+    private static readonly List<string> deadPieces = new List<string>();
+
+    /// <summary>
+    /// List of elements that are out of play
+    /// </summary>
+    private static readonly List<string> tempDead = new List<string>();
 
     /// <summary>
     /// 8x8 Table of pieces 
     /// </summary>
-    private static Transform[,] board = new Transform[9, 9];
+    private static readonly Transform[,] board = new Transform[9, 9];
 
     /// <summary>
     /// 8x8 Table of pieces 
     /// </summary>
-    private static Transform[,] tempBoard = new Transform[9, 9];
+    private static readonly Transform[,] tempBoard = new Transform[9, 9];
 
     /// <summary>
     /// Where the piece is being dropped over
@@ -112,6 +117,11 @@ public class Coord_Manager
     /// Where the piece was picked up from
     /// </summary>
     public static Vector2Int sourcePos = new Vector2Int(0, 0);
+
+    /// <summary>
+    /// Size of board in x and y direction
+    /// </summary>
+    public static readonly int BOARDSIZE = 8;
 
     /// <summary>
     /// Temp Row Struct used for undoing
@@ -139,9 +149,9 @@ public class Coord_Manager
             }
         }
 
-        for (int i = 1; i <= 8; i++)
+        for (int i = 1; i <= BOARDSIZE; i++)
         {
-            for (int j = 1; j <= 8; j++)
+            for (int j = 1; j <= BOARDSIZE; j++)
             {
                 if (board[i, j] == null)
                 {
@@ -149,7 +159,6 @@ public class Coord_Manager
                 }
                 //Debug.Log(pieces[i, j]);
             }
-
         }
         ClearTempBoard();
     }
@@ -159,8 +168,18 @@ public class Coord_Manager
     /// </summary>
     static void ClearTempBoard()
     {
-        tempBoard = board;
-        tempDead = deadPieces;
+        for (int i = 1; i <= BOARDSIZE; i++)
+        {
+            for (int j = 1; j <= BOARDSIZE; j++)
+            {
+                tempBoard[i, j] = board[i, j];
+            }
+        }
+
+        for (int i = 0; i < deadPieces.Count; i++)
+        {
+            tempDead[i] = deadPieces[i];
+        }
     }
 
     /*
@@ -349,8 +368,18 @@ public class Coord_Manager
     /// </summary>
     public static void CommitPositionUpdate()
     {
-        board = tempBoard;
-        deadPieces = tempDead;
+        for (int i = 1; i <= BOARDSIZE; i++)
+        {
+            for (int j = 1; j <= BOARDSIZE; j++)
+            {
+                board[i, j] = tempBoard[i, j];
+            }
+        }
+
+        for (int i = 0; i < deadPieces.Count; i++)
+        {
+            deadPieces[i] = tempDead[i];
+        }
     }
 
     //Compare old position with current position, returns offset
@@ -490,7 +519,7 @@ public class Coord_Manager
         CheckFlags flags = new CheckFlags();
 
 
-
+        
 
 
         return flags;

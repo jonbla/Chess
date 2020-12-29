@@ -1,12 +1,18 @@
 ﻿<Properties StartupConfiguration="{501BD3FF-7F48-2366-810A-1677FF50E37F}|">
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Code/Chess_Piece.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Code/Coord_Manager.cs">
     <Files>
-      <File FileName="Assets/Code/Main.cs" Line="1" Column="1" />
+      <File FileName="Assets/Code/Main.cs" Line="60" Column="17" />
       <File FileName="Assets/Code/King_Piece.cs" Line="26" Column="42" />
-      <File FileName="Assets/Code/Coord_Manager.cs" Line="326" Column="24" />
+      <File FileName="Assets/Code/Coord_Manager.cs" Line="372" Column="10" />
       <File FileName="Assets/Code/Coord_Helper.cs" Line="16" Column="12" />
-      <File FileName="Assets/Code/Team_Manager.cs" Line="1" Column="1" />
-      <File FileName="Assets/Code/Chess_Piece.cs" Line="195" Column="1" />
+      <File FileName="Assets/Code/Team_Manager.cs" Line="38" Column="21" />
+      <File FileName="Assets/Code/Chess_Piece.cs" Line="190" Column="36" />
+      <File FileName="Assets/Code/Mouse_Manager.cs" Line="25" Column="27" />
+      <File FileName="Assets/Code/FadeMaster.cs" Line="1" Column="1" />
+      <File FileName="Assets/Code/Fader.cs" Line="22" Column="53" />
+      <File FileName="Assets/Code/Piece_Middle_manager.cs" Line="159" Column="1" />
+      <File FileName="Assets/Code/Pawn_Piece.cs" Line="98" Column="1" />
+      <File FileName="Assets/Code/Feedback.cs" Line="28" Column="1" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
@@ -14,19 +20,24 @@
           <Node name="Chess" expanded="True">
             <Node name="Assets" expanded="True">
               <Node name="Code" expanded="True">
-                <Node name="Chess_Piece.cs" selected="True" />
+                <Node name="Coord_Manager.cs" selected="True" />
               </Node>
             </Node>
           </Node>
         </State>
       </Pad>
+      <Pad Id="MonoDevelop.Debugger.WatchPad">
+        <State />
+      </Pad>
     </Pads>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="ed6cb0eb-416d-4889-8a6b-955d0839cb00" />
+  <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="eb9e1030-9b22-4b89-af2a-9a6a76ce1176" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
-    <BreakpointStore />
+    <BreakpointStore>
+      <Breakpoint file="/Users/dannysedlov/Documents/Programming/Git/Chess/Assets/Code/Coord_Manager.cs" relfile="Assets/Code/Coord_Manager.cs" line="302" column="5" />
+    </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MultiItemStartupConfigurations />
 </Properties>
