@@ -309,6 +309,7 @@ public class Coord_Manager
 
         Debug.Log(old.x + ", " + old.y + ", " + name);
         tempBoard[old.x, old.y] = empty;
+        tempBoard[ChessCoords.x, ChessCoords.y] = transformObj;
 
         sourcePos = old;
 
