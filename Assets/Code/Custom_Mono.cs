@@ -19,24 +19,33 @@ public class Custom_Mono : MonoBehaviour
     }
 
     /// <summary>
+    /// Kill named piece
+    /// </summary>
+    /// <param name="name">Name of piece to kill</param>
+    public void Kill(string name)
+    {
+        Coord_Manager.GetPiece(name, true).GetKilled();
+    }
+
+    /// <summary>
     /// Kill piece at current location (assumes piece at current location isn't itself)
     /// </summary>
-    public void KillAtLocation()
-    {
-        bool isBlack = GetIsBlack();
+    //public void KillAtLocation()
+    //{
+    //    bool isBlack = GetIsBlack();
 
-        string targetName = Coord_Manager.GetNameAt(Coord_Manager.ConvertCoordsToChessUnits(transform.localPosition));
-        //Coord_Manager.getTransformAt()
-        if (isBlack)
-        {
-            transform.parent.parent.Find("White").Find(targetName).GetComponent<Chess_Piece>().GetKilled();
-        }
-        else
-        {
-            transform.parent.parent.Find("Black").Find(targetName).GetComponent<Chess_Piece>().GetKilled();
-        }
+    //    string targetName = Coord_Manager.GetNameAt(Coord_Manager.ConvertCoordsToChessUnits(transform.localPosition));
+    //    //Coord_Manager.getTransformAt()
+    //    if (isBlack)
+    //    {
+    //        transform.parent.parent.Find("White").Find(targetName).GetComponent<Chess_Piece>().GetKilled();
+    //    }
+    //    else
+    //    {
+    //        transform.parent.parent.Find("Black").Find(targetName).GetComponent<Chess_Piece>().GetKilled();
+    //    }
 
-    }
+    //}
 
     /// <summary>
     /// Returns the team colour of piece

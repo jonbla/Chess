@@ -18,7 +18,7 @@ public class Main : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Application.targetFrameRate = 60;
+        //Application.targetFrameRate = 60;
         Coord_Manager.Init();
         whiteTeam = GameObject.Find("White").GetComponent<Team_Manager>();
         blackTeam = GameObject.Find("Black").GetComponent<Team_Manager>();
@@ -64,15 +64,6 @@ public class Main : MonoBehaviour
 
         moves++;
         ToggleTurnState();
-        CheckFlags checkInfo = whiteTeam.hasTurn ? whiteTeam.CheckInfo : blackTeam.CheckInfo;
-        if (checkInfo.isInCheck)
-        {
-            Feedback.SetText("LONG LIVE THE KING!");
-        }
-        if (checkInfo.isInCheckmate)
-        {
-            Feedback.SetText("THE KING IS DEAD!");
-        }
     }
 
     /// <summary>

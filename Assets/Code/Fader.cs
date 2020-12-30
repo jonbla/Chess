@@ -19,7 +19,7 @@ public class Fader : Custom_Mono
     // Start is called before the first frame update
     void Start()
     {
-        isFadingOut = GetIsBlack();
+        isFadingOut = transform.name == "Black Wood";
     }
 
     // Update is called once per frame
