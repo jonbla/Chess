@@ -12,6 +12,8 @@ public class Custom_Mono : MonoBehaviour
     [HideInInspector]
     public Chess_Piece CP;
 
+    public int totalMoves = 0;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -33,12 +35,7 @@ public class Custom_Mono : MonoBehaviour
     /// <returns>True if black, False if White</returns>
     public bool GetIsBlack()
     {
-        bool isBlack = false;
-        if (transform.parent.name == "Black")
-        {
-            isBlack = true;
-        }
-        return isBlack;
+        return transform.parent.name == "Black";
     }
 
     /// <summary>
@@ -75,5 +72,10 @@ public class Custom_Mono : MonoBehaviour
         {
             return false;
         }
+    }
+
+    public void EndTurn()
+    {
+        totalMoves++;
     }
 }

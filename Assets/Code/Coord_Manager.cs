@@ -39,7 +39,9 @@ public class Coord_Manager
     /// </summary>
     public static Coord_Manager Coord_Man; //makes this a publicly accessable object
 
-    //converts real coords to board coords
+    /// <summary>
+    /// Converts real coords to board coords
+    /// </summary>
     static readonly Dictionary<float, int> map = new Dictionary<float, int>() {
                                                 {-4.06f,  1},
                                                 {-2.90f,  2},
@@ -49,6 +51,20 @@ public class Coord_Manager
                                                 {1.74f,   6},
                                                 {2.90f,   7},
                                                 {4.06f,   8}
+                                                };
+
+    /// <summary>
+    /// Converts board coords to Real coords
+    /// </summary>
+    static readonly Dictionary<int, float> map_R = new Dictionary<int, float>() {
+                                                {1, -4.06f},
+                                                {2, -2.90f},
+                                                {3, -1.74f},
+                                                {4, -0.58f},
+                                                {5, 0.58f},
+                                                {6, 1.74f},
+                                                {7, 2.90f},
+                                                {8, 4.06f}
                                                 };
 
     //table of all piece locations
@@ -177,39 +193,6 @@ public class Coord_Manager
         }
     }
 
-    /*
-    /// <summary>
-    /// Get row by number
-    /// </summary>
-    /// <param name="rowNum">Row to return</param>
-    /// <returns>nth row</returns>
-    static RowStruct GetRow(int rowNum)
-    {
-        Transform[] row = new Transform[9];
-        Debug.LogWarning("Starting Row Get");
-        for (int i = 1; i <= 8; i++)
-        {
-            row[i] = board[i, rowNum];
-            //Debug.Log(pieces[i, rowNum]);
-        }
-        Debug.LogWarning("Ending Row Get");
-        return new RowStruct(row, rowNum);
-    }
-
-    /// <summary>
-    /// Modify a specific row in the table
-    /// </summary>
-    /// <param name="row">Row struct to insert</param>
-    static void InsertRow(RowStruct row)
-    {
-        for (int i = 1; i <= 8; i++)
-        {
-            board[i, row.rowNum] = row.row[i];
-        }
-    }*/
-
-
-
     /// <summary>
     /// Converts world units into Chess Board Coords.
     /// World units must be local
@@ -234,12 +217,34 @@ public class Coord_Manager
     }
 
     /// <summary>
+    /// Converts Chess Board units into Real Coords.
+    /// </summary>
+    /// <param name="raw">Raw input to be converted</param>
+    /// <returns>Converted raw input as custom chess units</returns>
+    public static Vector2 ConvertChessUnitsToCoords(Vector2Int raw)
+    {
+        Vector2 temp = Vector2.zero;
+        foreach (KeyValuePair<int, float> space in map_R)
+        {
+            if (Mathf.Approximately(space.Key, raw.x))
+            {
+                temp = new Vector2(map_R[space.Key], temp.y);
+            }
+            if (Mathf.Approximately(space.Key, raw.y))
+            {
+                temp = new Vector2(temp.x, map_R[space.Key]);
+            }
+        }
+        return temp;
+    }
+
+    /// <summary>
     /// Finds piece by its name
     /// </summary>
     /// <param name="name">Name of piece to find</param>
     /// <param name="main">Main board, or temp board target</param>
     /// <returns>Found piece Transform, null if not found</returns>
-    static Transform GetTransformObject(string name, bool main = false)
+    public static Transform GetTransformObject(string name, bool main = false)
     {
         Transform[,] targetBoard = main ? board : tempBoard;
         for (int i = 1; i <= 8; i++)

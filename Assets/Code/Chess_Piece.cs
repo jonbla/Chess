@@ -57,7 +57,7 @@ public class Chess_Piece : MonoBehaviour
     /// <summary>
     /// Locate the nearest cell and centre the piece into it
     /// </summary>
-    void CenterPiece()
+    public void CenterPiece()
     {
         Grid grid = transform.parent.parent.parent.GetComponent<Grid>();
         Vector3Int cellPosition = grid.LocalToCell(transform.localPosition);
@@ -104,6 +104,15 @@ public class Chess_Piece : MonoBehaviour
             return false;
         }
 
+        lastMove = Coord_Manager.GetPositionDifference();
+
+        if (lastMove == Vector2Int.zero)
+        {
+            Debug.LogWarning("Oops, dropped your piece");
+            Feedback.SetText("Oops, dropped your piece");
+            return false;
+        }
+
         CollisionInfo = Coord_Manager.CheckCollition(transform);
 
         bool isColliding = CollisionInfo.isColliding;
@@ -114,15 +123,6 @@ public class Chess_Piece : MonoBehaviour
         {
             Debug.LogWarning("Can't kill your own piece");
             Feedback.SetText("Can't kill your own piece");
-            return false;
-        }
-
-        lastMove = Coord_Manager.GetPositionDifference();
-
-        if (lastMove == Vector2Int.zero)
-        {
-            Debug.LogWarning("Oops, dropped your piece");
-            Feedback.SetText("Oops, dropped your piece");
             return false;
         }
 
@@ -146,16 +146,6 @@ public class Chess_Piece : MonoBehaviour
     }
 
     /// <summary>
-    /// Move the piece with the mouse
-    /// </summary>
-    void MovePieceWithMouse()
-    {
-        mouseIsClicked = true;
-        Vector2 temp = Mouse_Manager.GetMouseDelta();
-        transform.position = new Vector3(transform.position.x + temp.x, transform.position.y + temp.y, -1);
-    }
-
-    /// <summary>
     /// End piece move, calculate move made and execute it
     /// </summary>
     void DropPiece()
@@ -174,6 +164,7 @@ public class Chess_Piece : MonoBehaviour
         else
         {
             Coord_Manager.CommitPositionUpdate();
+            middleMan.EndTurn();
             team.EndTurn();
         }
         print("timeend: " + Time.time);

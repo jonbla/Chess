@@ -33,7 +33,7 @@ public class Team_Manager : Custom_Mono
         king = transform.Find((name == "Black" ? "Black" : "White") + "_King").GetComponent<King_Piece>();
     }
 
-    public void EndTurn()
+    public new void EndTurn()
     {
         main.EndTurn();
     }

@@ -6,15 +6,8 @@ using UnityEngine;
 /// </summary>
 public class King_Piece : Custom_Mono
 {
-    /// <summary>
-    /// Coord Helper for extra coord functions
-    /// </summary>
-    public Coord_Helper CoordHelper;
-    private void Start()
-    {
-        CoordHelper = GameObject.Find("ExtraCode").transform.Find("Coord_Helper").GetComponent<Coord_Helper>();
-    }
 
+    bool canCastle = true;
 
     /// <summary>
     /// Checks if this move is valid for a King
@@ -28,6 +21,22 @@ public class King_Piece : Custom_Mono
         //If king moves more than 2 spaces, then invalid
         if (Mathf.Abs(lastMove.x) > 1 || Mathf.Abs(lastMove.y) > 1)
         {
+            if(Mathf.Abs(lastMove.x) == 2) //check if king moved 2 squares left or right
+            {
+                if (canCastle) //check if king can castle
+                {
+                    if(totalMoves > 0) //double check if king can really castle
+                    {
+                        canCastle = false; //update check if can't 
+                    }
+                    else
+                    {
+                        Castle(lastMove.x > 0); //Castle and return valid move
+                        return true;
+                    }
+                }
+                Feedback.SetText("Can't Castle");
+            }
             Feedback.SetText("Invalid move for King");
             return false;
         }
@@ -42,6 +51,63 @@ public class King_Piece : Custom_Mono
         }
 
         return true;
+    }
+
+    /// <summary>
+    /// Executes Castle
+    /// </summary>
+    /// <param name="ShortCastle">True for short side castle, False, for long side</param>
+    void Castle(bool ShortCastle)
+    {
+        if (GetIsBlack())
+        {
+            if (ShortCastle) {
+                Transform rook = Coord_Manager.GetTransformObject("Black_Rook_2");
+                Chess_Piece rook_CP = Coord_Manager.GetPiece("Black_Rook_2");
+                Vector3 targetPos = Coord_Manager.ConvertChessUnitsToCoords(new Vector2Int(6, 8));
+
+                rook.localPosition = targetPos;
+
+                rook_CP.CenterPiece();
+                Coord_Manager.UpdatePosition(rook.name, targetPos);
+            }
+            else
+            {
+                Transform rook = Coord_Manager.GetTransformObject("Black_Rook_1");
+                Chess_Piece rook_CP = Coord_Manager.GetPiece("Black_Rook_1");
+                Vector3 targetPos = Coord_Manager.ConvertChessUnitsToCoords(new Vector2Int(4, 8));
+
+                rook.localPosition = targetPos;
+
+                rook_CP.CenterPiece();
+                Coord_Manager.UpdatePosition(rook.name, targetPos);
+            }
+        }
+        else
+        {
+            if (ShortCastle)
+            {
+                Transform rook = Coord_Manager.GetTransformObject("White_Rook_2");
+                Chess_Piece rook_CP = Coord_Manager.GetPiece("White_Rook_2");
+                Vector3 targetPos = Coord_Manager.ConvertChessUnitsToCoords(new Vector2Int(6, 1));
+
+                rook.localPosition = targetPos;
+
+                rook_CP.CenterPiece();
+                Coord_Manager.UpdatePosition(rook.name, targetPos);
+            }
+            else
+            {
+                Transform rook = Coord_Manager.GetTransformObject("White_Rook_1");
+                Chess_Piece rook_CP = Coord_Manager.GetPiece("White_Rook_1");
+                Vector3 targetPos = Coord_Manager.ConvertChessUnitsToCoords(new Vector2Int(4, 1));
+
+                rook.localPosition = targetPos;
+
+                rook_CP.CenterPiece();
+                Coord_Manager.UpdatePosition(rook.name, targetPos);
+            }
+        }
     }
 
     /// <summary>
