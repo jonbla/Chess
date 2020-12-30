@@ -59,7 +59,7 @@ public class Pawn_Piece : Custom_Mono
                     if (flags.isColliding) //make sure you actually are colliding with something
                     {
                         Debug.Log("pass3");
-                        KillAtLocation(); //kill piece colliding with
+                        Kill(flags.nameOfColObject);
                         UpdateMoveCount();
                         return true; //if all these were true, then the move is valid
                     }

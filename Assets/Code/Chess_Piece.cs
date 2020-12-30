@@ -179,7 +179,6 @@ public class Chess_Piece : MonoBehaviour
         CenterPiece();
         Coord_Manager.UpdatePosition(transform.name, transform.localPosition);
 
-
         if (!IsValidMove())
         {
             transform.position = startPos;

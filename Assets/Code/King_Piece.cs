@@ -46,7 +46,7 @@ public class King_Piece : Custom_Mono
             {
                 return false;
             }
-            KillAtLocation();
+            Kill(flags.nameOfColObject);
         }
 
         return true;

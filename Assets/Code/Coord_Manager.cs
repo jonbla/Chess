@@ -412,6 +412,8 @@ public class Coord_Manager
 
         Transform col = targetBoard[chessCoords.x, chessCoords.y];
 
+        flags.nameOfColObject = col.name;
+
         if (col.name != "Empty")
         {
             flags.isColliding = true;
@@ -486,6 +488,39 @@ public class Coord_Manager
     }
 
     /// <summary>
+    /// Find chess piece component by coords
+    /// </summary>
+    /// <param name="pos">Piece coordinates</param>
+    /// <param name="main">Main board, or temp board target</param>
+    /// <returns>Chess Piece component</returns>
+    public static Chess_Piece GetPieceAt(Vector2Int pos, bool main = false)
+    {
+        Transform temp = GetTransformAt(pos, main);
+
+        if(temp != null)
+        {
+            return temp.GetComponent<Chess_Piece>();
+        }
+        return null;
+    }
+
+    /// <summary>
+    /// Find chess piece component by name
+    /// </summary>
+    /// <param name="name">Piece name</param>
+    /// <param name="main">Main board, or temp board target</param>
+    /// <returns>Chess Piece component</returns>
+    public static Chess_Piece GetPiece(string name, bool main = false)
+    {
+        Transform temp = GetTransformObject(name, main);
+        if (temp != null)
+        {
+            return temp.GetComponent<Chess_Piece>();
+        }
+        return null;
+    }
+
+    /// <summary>
     /// Kills named piece
     /// </summary>
     /// <param name="name">Name of piece to kill</param>
@@ -519,9 +554,7 @@ public class Coord_Manager
     {
         CheckFlags flags = new CheckFlags();
 
-
-        
-
+        //TODO Add Check logic here
 
         return flags;
     }

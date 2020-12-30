@@ -23,11 +23,18 @@ namespace ExtraChessStructures
         /// </summary>
         public bool isCollidingWithKing;
 
+        /// <summary>
+        /// Name of piece object is colliding with
+        /// </summary>
+        public string nameOfColObject;
+
+
         public ColInfo(bool col, bool colTeam, bool colKing)
         {
             isColliding = col;
             isCollidingWithOwnTeam = colTeam;
             isCollidingWithKing = colKing;
+            nameOfColObject = "";
         }
 
     }
