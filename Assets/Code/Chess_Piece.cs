@@ -14,7 +14,7 @@ public class Chess_Piece : MonoBehaviour
     /// <summary>
     /// Used for moving the piece while mouse is being held down
     /// </summary>
-    private bool mouseIsClicked = false;
+    public bool mouseIsClicked = false;
 
     /// <summary>
     /// Struct describing collition status
@@ -29,7 +29,7 @@ public class Chess_Piece : MonoBehaviour
     /// <summary>
     /// Last move in chessboard units
     /// </summary>
-    public Vector2Int lastMove; 
+    public Vector2Int lastMove;
 
     /// <summary>
     /// Flag showing if this piece is in play or dead
@@ -53,19 +53,6 @@ public class Chess_Piece : MonoBehaviour
         CenterPiece();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        //Keep running this function while mouse is being held down
-        if (mouseIsClicked)
-        {
-            MovePieceWithMouse();
-        }
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            Application.Quit();
-        }
-    }
 
     /// <summary>
     /// Locate the nearest cell and centre the piece into it
@@ -84,7 +71,7 @@ public class Chess_Piece : MonoBehaviour
     /// <returns>True if on board, False otherwise</returns>
     bool IsInBounds()
     {
-        if(Mathf.Abs(transform.localPosition.x) > 4.1 || Mathf.Abs(transform.localPosition.y) > 4.1)
+        if (Mathf.Abs(transform.localPosition.x) > 4.1 || Mathf.Abs(transform.localPosition.y) > 4.1)
         {
             return false;
         }
@@ -132,7 +119,7 @@ public class Chess_Piece : MonoBehaviour
 
         lastMove = Coord_Manager.GetPositionDifference();
 
-        if(lastMove == Vector2Int.zero)
+        if (lastMove == Vector2Int.zero)
         {
             Debug.LogWarning("Oops, dropped your piece");
             Feedback.SetText("Oops, dropped your piece");
@@ -173,7 +160,7 @@ public class Chess_Piece : MonoBehaviour
     /// </summary>
     void DropPiece()
     {
-        print("timestart: "+Time.time);
+        print("timestart: " + Time.time);
         mouseIsClicked = false;
         Mouse_Manager.ResetMouseDelta();
         CenterPiece();
@@ -185,7 +172,7 @@ public class Chess_Piece : MonoBehaviour
             Coord_Manager.RevertMove();
         }
         else
-        {            
+        {
             Coord_Manager.CommitPositionUpdate();
             team.EndTurn();
         }
@@ -197,9 +184,11 @@ public class Chess_Piece : MonoBehaviour
     /// </summary>
     private void OnMouseDown()
     {
-        
+        Mouse_Manager.HeldPiece_Transform = this.transform;
+        Mouse_Manager.HeldPiece_CP = this;
+
         startPos = transform.position;
-        MovePieceWithMouse();
+        Mouse_Manager.MovePieceWithMouse();
     }
 
     /// <summary>

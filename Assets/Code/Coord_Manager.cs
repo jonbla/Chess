@@ -89,6 +89,11 @@ public class Coord_Manager
                                                 };*/
 
     /// <summary>
+    /// Size of board in x and y direction
+    /// </summary>
+    public static readonly int BOARDSIZE = 8;
+
+    /// <summary>
     /// List of elements that are out of play
     /// </summary>
     private static readonly List<string> deadPieces = new List<string>();
@@ -101,12 +106,12 @@ public class Coord_Manager
     /// <summary>
     /// 8x8 Table of pieces 
     /// </summary>
-    private static readonly Transform[,] board = new Transform[9, 9];
+    private static readonly Transform[,] board = new Transform[BOARDSIZE+1, BOARDSIZE + 1];
 
     /// <summary>
     /// 8x8 Table of pieces 
     /// </summary>
-    private static readonly Transform[,] tempBoard = new Transform[9, 9];
+    private static readonly Transform[,] tempBoard = new Transform[BOARDSIZE + 1, BOARDSIZE + 1];
 
     /// <summary>
     /// Where the piece is being dropped over
@@ -119,17 +124,7 @@ public class Coord_Manager
     public static Vector2Int sourcePos = new Vector2Int(0, 0);
 
     /// <summary>
-    /// Size of board in x and y direction
-    /// </summary>
-    public static readonly int BOARDSIZE = 8;
-
-    /// <summary>
-    /// Temp Row Struct used for undoing
-    /// </summary>
-    //static RowStruct rowTemp1, rowTemp2 = GetRow(0);
-
-    /// <summary>
-    /// Representation of an empty row
+    /// Representation of an empty cell
     /// </summary>
     static readonly Transform empty = new GameObject("Empty").transform;
 
@@ -350,19 +345,6 @@ public class Coord_Manager
     //    InsertRow(rowTemp2);
     //    Debug.Log("revertMove");
     //}
-
-    /// <summary>
-    /// Tell board to commit move to permanent moves
-    /// </summary>
-    /// <param name="name">Name of piece to update</param>
-    /// <param name="value">Coords of location it moved to</param>
-    public static void CommitPositionUpdate(string name, Vector3 value)
-    {
-        Transform transformObj = GetTransformObject(name);
-
-        board[hoverPos.x, hoverPos.y] = transformObj;
-        Debug.Log("Commited " + name + hoverPos);
-    }
 
     /// <summary>
     /// Tell board to commit temp to permanent board

@@ -31,6 +31,24 @@ public class Main : MonoBehaviour
         Feedback.Init();
     }
 
+    void Update()
+    {
+        //Keep running this function while mouse is being held down
+        try
+        {
+            if (Mouse_Manager.HeldPiece_CP.mouseIsClicked)
+            {
+                Mouse_Manager.MovePieceWithMouse();
+            }
+        }
+        catch (System.Exception NullReferenceException) {}
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            Application.Quit();
+        }
+    }
+
     /// <summary>
     /// Toggles the turn
     /// </summary>
