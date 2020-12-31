@@ -138,8 +138,7 @@ public class Chess_Piece : MonoBehaviour
         }
 
 
-        string kingName = team.name + "_King";
-        CF = Coord_Manager.GetCheckInfoAt(Coord_Manager.GetCoordPosition(kingName), team.colour == "Black");
+        CF = Coord_Manager.GetCheckInfoAt(middleMan.GetKingPosition(team.isBlack), team.isBlack);
         if (CF.isInCheck)
         {
             Debug.LogWarning("King in Check");
@@ -165,7 +164,7 @@ public class Chess_Piece : MonoBehaviour
     /// </summary>
     void DropPiece()
     {
-        print("timestart: " + Time.time);
+        Debug.LogWarning("timestart: " + Time.time);
         mouseIsClicked = false;
         Mouse_Manager.ResetMouseDelta();
         CenterPiece();
@@ -182,8 +181,13 @@ public class Chess_Piece : MonoBehaviour
             middleMan.EndTurn();
             team.checkFlags = CF;
             team.EndTurn();
+            CF = Coord_Manager.GetCheckInfoAt(middleMan.GetKingPosition(!team.isBlack), !team.isBlack);
+            if (CF.isInCheck)
+            {
+                Feedback.SetText("CHECK!");
+            }
         }
-        print("timeend: " + Time.time);
+        Debug.LogWarning("timeend: " + Time.time);
     }
 
     /// <summary>

@@ -514,7 +514,7 @@ public class Coord_Manager
             isInCheck = IsBeingAttacked(space, isBlack), isInCheckmate = false
         };
 
-        flags.isInCheckmate = flags.isInCheck ? IsInMate(space, isBlack) : false;
+        //flags.isInCheckmate = flags.isInCheck ? IsInMate(space, isBlack) : false;
 
         return flags;
     }

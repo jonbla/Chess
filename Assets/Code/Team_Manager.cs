@@ -27,16 +27,16 @@ public class Team_Manager : Custom_Mono
     Main main;
 
     /// <summary>
-    /// Team Colour Name as String
+    /// Team Colour Name as bool
     /// </summary>
-    public string colour;
+    public bool isBlack;
 
     // Start is called before the first frame update
     void Start()
     {
         main = GameObject.Find("MainCode").GetComponent<Main>();
         king = transform.Find((name == "Black" ? "Black" : "White") + "_King").GetComponent<King_Piece>();
-        colour = name[0] == 'B' ? "Black" : "White";
+        isBlack = name[0] == 'B';
     }
 
     public new void EndTurn()

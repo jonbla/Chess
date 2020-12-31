@@ -193,4 +193,16 @@ public class Piece_Middle_manager : MonoBehaviour
                 break;
         }
     }
+
+    /// <summary>
+    /// Gets location of king in board units
+    /// </summary>
+    /// <param name="Black">Black King or White King</param>
+    /// <param name="main">Main Board or Temp Board</param>
+    /// <returns>Board units of selected king</returns>
+    public Vector2Int GetKingPosition(bool Black, bool main = false)
+    {
+        string kingName = Black ? "Black": "White" + "_King";
+        return Coord_Manager.GetCoordPosition(kingName, main);
+    }
 }

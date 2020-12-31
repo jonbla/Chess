@@ -93,17 +93,4 @@ public class Pawn_Piece : Custom_Mono
 
         return true; //all other moves are fine
     }
-
-    ///// <summary>
-    ///// Update movement flags
-    ///// </summary>
-    //void UpdateMoveCount()
-    //{
-    //    if (firstMoveDone)
-    //    {
-    //        secondMoveDone = true;
-    //    }
-
-    //    firstMoveDone = true;
-    //}
 }
