@@ -13,15 +13,15 @@ public class Coord_Helper : MonoBehaviour
     /// <param name="pos">Target position</param>
     /// <param name="type">Target type</param>
     /// <returns>True if type found at location, false otherwise</returns>
-    public bool IsTypeAtCoord(Vector2Int pos, string type)
+    public bool IsTypeAtCoord(Vector2Int pos, string type, bool lookForWhite, bool main = false)
     {
-
-        Transform obj = Coord_Manager.GetTransformAt(pos);
+        Transform obj = Coord_Manager.GetTransformAt(pos, main);
         if (obj != null && obj.name != "Empty")
         {
-            if (obj.parent != transform.parent)
+            if (obj.parent.name == "White" == lookForWhite)
             {
-                return obj.tag == type;
+                print("Type Matched " + obj.parent.name + " " + lookForWhite);
+                return obj.CompareTag(type);
             }
         }
         return false;

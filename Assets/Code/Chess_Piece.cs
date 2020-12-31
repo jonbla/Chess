@@ -22,6 +22,11 @@ public class Chess_Piece : MonoBehaviour
     public ColInfo CollisionInfo;
 
     /// <summary>
+    /// Check flags
+    /// </summary>
+    CheckFlags CF;
+
+    /// <summary>
     /// Used for determining offset
     /// </summary>
     Vector3 startPos;
@@ -132,6 +137,16 @@ public class Chess_Piece : MonoBehaviour
             return false;
         }
 
+
+        string kingName = team.name + "_King";
+        CF = Coord_Manager.GetCheckInfoAt(Coord_Manager.GetCoordPosition(kingName), team.colour == "Black");
+        if (CF.isInCheck)
+        {
+            Debug.LogWarning("King in Check");
+            Feedback.SetText("King In Check");
+            return false;
+        }
+
         return true;
     }
 
@@ -165,6 +180,7 @@ public class Chess_Piece : MonoBehaviour
         {
             Coord_Manager.CommitPositionUpdate();
             middleMan.EndTurn();
+            team.checkFlags = CF;
             team.EndTurn();
         }
         print("timeend: " + Time.time);

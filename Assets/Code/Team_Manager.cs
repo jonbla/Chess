@@ -14,7 +14,7 @@ public class Team_Manager : Custom_Mono
     /// <summary>
     /// Mate status of this team
     /// </summary>
-    CheckFlags checkFlags;
+    public CheckFlags checkFlags;
 
     /// <summary>
     /// Reference to this team's king
@@ -26,11 +26,17 @@ public class Team_Manager : Custom_Mono
     /// </summary>
     Main main;
 
+    /// <summary>
+    /// Team Colour Name as String
+    /// </summary>
+    public string colour;
+
     // Start is called before the first frame update
     void Start()
     {
         main = GameObject.Find("MainCode").GetComponent<Main>();
         king = transform.Find((name == "Black" ? "Black" : "White") + "_King").GetComponent<King_Piece>();
+        colour = name[0] == 'B' ? "Black" : "White";
     }
 
     public new void EndTurn()

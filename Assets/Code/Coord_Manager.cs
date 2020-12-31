@@ -274,7 +274,7 @@ public class Coord_Manager
     /// <param name="name">Name of piece to find</param>
     /// <param name="main">Main board, or temp board target</param>
     /// <returns>Coodinates of found piece, returns (-1,-1) if not found</returns>
-    static Vector2Int GetCoordPosition(string name, bool main = false)
+    public static Vector2Int GetCoordPosition(string name, bool main = false)
     {
         Transform[,] targetBoard = main ? board : tempBoard;
         for (int i = 1; i <= 8; i++)
@@ -509,9 +509,12 @@ public class Coord_Manager
     /// <returns>Check Flags describing kings check status</returns>
     public static CheckFlags GetCheckInfoAt(Vector2Int space, bool isBlack)
     {
-        CheckFlags flags = new CheckFlags();
+        CheckFlags flags = new CheckFlags
+        {
+            isInCheck = IsBeingAttacked(space, isBlack), isInCheckmate = false
+        };
 
-        flags.isInCheck = IsBeingAttacked(space, isBlack);
+        flags.isInCheckmate = flags.isInCheck ? IsInMate(space, isBlack) : false;
 
         return flags;
     }
@@ -523,7 +526,7 @@ public class Coord_Manager
     /// <returns>True if being attacked, False if it is not</returns>
     static bool IsBeingAttacked(Vector2Int space, bool isBlack)
     {
-        return IsBeingAttackedByPawn(space, isBlack) || IsBeingAttackedByHorse(space) || IsBeingAttackedByRook(space) || IsBeingAttackedByBishop(space) || IsBeingAttackedByKing(space);
+        return IsBeingAttackedByPawn(space, isBlack) || IsBeingAttackedByHorse(space, isBlack) || IsBeingAttackedByRook(space, isBlack) || IsBeingAttackedByBishop(space, isBlack) || IsBeingAttackedByKing(space, isBlack);
     }
 
     /// <summary>
@@ -581,12 +584,12 @@ public class Coord_Manager
     static bool IsBeingAttackedByPawn(Vector2Int units, bool isBlack)
     {
 
-        if (helper.IsTypeAtCoord(new Vector2Int(units.x + 1, units.y + (isBlack ? -1 : 1)), "Pawn"))
+        if (helper.IsTypeAtCoord(new Vector2Int(units.x + 1, units.y + (isBlack ? -1 : 1)), "Pawn", isBlack))
         {
             return true;
         }
 
-        if (helper.IsTypeAtCoord(new Vector2Int(units.x + -1, units.y + (isBlack ? -1 : 1)), "Pawn"))
+        if (helper.IsTypeAtCoord(new Vector2Int(units.x + -1, units.y + (isBlack ? -1 : 1)), "Pawn", isBlack))
         {
             return true;
         }
@@ -599,44 +602,44 @@ public class Coord_Manager
     /// </summary>
     /// <param name="units">Target</param>
     /// <returns>True if being attacked, False if it is not</returns>
-    static bool IsBeingAttackedByHorse(Vector2Int units, bool onExcept = false)
+    private static bool IsBeingAttackedByHorse(Vector2Int units, bool isBlack)
     {
-        if (helper.IsTypeAtCoord(new Vector2Int(units.x + 1, units.y + 2), "Horse"))
+        if (helper.IsTypeAtCoord(new Vector2Int(units.x + 1, units.y + 2), "Horse", isBlack))
         {
             return true;
         }
 
-        if (helper.IsTypeAtCoord(new Vector2Int(units.x + 1, units.y - 2), "Horse"))
+        if (helper.IsTypeAtCoord(new Vector2Int(units.x + 1, units.y - 2), "Horse", isBlack))
         {
             return true;
         }
 
-        if (helper.IsTypeAtCoord(new Vector2Int(units.x - 1, units.y - 2), "Horse"))
+        if (helper.IsTypeAtCoord(new Vector2Int(units.x - 1, units.y - 2), "Horse", isBlack))
         {
             return true;
         }
 
-        if (helper.IsTypeAtCoord(new Vector2Int(units.x - 1, units.y + 2), "Horse"))
+        if (helper.IsTypeAtCoord(new Vector2Int(units.x - 1, units.y + 2), "Horse", isBlack))
         {
             return true;
         }
 
-        if (helper.IsTypeAtCoord(new Vector2Int(units.x + 2, units.y + 1), "Horse"))
+        if (helper.IsTypeAtCoord(new Vector2Int(units.x + 2, units.y + 1), "Horse", isBlack))
         {
             return true;
         }
 
-        if (helper.IsTypeAtCoord(new Vector2Int(units.x + 2, units.y - 1), "Horse"))
+        if (helper.IsTypeAtCoord(new Vector2Int(units.x + 2, units.y - 1), "Horse", isBlack))
         {
             return true;
         }
 
-        if (helper.IsTypeAtCoord(new Vector2Int(units.x - 2, units.y - 1), "Horse"))
+        if (helper.IsTypeAtCoord(new Vector2Int(units.x - 2, units.y - 1), "Horse", isBlack))
         {
             return true;
         }
 
-        if (helper.IsTypeAtCoord(new Vector2Int(units.x - 2, units.y + 1), "Horse"))
+        if (helper.IsTypeAtCoord(new Vector2Int(units.x - 2, units.y + 1), "Horse", isBlack))
         {
             return true;
         }
@@ -649,14 +652,14 @@ public class Coord_Manager
     /// </summary>
     /// <param name="units">Target</param>
     /// <returns>True if being attacked, False if it is not</returns>
-    static bool IsBeingAttackedByRook(Vector2Int units)
+    static bool IsBeingAttackedByRook(Vector2Int units, bool isBlack)
     {
         //Debug.Log("looking right\n");
         for (int i = units.x + 1; i <= 8; i++)
         {
             Vector2Int lookingAt = new Vector2Int(i, units.y);
 
-            int stepVal = RookStep(lookingAt);
+            int stepVal = RookStep(lookingAt, isBlack);
 
             switch (stepVal)
             {
@@ -678,7 +681,7 @@ public class Coord_Manager
         {
             Vector2Int lookingAt = new Vector2Int(i, units.y);
 
-            int stepVal = RookStep(lookingAt);
+            int stepVal = RookStep(lookingAt, isBlack);
 
             switch (stepVal)
             {
@@ -700,7 +703,7 @@ public class Coord_Manager
         {
             Vector2Int lookingAt = new Vector2Int(units.x, i);
 
-            int stepVal = RookStep(lookingAt);
+            int stepVal = RookStep(lookingAt, isBlack);
 
             switch (stepVal)
             {
@@ -722,7 +725,7 @@ public class Coord_Manager
         {
             Vector2Int lookingAt = new Vector2Int(units.x, i);
 
-            int stepVal = RookStep(lookingAt);
+            int stepVal = RookStep(lookingAt, isBlack);
 
             switch (stepVal)
             {
@@ -746,14 +749,14 @@ public class Coord_Manager
     /// </summary>
     /// <param name="target">Target Coord</param>
     /// <returns>1 if found, -1 if null, 0 if empty space</returns>
-    static private int RookStep(Vector2Int target)
+    static private int RookStep(Vector2Int target, bool isBlack)
     {
-        if (helper.IsTypeAtCoord(target, "Rook"))
+        if (helper.IsTypeAtCoord(target, "Rook", isBlack))
         {
             return 1;
         }
 
-        if (helper.IsTypeAtCoord(target, "Queen"))
+        if (helper.IsTypeAtCoord(target, "Queen", isBlack))
         {
             return 1;
         }
@@ -776,13 +779,13 @@ public class Coord_Manager
     /// </summary>
     /// <param name="units">Target</param>
     /// <returns>True if being attacked, False if it is not</returns>
-    static bool IsBeingAttackedByBishop(Vector2Int units)
+    static bool IsBeingAttackedByBishop(Vector2Int units, bool isBlack)
     {
         for (int i = 1; i <= 8 - Mathf.Min(units.x, units.y); i++)
         {
             Vector2Int lookingAt = new Vector2Int(units.x + i, units.y + i);
 
-            int stepVal = BishopStep(lookingAt);
+            int stepVal = BishopStep(lookingAt, isBlack);
 
             switch (stepVal)
             {
@@ -803,7 +806,7 @@ public class Coord_Manager
         {
             Vector2Int lookingAt = new Vector2Int(units.x - i, units.y + i);
 
-            int stepVal = BishopStep(lookingAt);
+            int stepVal = BishopStep(lookingAt, isBlack);
             switch (stepVal)
             {
                 case 1:
@@ -822,7 +825,7 @@ public class Coord_Manager
         {
             Vector2Int lookingAt = new Vector2Int(units.x + i, units.y - i);
 
-            int stepVal = BishopStep(lookingAt);
+            int stepVal = BishopStep(lookingAt, isBlack);
 
             switch (stepVal)
             {
@@ -843,7 +846,7 @@ public class Coord_Manager
         {
             Vector2Int lookingAt = new Vector2Int(units.x - i, units.y - i);
 
-            int stepVal = BishopStep(lookingAt);
+            int stepVal = BishopStep(lookingAt, isBlack);
 
             switch (stepVal)
             {
@@ -866,15 +869,15 @@ public class Coord_Manager
     /// </summary>
     /// <param name="target">Target Coord</param>
     /// <returns>1 if found, -1 if null, 0 if empty space</returns>
-    static int BishopStep(Vector2Int target)
+    static int BishopStep(Vector2Int target, bool isBlack)
     {
 
-        if (helper.IsTypeAtCoord(target, "Bishop"))
+        if (helper.IsTypeAtCoord(target, "Bishop", isBlack))
         {
             return 1;
         }
 
-        if (helper.IsTypeAtCoord(target, "Queen"))
+        if (helper.IsTypeAtCoord(target, "Queen", isBlack))
         {
             return 1;
         }
@@ -897,45 +900,45 @@ public class Coord_Manager
     /// </summary>
     /// <param name="units">Target</param>
     /// <returns>True if being attacked, False if it is not</returns>
-    static bool IsBeingAttackedByKing(Vector2Int units, bool onExcept = false)
+    static bool IsBeingAttackedByKing(Vector2Int units, bool isBlack)
     {
 
-        if (helper.IsTypeAtCoord(new Vector2Int(units.x + 1, units.y), "King"))
+        if (helper.IsTypeAtCoord(new Vector2Int(units.x + 1, units.y), "King", isBlack))
         {
             return true;
         }
 
-        if (helper.IsTypeAtCoord(new Vector2Int(units.x - 1, units.y), "King"))
+        if (helper.IsTypeAtCoord(new Vector2Int(units.x - 1, units.y), "King", isBlack))
         {
             return true;
         }
 
-        if (helper.IsTypeAtCoord(new Vector2Int(units.x, units.y + 1), "King"))
+        if (helper.IsTypeAtCoord(new Vector2Int(units.x, units.y + 1), "King", isBlack))
         {
             return true;
         }
 
-        if (helper.IsTypeAtCoord(new Vector2Int(units.x, units.y - 1), "King"))
+        if (helper.IsTypeAtCoord(new Vector2Int(units.x, units.y - 1), "King", isBlack))
         {
             return true;
         }
 
-        if (helper.IsTypeAtCoord(new Vector2Int(units.x + 1, units.y + 1), "King"))
+        if (helper.IsTypeAtCoord(new Vector2Int(units.x + 1, units.y + 1), "King", isBlack))
         {
             return true;
         }
 
-        if (helper.IsTypeAtCoord(new Vector2Int(units.x - 1, units.y - 1), "King"))
+        if (helper.IsTypeAtCoord(new Vector2Int(units.x - 1, units.y - 1), "King", isBlack))
         {
             return true;
         }
 
-        if (helper.IsTypeAtCoord(new Vector2Int(units.x - 1, units.y + 1), "King"))
+        if (helper.IsTypeAtCoord(new Vector2Int(units.x - 1, units.y + 1), "King", isBlack))
         {
             return true;
         }
 
-        if (helper.IsTypeAtCoord(new Vector2Int(units.x + 1, units.y - 1), "King"))
+        if (helper.IsTypeAtCoord(new Vector2Int(units.x + 1, units.y - 1), "King", isBlack))
         {
             return true;
         }
