@@ -91,8 +91,16 @@ public class Piece_Middle_manager : MonoBehaviour
         switch (PieceTypeID)
         {
             case 1:
-                Debug.Log("Checking pawn validity");
                 response = pawn.IsValidPawnMove();
+                if (response == false)
+                {
+                    Feedback.SetText(errorMessage + transform.tag);
+                }
+
+                return response;
+
+            case 7:
+                response = pawn.IsValidPawnMove(true);
                 if (response == false)
                 {
                     Feedback.SetText(errorMessage + transform.tag);
@@ -143,18 +151,58 @@ public class Piece_Middle_manager : MonoBehaviour
             case 6:
             case 12:
                 return king.IsValidKingMove();
-            case 7:
-                response = pawn.IsValidPawnMove(true);
-                if (response == false)
-                {
-                    Feedback.SetText(errorMessage + transform.tag);
-                }
-
-                return response;
 
             default:
                 Feedback.SetText("this line shouldn't be reachable");
                 return false;
         }
+    }
+
+    public void EndTurn()
+    {
+        switch (PieceTypeID)
+        {
+            case 1:
+            case 7:
+                pawn.EndTurn();
+                break;
+
+            case 2:
+            case 8:
+                rook.EndTurn();
+                break;
+
+            case 3:
+            case 9:
+                bishop.EndTurn();
+                break;
+
+            case 4:
+            case 10:
+                horse.EndTurn();
+                break;
+
+            case 5:
+            case 11:
+                queen.EndTurn();
+                break;
+
+            case 6:
+            case 12:
+                king.EndTurn();
+                break;
+        }
+    }
+
+    /// <summary>
+    /// Gets location of king in board units
+    /// </summary>
+    /// <param name="Black">Black King or White King</param>
+    /// <param name="main">Main Board or Temp Board</param>
+    /// <returns>Board units of selected king</returns>
+    public Vector2Int GetKingPosition(bool Black, bool main = false)
+    {
+        string kingName = Black ? "Black": "White" + "_King";
+        return Coord_Manager.GetCoordPosition(kingName, main);
     }
 }

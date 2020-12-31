@@ -14,12 +14,17 @@ public class Chess_Piece : MonoBehaviour
     /// <summary>
     /// Used for moving the piece while mouse is being held down
     /// </summary>
-    private bool mouseIsClicked = false;
+    public bool mouseIsClicked = false;
 
     /// <summary>
     /// Struct describing collition status
     /// </summary>
     public ColInfo CollisionInfo;
+
+    /// <summary>
+    /// Check flags
+    /// </summary>
+    CheckFlags CF;
 
     /// <summary>
     /// Used for determining offset
@@ -29,7 +34,7 @@ public class Chess_Piece : MonoBehaviour
     /// <summary>
     /// Last move in chessboard units
     /// </summary>
-    public Vector2Int lastMove; 
+    public Vector2Int lastMove;
 
     /// <summary>
     /// Flag showing if this piece is in play or dead
@@ -53,24 +58,11 @@ public class Chess_Piece : MonoBehaviour
         CenterPiece();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        //Keep running this function while mouse is being held down
-        if (mouseIsClicked)
-        {
-            MovePieceWithMouse();
-        }
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            Application.Quit();
-        }
-    }
 
     /// <summary>
     /// Locate the nearest cell and centre the piece into it
     /// </summary>
-    void CenterPiece()
+    public void CenterPiece()
     {
         Grid grid = transform.parent.parent.parent.GetComponent<Grid>();
         Vector3Int cellPosition = grid.LocalToCell(transform.localPosition);
@@ -84,7 +76,7 @@ public class Chess_Piece : MonoBehaviour
     /// <returns>True if on board, False otherwise</returns>
     bool IsInBounds()
     {
-        if(Mathf.Abs(transform.localPosition.x) > 4.1 || Mathf.Abs(transform.localPosition.y) > 4.1)
+        if (Mathf.Abs(transform.localPosition.x) > 4.1 || Mathf.Abs(transform.localPosition.y) > 4.1)
         {
             return false;
         }
@@ -117,6 +109,15 @@ public class Chess_Piece : MonoBehaviour
             return false;
         }
 
+        lastMove = Coord_Manager.GetPositionDifference();
+
+        if (lastMove == Vector2Int.zero)
+        {
+            Debug.LogWarning("Oops, dropped your piece");
+            Feedback.SetText("Oops, dropped your piece");
+            return false;
+        }
+
         CollisionInfo = Coord_Manager.CheckCollition(transform);
 
         bool isColliding = CollisionInfo.isColliding;
@@ -130,18 +131,18 @@ public class Chess_Piece : MonoBehaviour
             return false;
         }
 
-        lastMove = Coord_Manager.GetPositionDifference();
-
-        if(lastMove == Vector2Int.zero)
-        {
-            Debug.LogWarning("Oops, dropped your piece");
-            Feedback.SetText("Oops, dropped your piece");
-            return false;
-        }
-
         //is the piece making a move that particular piece is able to do?
         if (!middleMan.IsPieceSpecificMoveValid())
         {
+            return false;
+        }
+
+
+        CF = Coord_Manager.GetCheckInfoAt(middleMan.GetKingPosition(team.isBlack), team.isBlack);
+        if (CF.isInCheck)
+        {
+            Debug.LogWarning("King in Check");
+            Feedback.SetText("King In Check");
             return false;
         }
 
@@ -159,21 +160,11 @@ public class Chess_Piece : MonoBehaviour
     }
 
     /// <summary>
-    /// Move the piece with the mouse
-    /// </summary>
-    void MovePieceWithMouse()
-    {
-        mouseIsClicked = true;
-        Vector2 temp = Mouse_Manager.GetMouseDelta();
-        transform.position = new Vector3(transform.position.x + temp.x, transform.position.y + temp.y, -1);
-    }
-
-    /// <summary>
     /// End piece move, calculate move made and execute it
     /// </summary>
     void DropPiece()
     {
-        print("timestart: "+Time.time);
+        Debug.LogWarning("timestart: " + Time.time);
         mouseIsClicked = false;
         Mouse_Manager.ResetMouseDelta();
         CenterPiece();
@@ -185,11 +176,18 @@ public class Chess_Piece : MonoBehaviour
             Coord_Manager.RevertMove();
         }
         else
-        {            
+        {
             Coord_Manager.CommitPositionUpdate();
+            middleMan.EndTurn();
+            team.checkFlags = CF;
             team.EndTurn();
+            CF = Coord_Manager.GetCheckInfoAt(middleMan.GetKingPosition(!team.isBlack), !team.isBlack);
+            if (CF.isInCheck)
+            {
+                Feedback.SetText("CHECK!");
+            }
         }
-        print("timeend: " + Time.time);
+        Debug.LogWarning("timeend: " + Time.time);
     }
 
     /// <summary>
@@ -197,9 +195,11 @@ public class Chess_Piece : MonoBehaviour
     /// </summary>
     private void OnMouseDown()
     {
-        
+        Mouse_Manager.HeldPiece_Transform = this.transform;
+        Mouse_Manager.HeldPiece_CP = this;
+
         startPos = transform.position;
-        MovePieceWithMouse();
+        Mouse_Manager.MovePieceWithMouse();
     }
 
     /// <summary>

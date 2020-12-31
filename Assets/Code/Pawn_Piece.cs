@@ -14,14 +14,14 @@ public class Pawn_Piece : Custom_Mono
     /// <summary>
     /// Flag indicating if this piece has completed its second move
     /// </summary>
-    [HideInInspector]
-    public bool secondMoveDone = false;
+    //[HideInInspector]
+    //public bool secondMoveDone = false;
 
     /// <summary>
     /// Flag indicating if this piece has completed its second move
     /// </summary>
-    [HideInInspector]
-    bool firstMoveDone = false;
+    //[HideInInspector]
+    //bool firstMoveDone = false;
 
     /// <summary>
     /// Reference to main
@@ -60,7 +60,6 @@ public class Pawn_Piece : Custom_Mono
                     {
                         Debug.Log("pass3");
                         Kill(flags.nameOfColObject);
-                        UpdateMoveCount();
                         return true; //if all these were true, then the move is valid
                     }
                 }
@@ -76,9 +75,8 @@ public class Pawn_Piece : Custom_Mono
 
         if (lastMove.y >= 2 || lastMove.y < 0) //if you tried to move more than 1 space forward
         {
-            if (lastMove.y == 2 && !firstMoveDone) //is this you first move?
+            if (lastMove.y == 2 && totalMoves == 0) //is this your first move?
             {
-                UpdateMoveCount();
                 canBePassanted = true;
                 main.pawnsToUpdate.Add(this, 2);
                 return true; //if so, then this move is valid
@@ -93,20 +91,6 @@ public class Pawn_Piece : Custom_Mono
             return false;
         }
 
-        UpdateMoveCount();
         return true; //all other moves are fine
-    }
-
-    /// <summary>
-    /// Update movement flags
-    /// </summary>
-    void UpdateMoveCount()
-    {
-        if (firstMoveDone)
-        {
-            secondMoveDone = true;
-        }
-
-        firstMoveDone = true;
     }
 }

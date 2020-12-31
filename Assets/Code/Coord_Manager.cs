@@ -39,7 +39,11 @@ public class Coord_Manager
     /// </summary>
     public static Coord_Manager Coord_Man; //makes this a publicly accessable object
 
-    //converts real coords to board coords
+    static Coord_Helper helper = GameObject.Find("ExtraCode").transform.Find("Coord_Helper").GetComponent<Coord_Helper>();
+
+    /// <summary>
+    /// Converts real coords to board coords
+    /// </summary>
     static readonly Dictionary<float, int> map = new Dictionary<float, int>() {
                                                 {-4.06f,  1},
                                                 {-2.90f,  2},
@@ -49,6 +53,20 @@ public class Coord_Manager
                                                 {1.74f,   6},
                                                 {2.90f,   7},
                                                 {4.06f,   8}
+                                                };
+
+    /// <summary>
+    /// Converts board coords to Real coords (Local units)
+    /// </summary>
+    static readonly Dictionary<int, float> map_R = new Dictionary<int, float>() {
+                                                {1, -4.06f},
+                                                {2, -2.90f},
+                                                {3, -1.74f},
+                                                {4, -0.58f},
+                                                {5, 0.58f},
+                                                {6, 1.74f},
+                                                {7, 2.90f},
+                                                {8, 4.06f}
                                                 };
 
     //table of all piece locations
@@ -89,6 +107,11 @@ public class Coord_Manager
                                                 };*/
 
     /// <summary>
+    /// Size of board in x and y direction
+    /// </summary>
+    public static readonly int BOARDSIZE = 8;
+
+    /// <summary>
     /// List of elements that are out of play
     /// </summary>
     private static readonly List<string> deadPieces = new List<string>();
@@ -101,12 +124,12 @@ public class Coord_Manager
     /// <summary>
     /// 8x8 Table of pieces 
     /// </summary>
-    private static readonly Transform[,] board = new Transform[9, 9];
+    private static readonly Transform[,] board = new Transform[BOARDSIZE+1, BOARDSIZE + 1];
 
     /// <summary>
     /// 8x8 Table of pieces 
     /// </summary>
-    private static readonly Transform[,] tempBoard = new Transform[9, 9];
+    private static readonly Transform[,] tempBoard = new Transform[BOARDSIZE + 1, BOARDSIZE + 1];
 
     /// <summary>
     /// Where the piece is being dropped over
@@ -119,17 +142,7 @@ public class Coord_Manager
     public static Vector2Int sourcePos = new Vector2Int(0, 0);
 
     /// <summary>
-    /// Size of board in x and y direction
-    /// </summary>
-    public static readonly int BOARDSIZE = 8;
-
-    /// <summary>
-    /// Temp Row Struct used for undoing
-    /// </summary>
-    //static RowStruct rowTemp1, rowTemp2 = GetRow(0);
-
-    /// <summary>
-    /// Representation of an empty row
+    /// Representation of an empty cell
     /// </summary>
     static readonly Transform empty = new GameObject("Empty").transform;
 
@@ -182,39 +195,6 @@ public class Coord_Manager
         }
     }
 
-    /*
-    /// <summary>
-    /// Get row by number
-    /// </summary>
-    /// <param name="rowNum">Row to return</param>
-    /// <returns>nth row</returns>
-    static RowStruct GetRow(int rowNum)
-    {
-        Transform[] row = new Transform[9];
-        Debug.LogWarning("Starting Row Get");
-        for (int i = 1; i <= 8; i++)
-        {
-            row[i] = board[i, rowNum];
-            //Debug.Log(pieces[i, rowNum]);
-        }
-        Debug.LogWarning("Ending Row Get");
-        return new RowStruct(row, rowNum);
-    }
-
-    /// <summary>
-    /// Modify a specific row in the table
-    /// </summary>
-    /// <param name="row">Row struct to insert</param>
-    static void InsertRow(RowStruct row)
-    {
-        for (int i = 1; i <= 8; i++)
-        {
-            board[i, row.rowNum] = row.row[i];
-        }
-    }*/
-
-
-
     /// <summary>
     /// Converts world units into Chess Board Coords.
     /// World units must be local
@@ -239,12 +219,34 @@ public class Coord_Manager
     }
 
     /// <summary>
+    /// Converts Chess Board units into Real Coords.
+    /// </summary>
+    /// <param name="raw">Raw input to be converted</param>
+    /// <returns>Converted raw input as custom chess units</returns>
+    public static Vector2 ConvertChessUnitsToCoords(Vector2Int raw)
+    {
+        Vector2 temp = Vector2.zero;
+        foreach (KeyValuePair<int, float> space in map_R)
+        {
+            if (Mathf.Approximately(space.Key, raw.x))
+            {
+                temp = new Vector2(map_R[space.Key], temp.y);
+            }
+            if (Mathf.Approximately(space.Key, raw.y))
+            {
+                temp = new Vector2(temp.x, map_R[space.Key]);
+            }
+        }
+        return temp;
+    }
+
+    /// <summary>
     /// Finds piece by its name
     /// </summary>
     /// <param name="name">Name of piece to find</param>
     /// <param name="main">Main board, or temp board target</param>
     /// <returns>Found piece Transform, null if not found</returns>
-    static Transform GetTransformObject(string name, bool main = false)
+    public static Transform GetTransformObject(string name, bool main = false)
     {
         Transform[,] targetBoard = main ? board : tempBoard;
         for (int i = 1; i <= 8; i++)
@@ -272,7 +274,7 @@ public class Coord_Manager
     /// <param name="name">Name of piece to find</param>
     /// <param name="main">Main board, or temp board target</param>
     /// <returns>Coodinates of found piece, returns (-1,-1) if not found</returns>
-    static Vector2Int GetCoordPosition(string name, bool main = false)
+    public static Vector2Int GetCoordPosition(string name, bool main = false)
     {
         Transform[,] targetBoard = main ? board : tempBoard;
         for (int i = 1; i <= 8; i++)
@@ -316,57 +318,12 @@ public class Coord_Manager
         Debug.Log("updated " + name);
     }
 
-    //public static void UpdatePosition(string name, Vector3 value)
-    //{
-    //    Transform transformObj = GetTransformObject(name);
-
-    //    Vector2Int ChessCoords = ConvertCoordsToChessUnits(value);
-    //    Vector2Int old = GetCoordPosition(name);
-
-    //    rowTemp1 = GetRow(ChessCoords.y);
-    //    rowTemp2 = GetRow(old.y);
-
-    //    hoverPos = ChessCoords;
-    //    board[old.x, old.y] = empty;
-
-    //    sourcePos = old;
-
-    //    Debug.Log("updated " + name);
-    //}
-
-    /// <summary>
-    /// Undo Function, can only go back 1 move
-    /// </summary>
-
     public static void RevertMove()
     {
         ClearTempBoard();
         Debug.Log("revertMove");
     }
 
-    //public static void RevertMove()
-    //{
-    //    InsertRow(rowTemp1);
-    //    InsertRow(rowTemp2);
-    //    Debug.Log("revertMove");
-    //}
-
-    /// <summary>
-    /// Tell board to commit move to permanent moves
-    /// </summary>
-    /// <param name="name">Name of piece to update</param>
-    /// <param name="value">Coords of location it moved to</param>
-    public static void CommitPositionUpdate(string name, Vector3 value)
-    {
-        Transform transformObj = GetTransformObject(name);
-
-        board[hoverPos.x, hoverPos.y] = transformObj;
-        Debug.Log("Commited " + name + hoverPos);
-    }
-
-    /// <summary>
-    /// Tell board to commit temp to permanent board
-    /// </summary>
     public static void CommitPositionUpdate()
     {
         for (int i = 1; i <= BOARDSIZE; i++)
@@ -550,13 +507,444 @@ public class Coord_Manager
     /// Finds information about King's check status
     /// </summary>
     /// <returns>Check Flags describing kings check status</returns>
-    public CheckFlags GetCheckInfo()
+    public static CheckFlags GetCheckInfoAt(Vector2Int space, bool isBlack)
     {
-        CheckFlags flags = new CheckFlags();
+        CheckFlags flags = new CheckFlags
+        {
+            isInCheck = IsBeingAttacked(space, isBlack), isInCheckmate = false
+        };
 
-        //TODO Add Check logic here
+        //flags.isInCheckmate = flags.isInCheck ? IsInMate(space, isBlack) : false;
 
         return flags;
+    }
+
+    /// <summary>
+    /// Check if input location is being attacked
+    /// </summary>
+    /// <param name="space">Target location</param>
+    /// <returns>True if being attacked, False if it is not</returns>
+    static bool IsBeingAttacked(Vector2Int space, bool isBlack)
+    {
+        return IsBeingAttackedByPawn(space, isBlack) || IsBeingAttackedByHorse(space, isBlack) || IsBeingAttackedByRook(space, isBlack) || IsBeingAttackedByBishop(space, isBlack) || IsBeingAttackedByKing(space, isBlack);
+    }
+
+    /// <summary>
+    /// Check if the king is in mate
+    /// </summary>
+    /// <returns>Mate status of king</returns>
+    static bool IsInMate(Vector2Int space, bool isBlack)
+    {
+        bool returnVal = true;
+        bool[,] emptySpaces = new bool[3, 3];
+
+        for (int x = 0; x < 3; x++)
+        {
+            for (int y = 0; y < 3; y++)
+            {
+                if (x == 1 && y == 1)
+                {
+                    emptySpaces[x, y] = false;
+                    continue;
+                }
+
+                bool temp = false;
+                Transform lookingAt = Coord_Manager.GetTransformAt(new Vector2Int(space.x + x - 1, space.y + y - 1));
+
+                if (lookingAt != null && lookingAt.name == "Empty")
+                {
+                    temp = true;
+                }
+                emptySpaces[x, y] = temp;
+            }
+        }
+
+
+        for (int x = 0; x < 3; x++)
+        {
+            for (int y = 0; y < 3; y++)
+            {
+                Debug.Log("x: " + x + "y: " + y + "  " + emptySpaces[x, y]);
+                if (x == 1 && y == 1) continue;
+                if (emptySpaces[x, y])
+                {
+                    returnVal = returnVal && IsBeingAttacked(new Vector2Int(space.x + x - 1, space.y + y - 1), isBlack);
+                    if (!returnVal) return false;
+                }
+            }
+        }
+        return returnVal;
+    }
+
+    /// <summary>
+    /// Check if king is being attacked by pawn at Target
+    /// </summary>
+    /// <param name="units">Target</param>
+    /// <returns>True if being attacked, False if it is not</returns>
+    static bool IsBeingAttackedByPawn(Vector2Int units, bool isBlack)
+    {
+
+        if (helper.IsTypeAtCoord(new Vector2Int(units.x + 1, units.y + (isBlack ? -1 : 1)), "Pawn", isBlack))
+        {
+            return true;
+        }
+
+        if (helper.IsTypeAtCoord(new Vector2Int(units.x + -1, units.y + (isBlack ? -1 : 1)), "Pawn", isBlack))
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    /// <summary>
+    /// Check if king is being attacked by Horse at Target
+    /// </summary>
+    /// <param name="units">Target</param>
+    /// <returns>True if being attacked, False if it is not</returns>
+    private static bool IsBeingAttackedByHorse(Vector2Int units, bool isBlack)
+    {
+        if (helper.IsTypeAtCoord(new Vector2Int(units.x + 1, units.y + 2), "Horse", isBlack))
+        {
+            return true;
+        }
+
+        if (helper.IsTypeAtCoord(new Vector2Int(units.x + 1, units.y - 2), "Horse", isBlack))
+        {
+            return true;
+        }
+
+        if (helper.IsTypeAtCoord(new Vector2Int(units.x - 1, units.y - 2), "Horse", isBlack))
+        {
+            return true;
+        }
+
+        if (helper.IsTypeAtCoord(new Vector2Int(units.x - 1, units.y + 2), "Horse", isBlack))
+        {
+            return true;
+        }
+
+        if (helper.IsTypeAtCoord(new Vector2Int(units.x + 2, units.y + 1), "Horse", isBlack))
+        {
+            return true;
+        }
+
+        if (helper.IsTypeAtCoord(new Vector2Int(units.x + 2, units.y - 1), "Horse", isBlack))
+        {
+            return true;
+        }
+
+        if (helper.IsTypeAtCoord(new Vector2Int(units.x - 2, units.y - 1), "Horse", isBlack))
+        {
+            return true;
+        }
+
+        if (helper.IsTypeAtCoord(new Vector2Int(units.x - 2, units.y + 1), "Horse", isBlack))
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    /// <summary>
+    /// Check if king is being attacked by Rook at Target
+    /// </summary>
+    /// <param name="units">Target</param>
+    /// <returns>True if being attacked, False if it is not</returns>
+    static bool IsBeingAttackedByRook(Vector2Int units, bool isBlack)
+    {
+        //Debug.Log("looking right\n");
+        for (int i = units.x + 1; i <= 8; i++)
+        {
+            Vector2Int lookingAt = new Vector2Int(i, units.y);
+
+            int stepVal = RookStep(lookingAt, isBlack);
+
+            switch (stepVal)
+            {
+                case 1:
+                    return true;
+                case 0:
+                    continue;
+                case -1:
+                    goto StraightLoop2;
+                default:
+                    Debug.Log("This code should be impossible");
+                    break;
+            }
+        }
+
+    //Debug.Log("looking left\n");
+    StraightLoop2: { }
+        for (int i = units.x - 1; i >= 0; i--)
+        {
+            Vector2Int lookingAt = new Vector2Int(i, units.y);
+
+            int stepVal = RookStep(lookingAt, isBlack);
+
+            switch (stepVal)
+            {
+                case 1:
+                    return true;
+                case 0:
+                    continue;
+                case -1:
+                    goto StraightLoop3;
+                default:
+                    Debug.Log("This code should be impossible");
+                    break;
+            }
+        }
+
+    //Debug.Log("looking up\n");
+    StraightLoop3: { }
+        for (int i = units.y + 1; i <= 8; i++)
+        {
+            Vector2Int lookingAt = new Vector2Int(units.x, i);
+
+            int stepVal = RookStep(lookingAt, isBlack);
+
+            switch (stepVal)
+            {
+                case 1:
+                    return true;
+                case 0:
+                    continue;
+                case -1:
+                    goto StraightLoop4;
+                default:
+                    Debug.Log("This code should be impossible");
+                    break;
+            }
+        }
+
+    //Debug.Log("looking down\n");
+    StraightLoop4: { }
+        for (int i = units.y - 1; i >= 0; i--)
+        {
+            Vector2Int lookingAt = new Vector2Int(units.x, i);
+
+            int stepVal = RookStep(lookingAt, isBlack);
+
+            switch (stepVal)
+            {
+                case 1:
+                    return true;
+                case 0:
+                    continue;
+                case -1:
+                    return false;
+                default:
+                    Debug.Log("This code should be impossible");
+                    break;
+            }
+        }
+
+        return false;
+    }
+
+    /// <summary>
+    /// Support method to make the Rook check smaller
+    /// </summary>
+    /// <param name="target">Target Coord</param>
+    /// <returns>1 if found, -1 if null, 0 if empty space</returns>
+    static private int RookStep(Vector2Int target, bool isBlack)
+    {
+        if (helper.IsTypeAtCoord(target, "Rook", isBlack))
+        {
+            return 1;
+        }
+
+        if (helper.IsTypeAtCoord(target, "Queen", isBlack))
+        {
+            return 1;
+        }
+
+        Transform transformBeingLookedAt = Coord_Manager.GetTransformAt(target);
+
+        if (transformBeingLookedAt == null)
+        {
+            return -1;
+        }
+        if (transformBeingLookedAt.name == "Empty")
+        {
+            return 0;
+        }
+        return -1;
+    }
+
+    /// <summary>
+    /// Check if king is being attacked by Bishop at Target
+    /// </summary>
+    /// <param name="units">Target</param>
+    /// <returns>True if being attacked, False if it is not</returns>
+    static bool IsBeingAttackedByBishop(Vector2Int units, bool isBlack)
+    {
+        for (int i = 1; i <= 8 - Mathf.Min(units.x, units.y); i++)
+        {
+            Vector2Int lookingAt = new Vector2Int(units.x + i, units.y + i);
+
+            int stepVal = BishopStep(lookingAt, isBlack);
+
+            switch (stepVal)
+            {
+                case 1:
+                    return true;
+                case 0:
+                    continue;
+                case -1:
+                    goto DiagonalLoop2;
+                default:
+                    Debug.Log("This code should be impossible");
+                    break;
+            }
+        }
+
+    DiagonalLoop2: { }
+        for (int i = 1; i <= 8 - Mathf.Min(units.x, units.y); i++)
+        {
+            Vector2Int lookingAt = new Vector2Int(units.x - i, units.y + i);
+
+            int stepVal = BishopStep(lookingAt, isBlack);
+            switch (stepVal)
+            {
+                case 1:
+                    return true;
+                case 0:
+                    continue;
+                case -1:
+                    goto DiagonalLoop3;
+                default:
+                    Debug.Log("This code should be impossible");
+                    break;
+            }
+        }
+    DiagonalLoop3: { }
+        for (int i = 1; i <= 8 - Mathf.Min(units.x, units.y); i++)
+        {
+            Vector2Int lookingAt = new Vector2Int(units.x + i, units.y - i);
+
+            int stepVal = BishopStep(lookingAt, isBlack);
+
+            switch (stepVal)
+            {
+                case 1:
+                    return true;
+                case 0:
+                    continue;
+                case -1:
+                    goto DiagonalLoop4;
+                default:
+                    Debug.Log("This code should be impossible");
+                    break;
+            }
+        }
+
+    DiagonalLoop4: { }
+        for (int i = 1; i <= Mathf.Max(units.x, units.y); i++)
+        {
+            Vector2Int lookingAt = new Vector2Int(units.x - i, units.y - i);
+
+            int stepVal = BishopStep(lookingAt, isBlack);
+
+            switch (stepVal)
+            {
+                case 1:
+                    return true;
+                case 0:
+                    continue;
+                case -1:
+                    return false;
+                default:
+                    Debug.Log("This code should be impossible");
+                    break;
+            }
+        }
+        return false;
+    }
+
+    /// <summary>
+    /// Support method to make the Bishop check smaller
+    /// </summary>
+    /// <param name="target">Target Coord</param>
+    /// <returns>1 if found, -1 if null, 0 if empty space</returns>
+    static int BishopStep(Vector2Int target, bool isBlack)
+    {
+
+        if (helper.IsTypeAtCoord(target, "Bishop", isBlack))
+        {
+            return 1;
+        }
+
+        if (helper.IsTypeAtCoord(target, "Queen", isBlack))
+        {
+            return 1;
+        }
+
+        Transform transformBeingLookedAt = Coord_Manager.GetTransformAt(target);
+
+        if (transformBeingLookedAt == null)
+        {
+            return -1;
+        }
+        if (transformBeingLookedAt.name == "Empty")
+        {
+            return 0;
+        }
+        return -1;
+    }
+
+    /// <summary>
+    /// Check if king is being attacked by King at Target
+    /// </summary>
+    /// <param name="units">Target</param>
+    /// <returns>True if being attacked, False if it is not</returns>
+    static bool IsBeingAttackedByKing(Vector2Int units, bool isBlack)
+    {
+
+        if (helper.IsTypeAtCoord(new Vector2Int(units.x + 1, units.y), "King", isBlack))
+        {
+            return true;
+        }
+
+        if (helper.IsTypeAtCoord(new Vector2Int(units.x - 1, units.y), "King", isBlack))
+        {
+            return true;
+        }
+
+        if (helper.IsTypeAtCoord(new Vector2Int(units.x, units.y + 1), "King", isBlack))
+        {
+            return true;
+        }
+
+        if (helper.IsTypeAtCoord(new Vector2Int(units.x, units.y - 1), "King", isBlack))
+        {
+            return true;
+        }
+
+        if (helper.IsTypeAtCoord(new Vector2Int(units.x + 1, units.y + 1), "King", isBlack))
+        {
+            return true;
+        }
+
+        if (helper.IsTypeAtCoord(new Vector2Int(units.x - 1, units.y - 1), "King", isBlack))
+        {
+            return true;
+        }
+
+        if (helper.IsTypeAtCoord(new Vector2Int(units.x - 1, units.y + 1), "King", isBlack))
+        {
+            return true;
+        }
+
+        if (helper.IsTypeAtCoord(new Vector2Int(units.x + 1, units.y - 1), "King", isBlack))
+        {
+            return true;
+        }
+
+        return false;
+
     }
 
 }
