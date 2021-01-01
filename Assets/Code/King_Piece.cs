@@ -31,6 +31,37 @@ public class King_Piece : Custom_Mono
                     }
                     else
                     {
+                        if(lastMove.x > 0)
+                        {
+                            if (Coord_Manager.GetNameAt(new Vector2Int(6, GetIsBlack() ? 8 : 1)) != null)
+                            {
+                                Feedback.SetText("Can't Castle With Piece In The Way");
+                                return false; //check for empty space for rook
+                            }
+
+                            if (Coord_Manager.GetCheckInfoAt(new Vector2Int(6, GetIsBlack() ? 8 : 1), GetIsBlack()).isInCheck)
+                            {
+                                Feedback.SetText("Can't Castle Through Check");
+                                return false; //make sure king isn't moving through check
+                            }
+                        }
+                        else
+                        {
+                            if (Coord_Manager.GetNameAt(new Vector2Int(4, GetIsBlack() ? 8 : 1)) != null
+                                || Coord_Manager.GetNameAt(new Vector2Int(2, GetIsBlack() ? 8 : 1)) != null)
+                            {
+                                Feedback.SetText("Can't Castle With Piece In The Way");
+                                return false; //check for empty piece for rook
+                            }
+
+                            if (Coord_Manager.GetCheckInfoAt(new Vector2Int(4, GetIsBlack() ? 8 : 1), GetIsBlack()).isInCheck)
+                            {
+                                Feedback.SetText("Can't Castle Through Check");
+                                return false; //make sure king isn't moving through check
+                            }
+                        }
+
+                        //Coord_Manager.GetNameAt()
                         Castle(lastMove.x > 0); //Castle and return valid move
                         return true;
                     }
