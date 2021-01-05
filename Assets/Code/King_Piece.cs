@@ -6,7 +6,9 @@ using UnityEngine;
 /// </summary>
 public class King_Piece : Custom_Mono
 {
-
+    /// <summary>indicates if king can castle
+    /// 
+    /// </summary>
     bool canCastle = true;
 
     /// <summary>
@@ -23,11 +25,12 @@ public class King_Piece : Custom_Mono
         {
             if(Mathf.Abs(lastMove.x) == 2) //check if king moved 2 squares left or right
             {
-                if (canCastle) //check if king can castle
+                if (canCastle && team.canCastle) //check if king can castle
                 {
                     if(totalMoves > 0) //double check if king can really castle
                     {
-                        canCastle = false; //update check if can't 
+                        canCastle = false; //update check if can't
+                        team.canCastle = false;
                     }
                     else
                     {
@@ -67,6 +70,7 @@ public class King_Piece : Custom_Mono
                     }
                 }
                 Feedback.SetText("Can't Castle");
+                return false;
             }
             Feedback.SetText("Invalid move for King");
             return false;

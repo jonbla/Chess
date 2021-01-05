@@ -23,11 +23,6 @@ public class Pawn_Piece : Custom_Mono
     //[HideInInspector]
     //bool firstMoveDone = false;
 
-    /// <summary>
-    /// Reference to main
-    /// </summary>
-    Main main;
-
     private void Awake()
     {
         main = GameObject.Find("MainCode").GetComponent<Main>();

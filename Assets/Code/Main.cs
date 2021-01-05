@@ -8,6 +8,8 @@ using UnityEngine;
 public class Main : MonoBehaviour
 {
     public int moves = 0;
+    public bool toggle;
+
     GameState state;
     Team_Manager whiteTeam;
     Team_Manager blackTeam;
@@ -55,7 +57,7 @@ public class Main : MonoBehaviour
                 Mouse_Manager.MovePieceWithMouse();
             }
         }
-        catch (System.Exception NullReferenceException) {}
+        catch (System.Exception NullReferenceException) { }
 
         if (Input.GetKeyDown(KeyCode.Escape))
         {
@@ -68,20 +70,21 @@ public class Main : MonoBehaviour
     /// </summary>
     void ToggleTurnState()
     {
-        if (state == GameState.BlackTurn)
-        {
-            state = GameState.WhiteTurn;
-            whiteTeam.hasTurn = true;
-            blackTeam.hasTurn = false;
-            Feedback.SetText("White Turn");
-        }
-        else if (state == GameState.WhiteTurn)
-        {
-            state = GameState.BlackTurn;
-            whiteTeam.hasTurn = false;
-            blackTeam.hasTurn = true;
-            Feedback.SetText("Black Turn");
-        }
+        if (toggle == false) return;
+            if (state == GameState.BlackTurn)
+            {
+                state = GameState.WhiteTurn;
+                whiteTeam.hasTurn = true;
+                blackTeam.hasTurn = false;
+                Feedback.SetText("White Turn");
+            }
+            else if (state == GameState.WhiteTurn)
+            {
+                state = GameState.BlackTurn;
+                whiteTeam.hasTurn = false;
+                blackTeam.hasTurn = true;
+                Feedback.SetText("Black Turn");
+            }
 
         fade.ToggleFade();
     }

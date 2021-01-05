@@ -6,25 +6,29 @@ using UnityEngine;
 /// </summary>
 public class Custom_Mono : MonoBehaviour
 {
+    protected Main main;
+    protected Team_Manager team;
+
     /// <summary>
     /// Chess Piece attached to this object
     /// </summary>
-    [HideInInspector]
-    public Chess_Piece CP;
+    protected Chess_Piece CP;
 
-    public int totalMoves = 0;
+    protected int totalMoves = 0;
 
     // Start is called before the first frame update
     void Start()
     {
         CP = transform.GetComponent<Chess_Piece>();
+        main = GameObject.Find("MainCode").GetComponent<Main>();
+        team = transform.parent.GetComponent<Team_Manager>();
     }
 
     /// <summary>
     /// Kill named piece
     /// </summary>
     /// <param name="name">Name of piece to kill</param>
-    public void Kill(string name)
+    protected void Kill(string name)
     {
         Coord_Manager.GetPiece(name, true).GetKilled();
     }
@@ -33,7 +37,7 @@ public class Custom_Mono : MonoBehaviour
     /// Returns the team colour of piece
     /// </summary>
     /// <returns>True if black, False if White</returns>
-    public bool GetIsBlack()
+    protected bool GetIsBlack()
     {
         return transform.parent.name == "Black";
     }
@@ -42,7 +46,7 @@ public class Custom_Mono : MonoBehaviour
     /// Check if object is elegable for en passant
     /// </summary>
     /// <returns>True if it can, False if it can not, Null if error</returns>
-    public bool IsEnPassant()
+    protected bool IsEnPassant()
     {
         int direction = 1;
 
