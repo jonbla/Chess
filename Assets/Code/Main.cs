@@ -13,7 +13,21 @@ public class Main : MonoBehaviour
     Team_Manager blackTeam;
     FadeMaster fade;
 
-    public Dictionary<Pawn_Piece, int> pawnsToUpdate = new Dictionary<Pawn_Piece, int>();
+    PassantablePawn PawnInLimbo;
+
+    Dictionary<Pawn_Piece, int> pawnsToUpdate = new Dictionary<Pawn_Piece, int>();
+
+    class PassantablePawn
+    {
+        public readonly Pawn_Piece tempPawn;
+        public readonly int halfturns;
+
+        public PassantablePawn(Pawn_Piece tempPawn, int halfturns)
+        {
+            this.tempPawn = tempPawn;
+            this.halfturns = halfturns;
+        }
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -72,11 +86,24 @@ public class Main : MonoBehaviour
         fade.ToggleFade();
     }
 
+    public void RequestPawnToBeAddedToPassantList(Pawn_Piece pawn, int halfTurnsElidgableFor)
+    {
+        PawnInLimbo = new PassantablePawn(pawn, halfTurnsElidgableFor);
+    }
+
+    public void CommitPawnToPassantList()
+    {
+        if (PawnInLimbo == null) return;
+        pawnsToUpdate.Add(PawnInLimbo.tempPawn, PawnInLimbo.halfturns);
+        PawnInLimbo = null;
+    }
+
     /// <summary>
     /// Preform end-turn functions
     /// </summary>
     public void EndTurn()
     {
+        CommitPawnToPassantList();
 
         UpdatePassantList();
 

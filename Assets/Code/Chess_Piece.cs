@@ -44,7 +44,7 @@ public class Chess_Piece : MonoBehaviour
     /// <summary>
     /// Reference to TeamManager class
     /// </summary>
-    Team_Manager team;
+    public Team_Manager team;
 
 
 
@@ -181,7 +181,9 @@ public class Chess_Piece : MonoBehaviour
             middleMan.EndTurn();
             team.checkFlags = CF;
             team.EndTurn();
+
             CF = Coord_Manager.GetCheckInfoAt(middleMan.GetKingPosition(!team.isBlack), !team.isBlack);
+            print("Check: " + CF.isInCheck+", target king: "+ (!team.isBlack ? "Black" : "White"));
             if (CF.isInCheck)
             {
                 Feedback.SetText("CHECK!");

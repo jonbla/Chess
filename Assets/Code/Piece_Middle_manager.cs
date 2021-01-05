@@ -29,6 +29,9 @@ public class Piece_Middle_manager : MonoBehaviour
     /// </summary>
     const string errorMessage = "Invalid move for ";
 
+    const string whiteKingName = "White_King";
+    const string blackKingName = "Black_King";
+
     Pawn_Piece pawn;
     Horse_Piece horse;
     Rook_Piece rook;
@@ -202,7 +205,8 @@ public class Piece_Middle_manager : MonoBehaviour
     /// <returns>Board units of selected king</returns>
     public Vector2Int GetKingPosition(bool Black, bool main = false)
     {
-        string kingName = Black ? "Black": "White" + "_King";
+        string kingName = Black ? blackKingName: whiteKingName;
+        print(Black+" : "+kingName);
         return Coord_Manager.GetCoordPosition(kingName, main);
     }
 }
