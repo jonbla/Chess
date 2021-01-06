@@ -176,7 +176,7 @@ public class Chess_Piece : MonoBehaviour
             }
         }
 
-        transform.localPosition = new Vector3(-5.22f, transform.localPosition.y, transform.localPosition.z);
+        transform.localPosition = team.isBlack ? Death_Manager.GetBlackCoord() : Death_Manager.GetWhiteCoord();
 
     }
 
