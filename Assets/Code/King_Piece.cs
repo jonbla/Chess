@@ -6,7 +6,9 @@ using UnityEngine;
 /// </summary>
 public class King_Piece : Custom_Mono
 {
-
+    /// <summary>indicates if king can castle
+    /// 
+    /// </summary>
     bool canCastle = true;
 
     /// <summary>
@@ -23,21 +25,76 @@ public class King_Piece : Custom_Mono
         {
             if(Mathf.Abs(lastMove.x) == 2) //check if king moved 2 squares left or right
             {
-                if (canCastle) //check if king can castle
+                if ((GetIsBlack() && !main.blackInCheck) || (!GetIsBlack() && !main.whiteInCheck))
                 {
-                    if(totalMoves > 0) //double check if king can really castle
+                    if (canCastle) //check if king can castle
                     {
-                        canCastle = false; //update check if can't 
+                        if (totalMoves > 0) //double check if king can really castle
+                        {
+                            canCastle = false; //update check if can't
+                            team.canCastleShort = false;
+                            team.canCastleLong = false;
+                        }
+                        else
+                        {
+                            if (lastMove.x > 0)
+                            {
+                                if (team.canCastleShort)
+                                {
+                                    if (Coord_Manager.GetNameAt(new Vector2Int(6, GetIsBlack() ? 8 : 1)) != null)
+                                    {
+                                        Feedback.SetText("Can't Castle With Piece In The Way");
+                                        return false; //check for empty space for rook
+                                    }
+
+                                    if (Coord_Manager.GetCheckInfoAt(new Vector2Int(6, GetIsBlack() ? 8 : 1), GetIsBlack()).isInCheck)
+                                    {
+                                        Feedback.SetText("Can't Castle Through Check");
+                                        return false; //make sure king isn't moving through check
+                                    }
+                                }
+                                else
+                                {
+                                    Feedback.SetText("Can't Castle King Side");
+                                    return false;
+                                }
+                            }
+                            else
+                            {
+                                if (team.canCastleLong)
+                                {
+                                    if (Coord_Manager.GetNameAt(new Vector2Int(4, GetIsBlack() ? 8 : 1)) != null
+                                        || Coord_Manager.GetNameAt(new Vector2Int(2, GetIsBlack() ? 8 : 1)) != null)
+                                    {
+                                        Feedback.SetText("Can't Castle With Piece In The Way");
+                                        return false; //check for empty piece for rook
+                                    }
+
+                                    if (Coord_Manager.GetCheckInfoAt(new Vector2Int(4, GetIsBlack() ? 8 : 1), GetIsBlack()).isInCheck)
+                                    {
+                                        Feedback.SetText("Can't Castle Through Check");
+                                        return false; //make sure king isn't moving through check
+                                    }
+                                }
+                                else
+                                {
+                                    Feedback.SetText("Can't Castle Queen Side");
+                                    return false;
+                                }
+                            }
+
+                            //Coord_Manager.GetNameAt()
+                            Castle(lastMove.x > 0); //Castle and return valid move
+                            return true;
+                        }
                     }
-                    else
-                    {
-                        Castle(lastMove.x > 0); //Castle and return valid move
-                        return true;
-                    }
+                    Feedback.SetText("Can't Castle");
+                    return false;
                 }
-                Feedback.SetText("Can't Castle");
+                Feedback.SetText("Can't Castle From Check");
+                return false;
             }
-            Feedback.SetText("Invalid move for King");
+            Feedback.SetText("Invalid Move for King");
             return false;
         }
 

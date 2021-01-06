@@ -75,4 +75,17 @@ public class Rook_Piece : Custom_Mono
 
         return true;
     }
+
+    public new void EndTurn()
+    {
+        totalMoves++;
+        if (transform.position.x > 0)
+        {
+            team.canCastleShort = false;
+        }
+        else
+        {
+            team.canCastleLong = false;
+        }
+    }
 }

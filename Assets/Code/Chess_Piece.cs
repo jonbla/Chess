@@ -44,7 +44,12 @@ public class Chess_Piece : MonoBehaviour
     /// <summary>
     /// Reference to TeamManager class
     /// </summary>
-    Team_Manager team;
+    public Team_Manager team;
+
+    /// <summary>
+    /// Reference to main
+    /// </summary>
+    Main main;
 
 
 
@@ -53,6 +58,7 @@ public class Chess_Piece : MonoBehaviour
     {
         middleMan = transform.GetComponent<Piece_Middle_manager>();
         team = transform.parent.GetComponent<Team_Manager>();
+        main = GameObject.Find("MainCode").GetComponent<Main>();
 
         //On start, make sure all the pieces are center
         CenterPiece();
@@ -156,7 +162,22 @@ public class Chess_Piece : MonoBehaviour
     {
         Coord_Manager.KillPiece(transform.name);
         isDead = true;
+
+        if (CompareTag("Rook"))
+        {
+            print(tag);
+            if (transform.localPosition.x > 0)
+            {
+                team.canCastleShort = false;
+            }
+            else
+            {
+                team.canCastleLong = false;
+            }
+        }
+
         transform.localPosition = new Vector3(-5.22f, transform.localPosition.y, transform.localPosition.z);
+
     }
 
     /// <summary>
@@ -177,14 +198,32 @@ public class Chess_Piece : MonoBehaviour
         }
         else
         {
+            if (team.isBlack)
+            {
+                main.blackInCheck = false;
+            } else
+            {
+                main.whiteInCheck = false;
+            }
+
             Coord_Manager.CommitPositionUpdate();
             middleMan.EndTurn();
             team.checkFlags = CF;
             team.EndTurn();
+
             CF = Coord_Manager.GetCheckInfoAt(middleMan.GetKingPosition(!team.isBlack), !team.isBlack);
             if (CF.isInCheck)
             {
                 Feedback.SetText("CHECK!");
+
+                if (team.isBlack)
+                {
+                    main.whiteInCheck = true;
+                }
+                else
+                {
+                    main.blackInCheck = true;
+                }
             }
         }
         Debug.LogWarning("timeend: " + Time.time);
