@@ -18,8 +18,9 @@ public class Coord_Helper : MonoBehaviour
         Transform obj = Coord_Manager.GetTransformAt(pos, main);
         if (obj != null && obj.name != "Empty")
         {
-            bool temp = !obj.GetComponent<Chess_Piece>().team.isBlack;
-            if (temp == lookForWhite)
+            //bool temp = !obj.GetComponent<Chess_Piece>().team.isBlack;
+            //if (temp == lookForWhite)
+            if (obj.parent.name == "White" == lookForWhite)
             {
                 return obj.CompareTag(type);
             }
