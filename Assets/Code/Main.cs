@@ -7,18 +7,49 @@ using UnityEngine;
 
 public class Main : MonoBehaviour
 {
-    public int moves = 0;
+    /// <summary>
+    /// Total Half moves in the game
+    /// </summary>
+    public int halfMoves = 0;
+
+    /// <summary>
+    /// Debug bool, indicating if 
+    /// </summary>
     public bool toggle;
 
+    /// <summary>
+    /// State of the game
+    /// </summary>
     GameState state;
+
+    /// <summary>
+    /// Reference to White team
+    /// </summary>
     Team_Manager whiteTeam;
+
+    /// <summary>
+    /// Reference to black team
+    /// </summary>
     Team_Manager blackTeam;
+
+    /// <summary>
+    /// Reference to fader
+    /// </summary>
     FadeMaster fade;
 
+    /// <summary>
+    /// Temp pawn that isn't commited yet
+    /// </summary>
     PassantablePawn PawnInLimbo;
 
+    /// <summary>
+    /// pawns whos passant status needs to be updated
+    /// </summary>
     Dictionary<Pawn_Piece, int> pawnsToUpdate = new Dictionary<Pawn_Piece, int>();
 
+    /// <summary>
+    /// pawn structure to be commited into dictionary
+    /// </summary>
     class PassantablePawn
     {
         public readonly Pawn_Piece tempPawn;
@@ -71,29 +102,37 @@ public class Main : MonoBehaviour
     void ToggleTurnState()
     {
         if (toggle == false) return;
-            if (state == GameState.BlackTurn)
-            {
-                state = GameState.WhiteTurn;
-                whiteTeam.hasTurn = true;
-                blackTeam.hasTurn = false;
-                Feedback.SetText("White Turn");
-            }
-            else if (state == GameState.WhiteTurn)
-            {
-                state = GameState.BlackTurn;
-                whiteTeam.hasTurn = false;
-                blackTeam.hasTurn = true;
-                Feedback.SetText("Black Turn");
-            }
+        if (state == GameState.BlackTurn)
+        {
+            state = GameState.WhiteTurn;
+            whiteTeam.hasTurn = true;
+            blackTeam.hasTurn = false;
+            Feedback.SetText("White Turn");
+        }
+        else if (state == GameState.WhiteTurn)
+        {
+            state = GameState.BlackTurn;
+            whiteTeam.hasTurn = false;
+            blackTeam.hasTurn = true;
+            Feedback.SetText("Black Turn");
+        }
 
         fade.ToggleFade();
     }
 
+    /// <summary>
+    /// Request pawn to be added to list, wait for conformation
+    /// </summary>
+    /// <param name="pawn">Pawn</param>
+    /// <param name="halfTurnsElidgableFor">how many half turns will this pawn be passanted for</param>
     public void RequestPawnToBeAddedToPassantList(Pawn_Piece pawn, int halfTurnsElidgableFor)
     {
         PawnInLimbo = new PassantablePawn(pawn, halfTurnsElidgableFor);
     }
 
+    /// <summary>
+    /// Confirm pawn is added to list
+    /// </summary>
     public void CommitPawnToPassantList()
     {
         if (PawnInLimbo == null) return;
@@ -110,7 +149,7 @@ public class Main : MonoBehaviour
 
         UpdatePassantList();
 
-        moves++;
+        halfMoves++;
         ToggleTurnState();
     }
 

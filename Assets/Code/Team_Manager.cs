@@ -27,9 +27,14 @@ public class Team_Manager : Custom_Mono
     public bool isBlack;
 
     /// <summary>
-    /// Indicates if this team can Castle
+    /// Indicates if this team can Castle Short side
     /// </summary>
-    public bool canCastle;
+    public bool canCastleShort;
+
+    /// <summary>
+    /// Indicates if this team can Castle Long side
+    /// </summary>
+    public bool canCastleLong;
 
     // Start is called before the first frame update
     void Start()
@@ -37,7 +42,9 @@ public class Team_Manager : Custom_Mono
         main = GameObject.Find("MainCode").GetComponent<Main>();
         king = transform.Find((name == "Black" ? "Black" : "White") + "_King").GetComponent<King_Piece>();
         isBlack = name[0] == 'B';
-        canCastle = true;
+        canCastleShort = true;
+        canCastleLong = true;
+
     }
 
 

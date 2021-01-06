@@ -79,6 +79,13 @@ public class Rook_Piece : Custom_Mono
     public new void EndTurn()
     {
         totalMoves++;
-        team.canCastle = false;
+        if (transform.position.x > 0)
+        {
+            team.canCastleShort = false;
+        }
+        else
+        {
+            team.canCastleLong = false;
+        }
     }
 }

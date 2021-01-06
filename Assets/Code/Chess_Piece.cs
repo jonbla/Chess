@@ -156,7 +156,22 @@ public class Chess_Piece : MonoBehaviour
     {
         Coord_Manager.KillPiece(transform.name);
         isDead = true;
+
+        if (CompareTag("Rook"))
+        {
+            print(tag);
+            if (transform.localPosition.x > 0)
+            {
+                team.canCastleShort = false;
+            }
+            else
+            {
+                team.canCastleLong = false;
+            }
+        }
+
         transform.localPosition = new Vector3(-5.22f, transform.localPosition.y, transform.localPosition.z);
+
     }
 
     /// <summary>
@@ -183,7 +198,6 @@ public class Chess_Piece : MonoBehaviour
             team.EndTurn();
 
             CF = Coord_Manager.GetCheckInfoAt(middleMan.GetKingPosition(!team.isBlack), !team.isBlack);
-            print("Check: " + CF.isInCheck+", target king: "+ (!team.isBlack ? "Black" : "White"));
             if (CF.isInCheck)
             {
                 Feedback.SetText("CHECK!");

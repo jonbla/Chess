@@ -19,10 +19,8 @@ public class Coord_Helper : MonoBehaviour
         if (obj != null && obj.name != "Empty")
         {
             bool temp = !obj.GetComponent<Chess_Piece>().team.isBlack;
-            print(temp + " : " + lookForWhite);
             if (temp == lookForWhite)
             {
-                print("Type Matched " + obj.parent.name + " " + lookForWhite);
                 return obj.CompareTag(type);
             }
         }
