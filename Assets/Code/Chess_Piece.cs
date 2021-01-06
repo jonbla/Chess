@@ -46,6 +46,11 @@ public class Chess_Piece : MonoBehaviour
     /// </summary>
     public Team_Manager team;
 
+    /// <summary>
+    /// Reference to main
+    /// </summary>
+    Main main;
+
 
 
     // Start is called before the first frame update
@@ -53,6 +58,7 @@ public class Chess_Piece : MonoBehaviour
     {
         middleMan = transform.GetComponent<Piece_Middle_manager>();
         team = transform.parent.GetComponent<Team_Manager>();
+        main = GameObject.Find("MainCode").GetComponent<Main>();
 
         //On start, make sure all the pieces are center
         CenterPiece();
@@ -192,6 +198,14 @@ public class Chess_Piece : MonoBehaviour
         }
         else
         {
+            if (team.isBlack)
+            {
+                main.blackInCheck = false;
+            } else
+            {
+                main.whiteInCheck = false;
+            }
+
             Coord_Manager.CommitPositionUpdate();
             middleMan.EndTurn();
             team.checkFlags = CF;
@@ -201,6 +215,15 @@ public class Chess_Piece : MonoBehaviour
             if (CF.isInCheck)
             {
                 Feedback.SetText("CHECK!");
+
+                if (team.isBlack)
+                {
+                    main.whiteInCheck = true;
+                }
+                else
+                {
+                    main.blackInCheck = true;
+                }
             }
         }
         Debug.LogWarning("timeend: " + Time.time);

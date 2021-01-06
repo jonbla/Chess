@@ -18,6 +18,16 @@ public class Main : MonoBehaviour
     public bool toggle;
 
     /// <summary>
+    /// Is White in Check
+    /// </summary>
+    public bool whiteInCheck;
+
+    /// <summary>
+    /// Is Black in Check
+    /// </summary>
+    public bool blackInCheck;
+
+    /// <summary>
     /// State of the game
     /// </summary>
     GameState state;
