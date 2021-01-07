@@ -43,6 +43,31 @@ public class Piece_Middle_manager : MonoBehaviour
     Queen_Piece queen;
     King_Piece king;
 
+    List<Vector2Int> PawnDeltas_W = new List<Vector2Int> { new Vector2Int(0, 1),
+                                                           new Vector2Int(0, 2),
+                                                           new Vector2Int(1, 1),
+                                                           new Vector2Int(-1, 1)};
+    List<Vector2Int> PawnDeltas_B = new List<Vector2Int> { new Vector2Int(0, -1),
+                                                           new Vector2Int(0, -2),
+                                                           new Vector2Int(1, -1),
+                                                           new Vector2Int(-1, -1)};
+    List<Vector2Int> HorseDeltas = new List<Vector2Int> {  new Vector2Int(1, 2),
+                                                           new Vector2Int(1, -2),
+                                                           new Vector2Int(-1, 2),
+                                                           new Vector2Int(-1, -2),
+                                                           new Vector2Int(2, 1),
+                                                           new Vector2Int(2, -1),
+                                                           new Vector2Int(-2, 1),
+                                                           new Vector2Int(-2, -1)};
+    List<Vector2Int> KingDeltas = new List<Vector2Int> {   new Vector2Int(-1, 1),
+                                                           new Vector2Int(0, 1),
+                                                           new Vector2Int(1, 1),
+                                                           new Vector2Int(1, 0),
+                                                           new Vector2Int(1, -1),
+                                                           new Vector2Int(0, -1),
+                                                           new Vector2Int(-1, -1),
+                                                           new Vector2Int(-1, 0)};
+
     void Start()
     {
         piece = GetComponent<Chess_Piece>();
@@ -205,15 +230,52 @@ public class Piece_Middle_manager : MonoBehaviour
 
     public List<Move> GetValidMoves()
     {
+        List<Move> validMoves = new List<Move>();
         List<Move> moves = new List<Move>();
 
         switch (PieceTypeID)
         {
-            //case 1:
+            case 1:
+                foreach (Vector2Int delta in PawnDeltas_W)
+                {
+                    moves.Add(new Move(name, tag, delta, piece.CurrentChessCoord + delta));
+                }
+                break;
+
+            case 7:
+                foreach (Vector2Int delta in PawnDeltas_B)
+                {
+                    moves.Add(new Move(name, tag, delta, piece.CurrentChessCoord + delta));
+                }
+                break;
+
+            case 4:
+            case 10:
+                foreach (Vector2Int delta in HorseDeltas)
+                {
+                    moves.Add(new Move(name, tag, delta, piece.CurrentChessCoord + delta));
+                }
+                break;
+
+            case 6:
+            case 12:
+                foreach (Vector2Int delta in KingDeltas)
+                {
+                    moves.Add(new Move(name, tag, delta, piece.CurrentChessCoord + delta));
+                }
+                break;
 
         }
 
-        return moves;
+        foreach (Move move in moves)
+        {
+            if (piece.IsValidMove(move))
+            {
+                validMoves.Add(move);
+            }
+        }
+
+        return validMoves;
     }
 
     /// <summary>
@@ -224,8 +286,8 @@ public class Piece_Middle_manager : MonoBehaviour
     /// <returns>Board units of selected king</returns>
     public Vector2Int GetKingPosition(bool Black, bool main = false)
     {
-        string kingName = Black ? blackKingName: whiteKingName;
-        print(Black+" : "+kingName);
+        string kingName = Black ? blackKingName : whiteKingName;
+        print(Black + " : " + kingName);
         return Coord_Manager.GetCoordPosition(kingName, main);
     }
 }

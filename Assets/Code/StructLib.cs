@@ -72,6 +72,15 @@ namespace ExtraChessStructures
             this.finalPos = Coord_Manager.ConvertCoordsToChessUnits(finalPosRaw);
             this.finalPosRaw = finalPosRaw;
         }
+
+        public Move(string name, string type, Vector2Int newMoveOffset, Vector2Int finalPos)
+        {
+            this.name = name;
+            this.type = type;
+            this.newMoveOffset = newMoveOffset;
+            this.finalPos = finalPos;
+            this.finalPosRaw = Coord_Manager.ConvertChessUnitsToCoords(finalPos);
+        }
     }
 
     /// <summary>

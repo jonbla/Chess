@@ -2,20 +2,21 @@
 using System.Collections.Generic;
 using UnityEngine;
 using ExtraChessStructures;
+using System;
 
-public class Move_Generator : MonoBehaviour
+public static class Move_Generator
 {
     /// <summary>
     /// Generate all legal moves on the board 
     /// </summary>
     /// <param name="board">Board to use</param>
     /// <param name="LookForBlackPieces">What team's turn is it?</param>
-    public void Generate(Transform[,] board, bool LookForBlackPieces)
+    public static List<Move> Generate(Transform[,] board, bool LookForBlackPieces)
     {
         List<Move> moves = new List<Move>();
         foreach (Transform piece in board)
         {
-            if (piece != null)
+            try
             {
                 Chess_Piece chess_Piece = piece.GetComponent<Chess_Piece>();
                 if (chess_Piece.GetIsBlack() == LookForBlackPieces)
@@ -26,7 +27,9 @@ public class Move_Generator : MonoBehaviour
                     }
                 }
             }
+            catch (NullReferenceException) { }
         }
+        return moves;
     }
 }
 

@@ -127,6 +127,14 @@ public class Main : MonoBehaviour
             whiteTeam.hasTurn = false;
             blackTeam.hasTurn = true;
             Feedback.SetText("Black Turn");
+
+            List<Move> movesPossible = Coord_Manager.GetMoves(true, true);
+
+            print("-------- Valid Moves --------");
+            foreach (Move move in movesPossible)
+            {
+                Debug.Log(move.name + ": " + move.newMoveOffset);
+            }
         }
 
         fade.ToggleFade();
@@ -191,7 +199,7 @@ public class Main : MonoBehaviour
 
     public void KillPieceMarkedForDeath()
     {
-        if(markedForDeath != "")
+        if (markedForDeath != "")
         {
             Debug.Log(markedForDeath);
             Coord_Manager.GetPiece(markedForDeath, true).GetKilled();

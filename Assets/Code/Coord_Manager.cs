@@ -972,4 +972,10 @@ public class Coord_Manager
 
     }
 
+    public static List<Move> GetMoves(bool main, bool LookForBlackPieces)
+    {
+        Transform[,] targetBoard = main ? board : tempBoard;
+        return Move_Generator.Generate(targetBoard, LookForBlackPieces);
+    }
+
 }

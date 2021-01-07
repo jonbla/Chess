@@ -52,6 +52,11 @@ public class Chess_Piece : MonoBehaviour
     /// </summary>
     Main main;
 
+    /// <summary>
+    /// The space the piece is currently on
+    /// </summary>
+    public Vector2Int CurrentChessCoord;
+
 
 
     // Start is called before the first frame update
@@ -63,6 +68,8 @@ public class Chess_Piece : MonoBehaviour
 
         //On start, make sure all the pieces are center
         CenterPiece();
+
+        CurrentChessCoord = Coord_Manager.ConvertCoordsToChessUnits(transform.localPosition);
     }
 
     /// <summary>
@@ -92,14 +99,26 @@ public class Chess_Piece : MonoBehaviour
     /// <returns>True if on board, False otherwise</returns>
     bool IsInBounds(Move move)
     {
-        return Mathf.Abs(move.finalPosRaw.x) <= 4.1 && Mathf.Abs(move.finalPosRaw.y) <= 4.1;
+        bool inBoundsCondition1 = false;
+        bool inBoundsCondition2 = false;
+        if (Mathf.Abs(move.finalPosRaw.x) <= 4.1 && Mathf.Abs(move.finalPosRaw.y) <= 4.1)
+        {
+            inBoundsCondition1 = true;
+        }
+
+        if(move.finalPos.x <= 8 && move.finalPos.y >= 0 && move.finalPos.y <= 8 && move.finalPos.y >= 0)
+        {
+            inBoundsCondition2 = true;
+        }
+
+        return inBoundsCondition1 && inBoundsCondition2;
     }
 
     /// <summary>
     /// Checks if the last move was valid
     /// </summary>
     /// <returns>Validity of last move</returns>
-    bool IsValidMove(Move move)
+    public bool IsValidMove(Move move)
     {
 
         //is the piece on the board?
@@ -210,6 +229,8 @@ public class Chess_Piece : MonoBehaviour
             main.KillPieceMarkedForDeath();
 
             Coord_Manager.CommitPositionUpdate();
+            CurrentChessCoord = Coord_Manager.ConvertCoordsToChessUnits(transform.localPosition);
+
             middleMan.EndTurn();
             team.checkFlags = CF;
             team.EndTurn();
@@ -256,7 +277,7 @@ public class Chess_Piece : MonoBehaviour
     {
         List<Move> moves = new List<Move>();
 
-
+        moves = middleMan.GetValidMoves();
 
         return moves;
     }
