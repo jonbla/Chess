@@ -57,6 +57,8 @@ public class Main : MonoBehaviour
     /// </summary>
     Dictionary<Pawn_Piece, int> pawnsToUpdate = new Dictionary<Pawn_Piece, int>();
 
+    public string markedForDeath = "";
+
     /// <summary>
     /// pawn structure to be commited into dictionary
     /// </summary>
@@ -159,7 +161,8 @@ public class Main : MonoBehaviour
 
         UpdatePassantList();
 
-        halfMoves++;
+        UpdateHalfMoves();
+
         ToggleTurnState();
     }
 
@@ -184,5 +187,23 @@ public class Main : MonoBehaviour
             }
         }
         pawnsToUpdate = tempDict;
+    }
+
+    public void KillPieceMarkedForDeath()
+    {
+        if(markedForDeath != "")
+        {
+            Debug.Log(markedForDeath);
+            Coord_Manager.GetPiece(markedForDeath, true).GetKilled();
+            markedForDeath = "";
+        }
+    }
+
+    /// <summary>
+    /// Updates the current half-move count
+    /// </summary>
+    void UpdateHalfMoves()
+    {
+        halfMoves++;
     }
 }

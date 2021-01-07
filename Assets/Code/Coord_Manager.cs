@@ -124,7 +124,7 @@ public class Coord_Manager
     /// <summary>
     /// 8x8 Table of pieces 
     /// </summary>
-    private static readonly Transform[,] board = new Transform[BOARDSIZE+1, BOARDSIZE + 1];
+    private static readonly Transform[,] board = new Transform[BOARDSIZE + 1, BOARDSIZE + 1];
 
     /// <summary>
     /// 8x8 Table of pieces 
@@ -386,6 +386,31 @@ public class Coord_Manager
         return flags;
     }
 
+    public static ColInfo CheckCollitionAt(Vector2Int pos, string parentName, bool main = true)
+    {
+        Transform[,] targetBoard = main ? board : tempBoard;
+        Transform col = targetBoard[pos.x, pos.y];
+        ColInfo flags = new ColInfo(false, false, false);
+
+        flags.nameOfColObject = col.name;
+
+        if (col.name != "Empty")
+        {
+            flags.isColliding = true;
+            if (col.parent.name == parentName)
+            {
+                flags.isCollidingWithOwnTeam = true;
+                if (col.CompareTag("King"))
+                {
+                    flags.isCollidingWithKing = true;
+                }
+            }
+        }
+        return flags;
+
+
+    }
+
     //reverse table lookup, gets piece name from coord locations
 
     /// <summary>
@@ -454,7 +479,7 @@ public class Coord_Manager
     {
         Transform temp = GetTransformAt(pos, main);
 
-        if(temp != null)
+        if (temp != null)
         {
             return temp.GetComponent<Chess_Piece>();
         }
@@ -511,7 +536,8 @@ public class Coord_Manager
     {
         CheckFlags flags = new CheckFlags
         {
-            isInCheck = IsBeingAttacked(space, isBlack, main), isInCheckmate = false
+            isInCheck = IsBeingAttacked(space, isBlack, main),
+            isInCheckmate = false
         };
 
         //flags.isInCheckmate = flags.isInCheck ? IsInMate(space, isBlack, main) : false;

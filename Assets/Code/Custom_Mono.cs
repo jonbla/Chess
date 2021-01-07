@@ -25,12 +25,12 @@ public class Custom_Mono : MonoBehaviour
     }
 
     /// <summary>
-    /// Kill named piece
+    /// Marks piece to be killed
     /// </summary>
     /// <param name="name">Name of piece to kill</param>
     protected void Kill(string name)
     {
-        Coord_Manager.GetPiece(name, true).GetKilled();
+        main.markedForDeath = name;
     }
 
     /// <summary>
@@ -65,7 +65,7 @@ public class Custom_Mono : MonoBehaviour
                 {
                     if (obj.GetComponent<Pawn_Piece>().canBePassanted)
                     {
-                        obj.GetComponent<Chess_Piece>().GetKilled();
+                        Kill(obj.name);
                         return true;
                     }
                 }

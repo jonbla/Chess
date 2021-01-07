@@ -62,13 +62,15 @@ namespace ExtraChessStructures
         public string type;
         public Vector2Int newMoveOffset;
         public Vector2Int finalPos;
+        public Vector2 finalPosRaw;
 
-        public Move(string name, string type, Vector2Int newMoveOffset, Vector2Int finalPos)
+        public Move(string name, string type, Vector2Int newMoveOffset, Vector2 finalPosRaw)
         {
             this.name = name;
             this.type = type;
             this.newMoveOffset = newMoveOffset;
-            this.finalPos = finalPos;
+            this.finalPos = Coord_Manager.ConvertCoordsToChessUnits(finalPosRaw);
+            this.finalPosRaw = finalPosRaw;
         }
     }
 

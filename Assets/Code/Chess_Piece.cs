@@ -90,29 +90,21 @@ public class Chess_Piece : MonoBehaviour
     /// Checks if piece is in playable area
     /// </summary>
     /// <returns>True if on board, False otherwise</returns>
-    bool IsInBounds()
+    bool IsInBounds(Move move)
     {
-        if (Mathf.Abs(transform.localPosition.x) > 4.1 || Mathf.Abs(transform.localPosition.y) > 4.1)
-        {
-            return false;
-        }
-        else
-        {
-            return true;
-        }
+        return Mathf.Abs(move.finalPosRaw.x) <= 4.1 && Mathf.Abs(move.finalPosRaw.y) <= 4.1;
     }
 
     /// <summary>
     /// Checks if the last move was valid
     /// </summary>
     /// <returns>Validity of last move</returns>
-    bool IsValidMove()
+    bool IsValidMove(Move move)
     {
 
         //is the piece on the board?
-        if (!IsInBounds())
+        if (!IsInBounds(move))
         {
-            Debug.LogWarning("Out of Bounds");
             Feedback.SetText("Out of Bounds");
             return false;
         }
@@ -120,28 +112,27 @@ public class Chess_Piece : MonoBehaviour
         //is it your turn to go?
         if (!team.hasTurn)
         {
-            Debug.LogWarning("Not your turn");
             Feedback.SetText("Not your turn");
             return false;
         }
 
-        lastMove = Coord_Manager.GetPositionDifference();
+        lastMove = move.newMoveOffset;
+
+        Debug.Log(lastMove);
 
         if (lastMove == Vector2Int.zero)
         {
-            Debug.LogWarning("Oops, dropped your piece");
             Feedback.SetText("Oops, dropped your piece");
             return false;
         }
 
-        CollisionInfo = Coord_Manager.CheckCollition(transform);
+        CollisionInfo = Coord_Manager.CheckCollitionAt(move.finalPos, GetIsBlack() ? "Black" : "White");
 
         bool isCollidingWithOwnTeam = CollisionInfo.isCollidingWithOwnTeam;
 
         //is the piece trying to kill it's own team?
         if (isCollidingWithOwnTeam)
         {
-            Debug.LogWarning("Can't kill your own piece");
             Feedback.SetText("Can't kill your own piece");
             return false;
         }
@@ -156,7 +147,6 @@ public class Chess_Piece : MonoBehaviour
         CF = Coord_Manager.GetCheckInfoAt(middleMan.GetKingPosition(team.isBlack), team.isBlack);
         if (CF.isInCheck)
         {
-            Debug.LogWarning("King in Check");
             Feedback.SetText("King In Check");
             return false;
         }
@@ -200,7 +190,9 @@ public class Chess_Piece : MonoBehaviour
         CenterPiece();
         Coord_Manager.UpdatePosition(transform.name, transform.localPosition);
 
-        if (!IsValidMove())
+        Move move = new Move(name, tag, Coord_Manager.GetPositionDifference(), transform.localPosition);
+
+        if (!IsValidMove(move))
         {
             transform.position = startPos;
             Coord_Manager.RevertMove();
@@ -214,6 +206,8 @@ public class Chess_Piece : MonoBehaviour
             {
                 main.whiteInCheck = false;
             }
+
+            main.KillPieceMarkedForDeath();
 
             Coord_Manager.CommitPositionUpdate();
             middleMan.EndTurn();
