@@ -66,7 +66,74 @@ public class Piece_Middle_manager : MonoBehaviour
                                                            new Vector2Int(1, -1),
                                                            new Vector2Int(0, -1),
                                                            new Vector2Int(-1, -1),
-                                                           new Vector2Int(-1, 0)};
+                                                           new Vector2Int(-1, 0),
+                                                           new Vector2Int(2, 0),
+                                                           new Vector2Int(-2, 0)};
+    List<Vector2Int> RookDeltas = new List<Vector2Int> {   new Vector2Int(1, 0),
+                                                           new Vector2Int(2, 0),
+                                                           new Vector2Int(3, 0),
+                                                           new Vector2Int(4, 0),
+                                                           new Vector2Int(5, 0),
+                                                           new Vector2Int(6, 0),
+                                                           new Vector2Int(7, 0),
+                                                           new Vector2Int(8, 0),
+                                                           new Vector2Int(-1, 0),
+                                                           new Vector2Int(-2, 0),
+                                                           new Vector2Int(-3, 0),
+                                                           new Vector2Int(-4, 0),
+                                                           new Vector2Int(-5, 0),
+                                                           new Vector2Int(-6, 0),
+                                                           new Vector2Int(-7, 0),
+                                                           new Vector2Int(-8, 0),
+                                                           new Vector2Int(0, 1),
+                                                           new Vector2Int(0, 2),
+                                                           new Vector2Int(0, 3),
+                                                           new Vector2Int(0, 4),
+                                                           new Vector2Int(0, 5),
+                                                           new Vector2Int(0, 6),
+                                                           new Vector2Int(0, 7),
+                                                           new Vector2Int(0, 8),
+                                                           new Vector2Int(0, -1),
+                                                           new Vector2Int(0, -2),
+                                                           new Vector2Int(0, -3),
+                                                           new Vector2Int(0, -4),
+                                                           new Vector2Int(0, -5),
+                                                           new Vector2Int(0, -6),
+                                                           new Vector2Int(0, -7),
+                                                           new Vector2Int(0, -8)};
+    List<Vector2Int> BishopDeltas = new List<Vector2Int> { new Vector2Int(1, 1),
+                                                           new Vector2Int(2, 2),
+                                                           new Vector2Int(3, 3),
+                                                           new Vector2Int(4, 4),
+                                                           new Vector2Int(5, 5),
+                                                           new Vector2Int(6, 6),
+                                                           new Vector2Int(7, 7),
+                                                           new Vector2Int(8, 8),
+                                                           new Vector2Int(-1, -1),
+                                                           new Vector2Int(-2, -2),
+                                                           new Vector2Int(-3, -3),
+                                                           new Vector2Int(-4, -4),
+                                                           new Vector2Int(-5, -5),
+                                                           new Vector2Int(-6, -6),
+                                                           new Vector2Int(-7, -7),
+                                                           new Vector2Int(-8, -8),
+                                                           new Vector2Int(-1, 1),
+                                                           new Vector2Int(-2, 2),
+                                                           new Vector2Int(-3, 3),
+                                                           new Vector2Int(-4, 4),
+                                                           new Vector2Int(-5, 5),
+                                                           new Vector2Int(-6, 6),
+                                                           new Vector2Int(-7, 7),
+                                                           new Vector2Int(-8, 8),
+                                                           new Vector2Int(1, -1),
+                                                           new Vector2Int(2, -2),
+                                                           new Vector2Int(3, -3),
+                                                           new Vector2Int(4, -4),
+                                                           new Vector2Int(5, -5),
+                                                           new Vector2Int(6, -6),
+                                                           new Vector2Int(7, -7),
+                                                           new Vector2Int(8, -8)};
+
 
     void Start()
     {
@@ -249,9 +316,37 @@ public class Piece_Middle_manager : MonoBehaviour
                 }
                 break;
 
+            case 2:
+            case 8:
+                foreach (Vector2Int delta in RookDeltas)
+                {
+                    moves.Add(new Move(name, tag, delta, piece.CurrentChessCoord + delta));
+                }
+                break;
+
+            case 3:
+            case 9:
+                foreach (Vector2Int delta in BishopDeltas)
+                {
+                    //moves.Add(new Move(name, tag, delta, piece.CurrentChessCoord + delta));
+                }
+                break;
+
             case 4:
             case 10:
                 foreach (Vector2Int delta in HorseDeltas)
+                {
+                    moves.Add(new Move(name, tag, delta, piece.CurrentChessCoord + delta));
+                }
+                break;
+
+            case 5:
+            case 11:
+                foreach (Vector2Int delta in RookDeltas)
+                {
+                    moves.Add(new Move(name, tag, delta, piece.CurrentChessCoord + delta));
+                }
+                foreach (Vector2Int delta in BishopDeltas)
                 {
                     moves.Add(new Move(name, tag, delta, piece.CurrentChessCoord + delta));
                 }
@@ -267,13 +362,18 @@ public class Piece_Middle_manager : MonoBehaviour
 
         }
 
+        string temp = Feedback.GetText();
+
         foreach (Move move in moves)
         {
             if (piece.IsValidMove(move))
             {
                 validMoves.Add(move);
             }
+            Coord_Manager.RevertMove();
         }
+
+        Feedback.SetText(temp);
 
         return validMoves;
     }

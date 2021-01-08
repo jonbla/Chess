@@ -27,4 +27,13 @@ public static class Feedback// : MonoBehaviour
     {
         line.text = text;
     }
+
+    /// <summary>
+    /// Gets the text currently printed on board
+    /// </summary>
+    /// <returns></returns>
+    public static string GetText()
+    {
+        return line.text;
+    }
 }
