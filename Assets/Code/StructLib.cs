@@ -1,4 +1,6 @@
-﻿/// <summary>
+﻿using UnityEngine;
+
+/// <summary>
 /// Structs some classes may use
 /// </summary>
 namespace ExtraChessStructures
@@ -51,6 +53,22 @@ namespace ExtraChessStructures
         {
             this.isInCheck = isInCheck;
             this.isInCheckmate = isInCheckmate;
+        }
+    }
+
+    public struct Move
+    {
+        public string name;
+        public string type;
+        public Vector2Int newMoveOffset;
+        public Vector2Int finalPos;
+
+        public Move(string name, string type, Vector2Int newMoveOffset, Vector2Int finalPos)
+        {
+            this.name = name;
+            this.type = type;
+            this.newMoveOffset = newMoveOffset;
+            this.finalPos = finalPos;
         }
     }
 

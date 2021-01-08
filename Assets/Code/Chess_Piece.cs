@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using ExtraChessStructures;
 using UnityEngine;
 
@@ -64,6 +65,15 @@ public class Chess_Piece : MonoBehaviour
         CenterPiece();
     }
 
+    /// <summary>
+    /// Returns the team colour of piece
+    /// </summary>
+    /// <returns>True if black, False if White</returns>
+    public bool GetIsBlack()
+    {
+        return transform.parent.name == "Black";
+    }
+
 
     /// <summary>
     /// Locate the nearest cell and centre the piece into it
@@ -126,7 +136,6 @@ public class Chess_Piece : MonoBehaviour
 
         CollisionInfo = Coord_Manager.CheckCollition(transform);
 
-        bool isColliding = CollisionInfo.isColliding;
         bool isCollidingWithOwnTeam = CollisionInfo.isCollidingWithOwnTeam;
 
         //is the piece trying to kill it's own team?
@@ -176,7 +185,7 @@ public class Chess_Piece : MonoBehaviour
             }
         }
 
-        transform.localPosition = new Vector3(-5.22f, transform.localPosition.y, transform.localPosition.z);
+        transform.localPosition = team.isBlack ? Death_Manager.GetBlackCoord() : Death_Manager.GetWhiteCoord();
 
     }
 
@@ -247,5 +256,14 @@ public class Chess_Piece : MonoBehaviour
     private void OnMouseUp()
     {
         DropPiece();
+    }
+
+    public List<Move> GenerateAllValidMoves()
+    {
+        List<Move> moves = new List<Move>();
+
+
+
+        return moves;
     }
 }

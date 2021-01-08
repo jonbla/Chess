@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using ExtraChessStructures;
+using UnityEngine;
 
 /// <summary>
 /// Class responsible for validating piece specific moves
@@ -32,6 +34,8 @@ public class Piece_Middle_manager : MonoBehaviour
     const string whiteKingName = "White_King";
     const string blackKingName = "Black_King";
 
+    Chess_Piece piece;
+
     Pawn_Piece pawn;
     Horse_Piece horse;
     Rook_Piece rook;
@@ -41,6 +45,8 @@ public class Piece_Middle_manager : MonoBehaviour
 
     void Start()
     {
+        piece = GetComponent<Chess_Piece>();
+
         //determine piece type
         switch (transform.name[6])
         {
@@ -195,6 +201,19 @@ public class Piece_Middle_manager : MonoBehaviour
                 king.EndTurn();
                 break;
         }
+    }
+
+    public List<Move> GetValidMoves()
+    {
+        List<Move> moves = new List<Move>();
+
+        switch (PieceTypeID)
+        {
+            //case 1:
+
+        }
+
+        return moves;
     }
 
     /// <summary>
