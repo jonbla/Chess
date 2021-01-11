@@ -1935,7 +1935,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!81 &441653275
 AudioListener:
   m_ObjectHideFlags: 0
@@ -3319,6 +3319,7 @@ MonoBehaviour:
   altCamera: {fileID: 441653276}
   tint: {fileID: 1347135037}
   pauseMenuPopUp: {fileID: 2081024371}
+  inPause: 0
 --- !u!1 &838804370
 GameObject:
   m_ObjectHideFlags: 0
@@ -7226,7 +7227,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2081024372
 RectTransform:
   m_ObjectHideFlags: 0
