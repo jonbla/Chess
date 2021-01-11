@@ -57,6 +57,10 @@ public class Main : MonoBehaviour
     /// </summary>
     Dictionary<Pawn_Piece, int> pawnsToUpdate = new Dictionary<Pawn_Piece, int>();
 
+    Menu pauseMenu;
+
+    public bool inPause { get => pauseMenu.inPause; }
+
     /// <summary>
     /// pawn structure to be commited into dictionary
     /// </summary>
@@ -75,12 +79,12 @@ public class Main : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        //Application.targetFrameRate = 60;
         Coord_Manager.Init();
         whiteTeam = GameObject.Find("White").GetComponent<Team_Manager>();
         blackTeam = GameObject.Find("Black").GetComponent<Team_Manager>();
 
         fade = GameObject.Find("Fade Master").GetComponent<FadeMaster>();
+        pauseMenu = GameObject.Find("ExtraCode").GetComponentInChildren<Menu>();
 
         state = GameState.WhiteTurn;
         whiteTeam.hasTurn = true;
@@ -102,7 +106,14 @@ public class Main : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            Application.Quit();
+            if (!inPause)
+            {
+                pauseMenu.EnterPauseMenu();
+            }
+            else
+            {
+                pauseMenu.ExitPauseMenu();
+            }
         }
     }
 

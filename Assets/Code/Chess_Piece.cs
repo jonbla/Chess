@@ -243,6 +243,7 @@ public class Chess_Piece : MonoBehaviour
     /// </summary>
     private void OnMouseDown()
     {
+        if (main.inPause) return;
         Mouse_Manager.HeldPiece_Transform = this.transform;
         Mouse_Manager.HeldPiece_CP = this;
 
@@ -255,6 +256,8 @@ public class Chess_Piece : MonoBehaviour
     /// </summary>
     private void OnMouseUp()
     {
+        if (main.inPause) return;
+
         if (!isDead)
         {
             DropPiece();
