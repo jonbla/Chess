@@ -214,4 +214,11 @@ public class Main : MonoBehaviour
     {
         halfMoves++;
     }
+
+    public void Clear()
+    {
+        markedForDeath = "";
+        pawnsToUpdate = null;
+        PawnInLimbo = null;
+    }
 }

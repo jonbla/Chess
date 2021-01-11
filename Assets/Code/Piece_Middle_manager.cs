@@ -300,6 +300,8 @@ public class Piece_Middle_manager : MonoBehaviour
         List<Move> validMoves = new List<Move>();
         List<Move> moves = new List<Move>();
 
+        Debug.LogWarning(name);
+
         switch (PieceTypeID)
         {
             case 1:

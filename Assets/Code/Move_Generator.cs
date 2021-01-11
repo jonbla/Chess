@@ -32,4 +32,3 @@ public static class Move_Generator
         return moves;
     }
 }
-

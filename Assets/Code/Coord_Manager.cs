@@ -39,7 +39,8 @@ public class Coord_Manager
     /// </summary>
     public static Coord_Manager Coord_Man; //makes this a publicly accessable object
 
-    static Coord_Helper helper = GameObject.Find("ExtraCode").transform.Find("Coord_Helper").GetComponent<Coord_Helper>();
+    static readonly Coord_Helper helper = GameObject.Find("ExtraCode").transform.Find("Coord_Helper").GetComponent<Coord_Helper>();
+    private static readonly Main main = GameObject.Find("MainCode").GetComponent<Main>();
 
     /// <summary>
     /// Converts real coords to board coords
@@ -321,6 +322,7 @@ public class Coord_Manager
     public static void RevertMove()
     {
         ClearTempBoard();
+        main.Clear();
         Debug.Log("revertMove");
     }
 
@@ -559,47 +561,47 @@ public class Coord_Manager
     /// Check if the king is in mate
     /// </summary>
     /// <returns>Mate status of king</returns>
-    static bool IsInMate(Vector2Int space, bool isBlack)
-    {
-        bool returnVal = true;
-        bool[,] emptySpaces = new bool[3, 3];
+    //static bool IsInMate(Vector2Int space, bool isBlack)
+    //{
+    //    bool returnVal = true;
+    //    bool[,] emptySpaces = new bool[3, 3];
 
-        for (int x = 0; x < 3; x++)
-        {
-            for (int y = 0; y < 3; y++)
-            {
-                if (x == 1 && y == 1)
-                {
-                    emptySpaces[x, y] = false;
-                    continue;
-                }
+    //    for (int x = 0; x < 3; x++)
+    //    {
+    //        for (int y = 0; y < 3; y++)
+    //        {
+    //            if (x == 1 && y == 1)
+    //            {
+    //                emptySpaces[x, y] = false;
+    //                continue;
+    //            }
 
-                bool temp = false;
-                Transform lookingAt = Coord_Manager.GetTransformAt(new Vector2Int(space.x + x - 1, space.y + y - 1));
+    //            bool temp = false;
+    //            Transform lookingAt = Coord_Manager.GetTransformAt(new Vector2Int(space.x + x - 1, space.y + y - 1));
 
-                if (lookingAt != null && lookingAt.name == "Empty")
-                {
-                    temp = true;
-                }
-                emptySpaces[x, y] = temp;
-            }
-        }
+    //            if (lookingAt != null && lookingAt.name == "Empty")
+    //            {
+    //                temp = true;
+    //            }
+    //            emptySpaces[x, y] = temp;
+    //        }
+    //    }
 
 
-        for (int x = 0; x < 3; x++)
-        {
-            for (int y = 0; y < 3; y++)
-            {
-                if (x == 1 && y == 1) continue;
-                if (emptySpaces[x, y])
-                {
-                    returnVal = returnVal && IsBeingAttacked(new Vector2Int(space.x + x - 1, space.y + y - 1), isBlack);
-                    if (!returnVal) return false;
-                }
-            }
-        }
-        return returnVal;
-    }
+    //    for (int x = 0; x < 3; x++)
+    //    {
+    //        for (int y = 0; y < 3; y++)
+    //        {
+    //            if (x == 1 && y == 1) continue;
+    //            if (emptySpaces[x, y])
+    //            {
+    //                returnVal = returnVal && IsBeingAttacked(new Vector2Int(space.x + x - 1, space.y + y - 1), isBlack);
+    //                if (!returnVal) return false;
+    //            }
+    //        }
+    //    }
+    //    return returnVal;
+    //}
 
     /// <summary>
     /// Check if king is being attacked by pawn at Target
