@@ -129,8 +129,8 @@ public class Chess_Piece : MonoBehaviour
 
         if (lastMove == Vector2Int.zero)
         {
-            Debug.LogWarning("Oops, dropped your piece");
-            Feedback.SetText("Oops, dropped your piece");
+            //Debug.LogWarning("Oops, dropped your piece");
+            //Feedback.SetText("Oops, dropped your piece");
             return false;
         }
 
@@ -255,7 +255,15 @@ public class Chess_Piece : MonoBehaviour
     /// </summary>
     private void OnMouseUp()
     {
-        DropPiece();
+        if (!isDead)
+        {
+            DropPiece();
+        } else
+        {
+            mouseIsClicked = false;
+            Mouse_Manager.ResetMouseDelta();
+            transform.position = startPos;
+        }
     }
 
     public List<Move> GenerateAllValidMoves()
