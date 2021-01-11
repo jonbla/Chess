@@ -323,7 +323,7 @@ public class Piece_Middle_manager : MonoBehaviour
             case 8:
                 foreach (Vector2Int delta in RookDeltas)
                 {
-                    moves.Add(new Move(name, tag, delta, piece.CurrentChessCoord + delta));
+                    //moves.Add(new Move(name, tag, delta, piece.CurrentChessCoord + delta));
                 }
                 break;
 
@@ -339,7 +339,7 @@ public class Piece_Middle_manager : MonoBehaviour
             case 10:
                 foreach (Vector2Int delta in HorseDeltas)
                 {
-                    moves.Add(new Move(name, tag, delta, piece.CurrentChessCoord + delta));
+                    //moves.Add(new Move(name, tag, delta, piece.CurrentChessCoord + delta));
                 }
                 break;
 
@@ -347,11 +347,11 @@ public class Piece_Middle_manager : MonoBehaviour
             case 11:
                 foreach (Vector2Int delta in RookDeltas)
                 {
-                    moves.Add(new Move(name, tag, delta, piece.CurrentChessCoord + delta));
+                    //moves.Add(new Move(name, tag, delta, piece.CurrentChessCoord + delta));
                 }
                 foreach (Vector2Int delta in BishopDeltas)
                 {
-                    moves.Add(new Move(name, tag, delta, piece.CurrentChessCoord + delta));
+                    //moves.Add(new Move(name, tag, delta, piece.CurrentChessCoord + delta));
                 }
                 break;
 
@@ -359,7 +359,7 @@ public class Piece_Middle_manager : MonoBehaviour
             case 12:
                 foreach (Vector2Int delta in KingDeltas)
                 {
-                    moves.Add(new Move(name, tag, delta, piece.CurrentChessCoord + delta));
+                    //moves.Add(new Move(name, tag, delta, piece.CurrentChessCoord + delta));
                 }
                 break;
 
@@ -374,7 +374,7 @@ public class Piece_Middle_manager : MonoBehaviour
             {
                 validMoves.Add(move);
             }
-            Coord_Manager.RevertMove();
+            Coord_Manager.RevertMove(ref piece.moveDelta);
         }
 
         Feedback.SetText(temp);

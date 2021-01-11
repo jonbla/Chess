@@ -319,10 +319,11 @@ public class Coord_Manager
         Debug.Log("updated " + name);
     }
 
-    public static void RevertMove()
+    public static void RevertMove(ref Vector2Int moveDelta)
     {
         ClearTempBoard();
         main.Clear();
+        moveDelta = Vector2Int.zero;
         Debug.Log("revertMove");
     }
 

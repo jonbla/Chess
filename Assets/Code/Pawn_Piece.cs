@@ -72,7 +72,6 @@ public class Pawn_Piece : Custom_Mono
         {
             if (lastMove.y == 2 && totalMoves == 0) //is this your first move?
             {
-                canBePassanted = true;
                 main.RequestPawnToBeAddedToPassantList(this, 2);
                 return true; //if so, then this move is valid
             }

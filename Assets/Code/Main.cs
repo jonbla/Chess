@@ -156,6 +156,7 @@ public class Main : MonoBehaviour
     public void CommitPawnToPassantList()
     {
         if (PawnInLimbo == null) return;
+        PawnInLimbo.tempPawn.canBePassanted = true;
         pawnsToUpdate.Add(PawnInLimbo.tempPawn, PawnInLimbo.halfturns);
         PawnInLimbo = null;
     }
@@ -180,18 +181,22 @@ public class Main : MonoBehaviour
     void UpdatePassantList()
     {
         Dictionary<Pawn_Piece, int> tempDict = pawnsToUpdate;
-        foreach (var entry in pawnsToUpdate.ToList())
+
+        if (pawnsToUpdate.Count > 0)
         {
-            int temp = entry.Value;
-            temp--;
-            if (temp <= 0)
+            foreach (var entry in pawnsToUpdate.ToList())
             {
-                entry.Key.canBePassanted = false;
-            }
-            else
-            {
-                tempDict.Remove(entry.Key);
-                tempDict.Add(entry.Key, temp);
+                int temp = entry.Value;
+                temp--;
+                if (temp <= 0)
+                {
+                    entry.Key.canBePassanted = false;
+                }
+                else
+                {
+                    tempDict.Remove(entry.Key);
+                    tempDict.Add(entry.Key, temp);
+                }
             }
         }
         pawnsToUpdate = tempDict;
@@ -218,7 +223,6 @@ public class Main : MonoBehaviour
     public void Clear()
     {
         markedForDeath = "";
-        pawnsToUpdate = null;
         PawnInLimbo = null;
     }
 }

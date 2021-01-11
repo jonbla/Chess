@@ -214,7 +214,7 @@ public class Chess_Piece : MonoBehaviour
         if (!IsValidMove(move))
         {
             transform.position = startPos;
-            Coord_Manager.RevertMove();
+            Coord_Manager.RevertMove(ref moveDelta);
         }
         else
         {
