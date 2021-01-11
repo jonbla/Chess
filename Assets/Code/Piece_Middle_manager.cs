@@ -372,10 +372,15 @@ public class Piece_Middle_manager : MonoBehaviour
             Debug.Log(move.name);
             if (piece.IsValidMove(move))
             {
+                Debug.Log(move.name + " accepted");
                 validMoves.Add(move);
             }
+            else
+            {
+                Debug.Log(move.name + " rejected");
+            }
             Coord_Manager.RevertMove(ref piece.moveDelta);
-        }
+        } 
 
         Feedback.SetText(temp);
 
