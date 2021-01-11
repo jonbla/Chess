@@ -35,7 +35,7 @@ public class Chess_Piece : MonoBehaviour
     /// <summary>
     /// Last move in chessboard units
     /// </summary>
-    public Vector2Int lastMove;
+    public Vector2Int moveDelta;
 
     /// <summary>
     /// Flag showing if this piece is in play or dead
@@ -135,11 +135,11 @@ public class Chess_Piece : MonoBehaviour
             return false;
         }
 
-        lastMove = move.newMoveOffset;
+        moveDelta = move.newMoveOffset;
 
-        Debug.Log(lastMove);
+        Debug.Log(moveDelta);
 
-        if (lastMove == Vector2Int.zero)
+        if (moveDelta == Vector2Int.zero)
         {
             Feedback.SetText("Oops, dropped your piece");
             return false;

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using ExtraChessStructures;
+using DebuggingEssentials;
 using UnityEngine;
 
 /// <summary>
@@ -300,7 +301,7 @@ public class Piece_Middle_manager : MonoBehaviour
         List<Move> validMoves = new List<Move>();
         List<Move> moves = new List<Move>();
 
-        Debug.LogWarning(name);
+        //Debug.LogWarning(name);
 
         switch (PieceTypeID)
         {
@@ -367,7 +368,8 @@ public class Piece_Middle_manager : MonoBehaviour
         string temp = Feedback.GetText();
 
         foreach (Move move in moves)
-        {
+        {            
+            Debug.Log(move.name);
             if (piece.IsValidMove(move))
             {
                 validMoves.Add(move);

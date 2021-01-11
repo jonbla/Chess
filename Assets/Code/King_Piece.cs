@@ -17,7 +17,7 @@ public class King_Piece : Custom_Mono
     /// <returns>Validity of move</returns>
     public bool IsValidKingMove()
     {
-        Vector2Int lastMove = CP.lastMove;
+        Vector2Int lastMove = CP.moveDelta;
         ColInfo flags = CP.CollisionInfo;
 
         //If king moves more than 2 spaces, then invalid

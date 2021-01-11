@@ -35,7 +35,7 @@ public class Pawn_Piece : Custom_Mono
     /// <returns>Validity of move</returns>
     public bool IsValidPawnMove(bool isBlack = false)
     {
-        Vector2Int lastMove = CP.lastMove;
+        Vector2Int lastMove = CP.moveDelta;
         ColInfo flags = CP.CollisionInfo;
 
         if (isBlack)

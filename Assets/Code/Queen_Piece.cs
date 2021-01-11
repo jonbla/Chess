@@ -17,7 +17,7 @@ public class Queen_Piece : Custom_Mono
     /// <returns>Validity of move</returns>
     public bool IsValidQueenMove()
     {
-        Vector2Int lastMove = CP.lastMove;
+        Vector2Int lastMove = CP.moveDelta;
         ColInfo flags = CP.CollisionInfo;
 
         isDiagonal = true;

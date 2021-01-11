@@ -13,7 +13,7 @@ public class Bishop_Piece : Custom_Mono
     /// <returns>Validity of move</returns>
     public bool IsValidBishopMove()
     {
-        Vector2Int lastMove = CP.lastMove;
+        Vector2Int lastMove = CP.moveDelta;
         ColInfo flags = CP.CollisionInfo;
 
         if(Mathf.Abs(lastMove.x) != Mathf.Abs(lastMove.y))

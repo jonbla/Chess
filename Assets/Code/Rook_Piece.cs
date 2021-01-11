@@ -12,7 +12,7 @@ public class Rook_Piece : Custom_Mono
     /// <returns>Validity of move</returns>
     public bool IsValidRookMove()
     {
-        Vector2Int lastMove = CP.lastMove;
+        Vector2Int lastMove = CP.moveDelta;
         ColInfo flags = CP.CollisionInfo;
 
         if (lastMove.x != 0 && lastMove.y != 0)
