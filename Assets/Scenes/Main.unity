@@ -5425,7 +5425,7 @@ MonoBehaviour:
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
   borderWidth: 0
-  falloffDistance: 0
+  falloffDistance: 0.09
 --- !u!222 &2033257689
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -5515,7 +5515,7 @@ MonoBehaviour:
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
   borderWidth: 0
-  falloffDistance: 0
+  falloffDistance: 0.09
 --- !u!222 &2035972954
 CanvasRenderer:
   m_ObjectHideFlags: 0
