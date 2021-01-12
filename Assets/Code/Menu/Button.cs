@@ -47,6 +47,10 @@ public class Button : MonoBehaviour
             case "Set3":
                 pauseMenu.SetTexture(2);
                 break;
+
+            case "Set4":
+                pauseMenu.SetTexture(3);
+                break;
         }
     }
 }
