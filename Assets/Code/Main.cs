@@ -206,7 +206,6 @@ public class Main : MonoBehaviour
     {
         if (markedForDeath != "")
         {
-            Debug.Log(markedForDeath);
             Coord_Manager.GetPiece(markedForDeath, true).GetKilled();
             markedForDeath = "";
         }

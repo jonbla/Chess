@@ -371,15 +371,15 @@ public class Piece_Middle_manager : MonoBehaviour
         {
             try
             {
-                Debug.Log(move.name);
+                //Debug.Log(move.name);
                 if (piece.IsValidMove(move))
                 {
-                    Debug.Log(move.name + " accepted");
+                    //Debug.Log(move.name + " accepted");
                     validMoves.Add(move);
                 }
                 else
                 {
-                    Debug.Log(move.name + " rejected");
+                    //Debug.Log(move.name + " rejected");
                 }
                 Coord_Manager.RevertMove(ref piece.moveDelta);
             } catch
