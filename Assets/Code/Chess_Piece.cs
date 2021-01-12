@@ -277,8 +277,11 @@ public class Chess_Piece : MonoBehaviour
     {
         List<Move> moves = new List<Move>();
 
-        moves = middleMan.GetValidMoves();
-
+        foreach (Move move in middleMan.GetValidMoves())
+        {
+            moves.Add(move);
+        }
+        
         return moves;
     }
 }

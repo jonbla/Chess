@@ -130,7 +130,7 @@ public class Main : MonoBehaviour
 
             List<Move> movesPossible = Coord_Manager.GetMoves(true, true);
 
-            print("-------- Valid Moves --------");
+            Debug.Log("-------- Valid Moves --------");
             foreach (Move move in movesPossible)
             {
                 Debug.Log(move.name + ": " + move.newMoveOffset);

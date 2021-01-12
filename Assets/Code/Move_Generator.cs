@@ -23,12 +23,15 @@ public static class Move_Generator
                 {
                     foreach (Move move in chess_Piece.GenerateAllValidMoves())
                     {
+                        Debug.Log("adding");
                         moves.Add(move);
                     }
                 }
             }
             catch (NullReferenceException) { }
         }
+
+        //Debug.Log(moves[1].name);
         return moves;
     }
 }

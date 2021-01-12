@@ -323,7 +323,7 @@ public class Piece_Middle_manager : MonoBehaviour
             case 8:
                 foreach (Vector2Int delta in RookDeltas)
                 {
-                    //moves.Add(new Move(name, tag, delta, piece.CurrentChessCoord + delta));
+                    moves.Add(new Move(name, tag, delta, piece.CurrentChessCoord + delta));
                 }
                 break;
 
@@ -331,7 +331,7 @@ public class Piece_Middle_manager : MonoBehaviour
             case 9:
                 foreach (Vector2Int delta in BishopDeltas)
                 {
-                    //moves.Add(new Move(name, tag, delta, piece.CurrentChessCoord + delta));
+                    moves.Add(new Move(name, tag, delta, piece.CurrentChessCoord + delta));
                 }
                 break;
 
@@ -339,7 +339,7 @@ public class Piece_Middle_manager : MonoBehaviour
             case 10:
                 foreach (Vector2Int delta in HorseDeltas)
                 {
-                    //moves.Add(new Move(name, tag, delta, piece.CurrentChessCoord + delta));
+                    moves.Add(new Move(name, tag, delta, piece.CurrentChessCoord + delta));
                 }
                 break;
 
@@ -347,11 +347,11 @@ public class Piece_Middle_manager : MonoBehaviour
             case 11:
                 foreach (Vector2Int delta in RookDeltas)
                 {
-                    //moves.Add(new Move(name, tag, delta, piece.CurrentChessCoord + delta));
+                    moves.Add(new Move(name, tag, delta, piece.CurrentChessCoord + delta));
                 }
                 foreach (Vector2Int delta in BishopDeltas)
                 {
-                    //moves.Add(new Move(name, tag, delta, piece.CurrentChessCoord + delta));
+                    moves.Add(new Move(name, tag, delta, piece.CurrentChessCoord + delta));
                 }
                 break;
 
@@ -359,7 +359,7 @@ public class Piece_Middle_manager : MonoBehaviour
             case 12:
                 foreach (Vector2Int delta in KingDeltas)
                 {
-                    //moves.Add(new Move(name, tag, delta, piece.CurrentChessCoord + delta));
+                    moves.Add(new Move(name, tag, delta, piece.CurrentChessCoord + delta));
                 }
                 break;
 
@@ -368,18 +368,24 @@ public class Piece_Middle_manager : MonoBehaviour
         string temp = Feedback.GetText();
 
         foreach (Move move in moves)
-        {            
-            Debug.Log(move.name);
-            if (piece.IsValidMove(move))
+        {
+            try
             {
-                Debug.Log(move.name + " accepted");
-                validMoves.Add(move);
-            }
-            else
+                Debug.Log(move.name);
+                if (piece.IsValidMove(move))
+                {
+                    Debug.Log(move.name + " accepted");
+                    validMoves.Add(move);
+                }
+                else
+                {
+                    Debug.Log(move.name + " rejected");
+                }
+                Coord_Manager.RevertMove(ref piece.moveDelta);
+            } catch
             {
-                Debug.Log(move.name + " rejected");
+                Coord_Manager.RevertMove(ref piece.moveDelta);
             }
-            Coord_Manager.RevertMove(ref piece.moveDelta);
         } 
 
         Feedback.SetText(temp);
