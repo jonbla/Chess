@@ -124,7 +124,7 @@ public class Coord_Manager
     /// <summary>
     /// 8x8 Table of pieces 
     /// </summary>
-    private static readonly Transform[,] board = new Transform[BOARDSIZE+1, BOARDSIZE + 1];
+    private static readonly Transform[,] board = new Transform[BOARDSIZE + 1, BOARDSIZE + 1];
 
     /// <summary>
     /// 8x8 Table of pieces 
@@ -454,7 +454,7 @@ public class Coord_Manager
     {
         Transform temp = GetTransformAt(pos, main);
 
-        if(temp != null)
+        if (temp != null)
         {
             return temp.GetComponent<Chess_Piece>();
         }
@@ -511,7 +511,8 @@ public class Coord_Manager
     {
         CheckFlags flags = new CheckFlags
         {
-            isInCheck = IsBeingAttacked(space, isBlack, main), isInCheckmate = false
+            isInCheck = IsBeingAttacked(space, isBlack, main),
+            isInCheckmate = false
         };
 
         //flags.isInCheckmate = flags.isInCheck ? IsInMate(space, isBlack, main) : false;
@@ -944,6 +945,27 @@ public class Coord_Manager
 
         return false;
 
+    }
+    public static void Reset()
+    {
+        foreach (Transform piece in board)
+        {
+            try
+            {
+                piece.GetComponent<Chess_Piece>().Reset();
+            }
+            catch { };
+        }
+
+        foreach (Transform colour in GameObject.Find("Board").transform.Find("Pieces").transform)
+        {
+            foreach (Transform piece in colour)
+            {
+                piece.GetComponent<Chess_Piece>().Reset();
+            }
+        }
+
+        Init();
     }
 
 }

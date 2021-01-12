@@ -82,4 +82,9 @@ public class Custom_Mono : MonoBehaviour
     {
         totalMoves++;
     }
+
+    public void Reset()
+    {
+        totalMoves = 0;
+    }
 }

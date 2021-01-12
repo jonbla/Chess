@@ -40,7 +40,7 @@ public class Chess_Piece : MonoBehaviour
     /// <summary>
     /// Flag showing if this piece is in play or dead
     /// </summary>
-    public bool isDead = false;
+    public bool isDead;
 
     /// <summary>
     /// Reference to TeamManager class
@@ -52,6 +52,8 @@ public class Chess_Piece : MonoBehaviour
     /// </summary>
     Main main;
 
+    Vector2 SpawnPos;
+
 
 
     // Start is called before the first frame update
@@ -60,6 +62,10 @@ public class Chess_Piece : MonoBehaviour
         middleMan = transform.GetComponent<Piece_Middle_manager>();
         team = transform.parent.GetComponent<Team_Manager>();
         main = GameObject.Find("MainCode").GetComponent<Main>();
+
+        SpawnPos = transform.position;
+
+        isDead = false;
 
         //On start, make sure all the pieces are center
         CenterPiece();
@@ -276,5 +282,12 @@ public class Chess_Piece : MonoBehaviour
 
 
         return moves;
+    }
+
+    public void Reset()
+    {
+        transform.position = SpawnPos;
+        middleMan.Reset();
+        Start();
     }
 }

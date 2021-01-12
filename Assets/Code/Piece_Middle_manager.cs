@@ -228,4 +228,40 @@ public class Piece_Middle_manager : MonoBehaviour
         print(Black+" : "+kingName);
         return Coord_Manager.GetCoordPosition(kingName, main);
     }
+
+    public void Reset()
+    {
+        switch (PieceTypeID)
+        {
+            case 1:
+            case 7:
+                pawn.Reset();
+                break;
+
+            case 2:
+            case 8:
+                rook.Reset();
+                break;
+
+            case 3:
+            case 9:
+                bishop.Reset();
+                break;
+
+            case 4:
+            case 10:
+                horse.Reset();
+                break;
+
+            case 5:
+            case 11:
+                queen.Reset();
+                break;
+
+            case 6:
+            case 12:
+                king.Reset();
+                break;
+        }
+    }
 }

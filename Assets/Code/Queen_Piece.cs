@@ -9,6 +9,7 @@ public class Queen_Piece : Custom_Mono
     /// <summary>
     /// Indicates if the Queen moved diagonally or horizontally
     /// </summary>
+    [HideInInspector]
     public bool isDiagonal;
 
     /// <summary>

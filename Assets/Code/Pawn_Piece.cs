@@ -88,4 +88,10 @@ public class Pawn_Piece : Custom_Mono
 
         return true; //all other moves are fine
     }
+
+    public new void Reset()
+    {
+        totalMoves = 0;
+        canBePassanted = false;
+    }
 }

@@ -2,9 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
+using UnityEngine.SceneManagement;
 
 public class Menu : MonoBehaviour
 {
+    Main main;
 
     public Camera mainCamera;
     public Camera altCamera;
@@ -17,6 +19,7 @@ public class Menu : MonoBehaviour
     void Start()
     {
         ExitPauseMenu();
+        main = GameObject.Find("MainCode").GetComponent<Main>();
     }
 
     public void EnterPauseMenu()
@@ -39,6 +42,7 @@ public class Menu : MonoBehaviour
 
     public void QuitGame()
     {
+        Feedback.SetText("Quiting....");
         Application.Quit();
     }
 
@@ -49,7 +53,14 @@ public class Menu : MonoBehaviour
 
     public void Graphics()
     {
-        Debug.LogWarning("This feature is not implemented yet");
+        Debug.LogError("This feature is not implemented yet");
+    }
+
+    public void RestartGame()
+    {
+        Feedback.SetText("Reseting...");
+        main.Reset();
+        //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
 }
