@@ -23,8 +23,29 @@ public class Button : MonoBehaviour
                 pauseMenu.Graphics();
                 break;
 
+            case "Reset":
+                pauseMenu.RestartGame();
+                pauseMenu.ExitPauseMenu();
+                break;
+
             case "Exit Application":
                 pauseMenu.QuitGame();
+                break;
+
+            case "Back":
+                pauseMenu.Back();
+                break;
+
+            case "Set1":
+                pauseMenu.SetTexture(0);
+                break;
+
+            case "Set2":
+                pauseMenu.SetTexture(1);
+                break;
+
+            case "Set3":
+                pauseMenu.SetTexture(2);
                 break;
         }
     }

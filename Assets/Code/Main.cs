@@ -10,7 +10,7 @@ public class Main : MonoBehaviour
     /// <summary>
     /// Total Half moves in the game
     /// </summary>
-    public int halfMoves = 0;
+    public int halfMoves;
 
     /// <summary>
     /// Debug bool, indicating if 
@@ -55,7 +55,7 @@ public class Main : MonoBehaviour
     /// <summary>
     /// pawns whos passant status needs to be updated
     /// </summary>
-    Dictionary<Pawn_Piece, int> pawnsToUpdate = new Dictionary<Pawn_Piece, int>();
+    Dictionary<Pawn_Piece, int> pawnsToUpdate;
 
     Menu pauseMenu;
 
@@ -79,6 +79,8 @@ public class Main : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        halfMoves = 0;
+
         Coord_Manager.Init();
         whiteTeam = GameObject.Find("White").GetComponent<Team_Manager>();
         blackTeam = GameObject.Find("Black").GetComponent<Team_Manager>();
@@ -88,6 +90,8 @@ public class Main : MonoBehaviour
 
         state = GameState.WhiteTurn;
         whiteTeam.hasTurn = true;
+
+        pawnsToUpdate = new Dictionary<Pawn_Piece, int>();
 
         Feedback.Init();
     }
@@ -195,5 +199,11 @@ public class Main : MonoBehaviour
             }
         }
         pawnsToUpdate = tempDict;
+    }
+
+    public void Reset()
+    {
+        Coord_Manager.Reset();
+        Start();
     }
 }

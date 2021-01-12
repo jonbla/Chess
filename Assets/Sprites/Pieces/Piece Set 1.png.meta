@@ -42,7 +42,7 @@ TextureImporter:
       213: -6781322967953591563
     second: Chess Pieces_12
   externalObjects: {}
-  serializedVersion: 10
+  serializedVersion: 11
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
@@ -62,6 +62,7 @@ TextureImporter:
   isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
+  vTOnly: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -93,9 +94,13 @@ TextureImporter:
   textureType: 8
   textureShape: 1
   singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
   maxTextureSizeSet: 0
   compressionQualitySet: 0
   textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 1
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
@@ -152,7 +157,7 @@ TextureImporter:
       name: Chess Pieces_0
       rect:
         serializedVersion: 2
-        x: 0
+        x: 4
         y: 2565
         width: 427
         height: 704
@@ -217,11 +222,11 @@ TextureImporter:
         serializedVersion: 2
         x: 1928
         y: 2565
-        width: 430
+        width: 416
         height: 871
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
+      border: {x: 0, y: 0, z: 8, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
