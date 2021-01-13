@@ -12,7 +12,7 @@ public class Horse_Piece : Custom_Mono
     /// <returns>Validity of move</returns>
     public bool IsValidHorseMove()
     {
-        Vector2Int lastMove = CP.lastMove;
+        Vector2Int lastMove = CP.moveDelta;
         ColInfo flags = CP.CollisionInfo;
 
         if ((Mathf.Abs(lastMove.x) == 2 && Mathf.Abs(lastMove.y) == 1) || (Mathf.Abs(lastMove.x) == 1 && Mathf.Abs(lastMove.y) == 2))

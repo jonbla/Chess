@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using ExtraChessStructures;
+using DebuggingEssentials;
 using UnityEngine;
 
 /// <summary>
@@ -42,6 +43,98 @@ public class Piece_Middle_manager : MonoBehaviour
     Bishop_Piece bishop;
     Queen_Piece queen;
     King_Piece king;
+
+    List<Vector2Int> PawnDeltas_W = new List<Vector2Int> { new Vector2Int(0, 1),
+                                                           new Vector2Int(0, 2),
+                                                           new Vector2Int(1, 1),
+                                                           new Vector2Int(-1, 1)};
+    List<Vector2Int> PawnDeltas_B = new List<Vector2Int> { new Vector2Int(0, -1),
+                                                           new Vector2Int(0, -2),
+                                                           new Vector2Int(1, -1),
+                                                           new Vector2Int(-1, -1)};
+    List<Vector2Int> HorseDeltas = new List<Vector2Int> {  new Vector2Int(1, 2),
+                                                           new Vector2Int(1, -2),
+                                                           new Vector2Int(-1, 2),
+                                                           new Vector2Int(-1, -2),
+                                                           new Vector2Int(2, 1),
+                                                           new Vector2Int(2, -1),
+                                                           new Vector2Int(-2, 1),
+                                                           new Vector2Int(-2, -1)};
+    List<Vector2Int> KingDeltas = new List<Vector2Int> {   new Vector2Int(-1, 1),
+                                                           new Vector2Int(0, 1),
+                                                           new Vector2Int(1, 1),
+                                                           new Vector2Int(1, 0),
+                                                           new Vector2Int(1, -1),
+                                                           new Vector2Int(0, -1),
+                                                           new Vector2Int(-1, -1),
+                                                           new Vector2Int(-1, 0),
+                                                           new Vector2Int(2, 0),
+                                                           new Vector2Int(-2, 0)};
+    List<Vector2Int> RookDeltas = new List<Vector2Int> {   new Vector2Int(1, 0),
+                                                           new Vector2Int(2, 0),
+                                                           new Vector2Int(3, 0),
+                                                           new Vector2Int(4, 0),
+                                                           new Vector2Int(5, 0),
+                                                           new Vector2Int(6, 0),
+                                                           new Vector2Int(7, 0),
+                                                           new Vector2Int(8, 0),
+                                                           new Vector2Int(-1, 0),
+                                                           new Vector2Int(-2, 0),
+                                                           new Vector2Int(-3, 0),
+                                                           new Vector2Int(-4, 0),
+                                                           new Vector2Int(-5, 0),
+                                                           new Vector2Int(-6, 0),
+                                                           new Vector2Int(-7, 0),
+                                                           new Vector2Int(-8, 0),
+                                                           new Vector2Int(0, 1),
+                                                           new Vector2Int(0, 2),
+                                                           new Vector2Int(0, 3),
+                                                           new Vector2Int(0, 4),
+                                                           new Vector2Int(0, 5),
+                                                           new Vector2Int(0, 6),
+                                                           new Vector2Int(0, 7),
+                                                           new Vector2Int(0, 8),
+                                                           new Vector2Int(0, -1),
+                                                           new Vector2Int(0, -2),
+                                                           new Vector2Int(0, -3),
+                                                           new Vector2Int(0, -4),
+                                                           new Vector2Int(0, -5),
+                                                           new Vector2Int(0, -6),
+                                                           new Vector2Int(0, -7),
+                                                           new Vector2Int(0, -8)};
+    List<Vector2Int> BishopDeltas = new List<Vector2Int> { new Vector2Int(1, 1),
+                                                           new Vector2Int(2, 2),
+                                                           new Vector2Int(3, 3),
+                                                           new Vector2Int(4, 4),
+                                                           new Vector2Int(5, 5),
+                                                           new Vector2Int(6, 6),
+                                                           new Vector2Int(7, 7),
+                                                           new Vector2Int(8, 8),
+                                                           new Vector2Int(-1, -1),
+                                                           new Vector2Int(-2, -2),
+                                                           new Vector2Int(-3, -3),
+                                                           new Vector2Int(-4, -4),
+                                                           new Vector2Int(-5, -5),
+                                                           new Vector2Int(-6, -6),
+                                                           new Vector2Int(-7, -7),
+                                                           new Vector2Int(-8, -8),
+                                                           new Vector2Int(-1, 1),
+                                                           new Vector2Int(-2, 2),
+                                                           new Vector2Int(-3, 3),
+                                                           new Vector2Int(-4, 4),
+                                                           new Vector2Int(-5, 5),
+                                                           new Vector2Int(-6, 6),
+                                                           new Vector2Int(-7, 7),
+                                                           new Vector2Int(-8, 8),
+                                                           new Vector2Int(1, -1),
+                                                           new Vector2Int(2, -2),
+                                                           new Vector2Int(3, -3),
+                                                           new Vector2Int(4, -4),
+                                                           new Vector2Int(5, -5),
+                                                           new Vector2Int(6, -6),
+                                                           new Vector2Int(7, -7),
+                                                           new Vector2Int(8, -8)};
+
 
     void Start()
     {
@@ -205,15 +298,99 @@ public class Piece_Middle_manager : MonoBehaviour
 
     public List<Move> GetValidMoves()
     {
+        List<Move> validMoves = new List<Move>();
         List<Move> moves = new List<Move>();
+
+        //Debug.LogWarning(name);
 
         switch (PieceTypeID)
         {
-            //case 1:
+            case 1:
+                foreach (Vector2Int delta in PawnDeltas_W)
+                {
+                    moves.Add(new Move(name, tag, delta, piece.CurrentChessCoord + delta));
+                }
+                break;
+
+            case 7:
+                foreach (Vector2Int delta in PawnDeltas_B)
+                {
+                    moves.Add(new Move(name, tag, delta, piece.CurrentChessCoord + delta));
+                }
+                break;
+
+            case 2:
+            case 8:
+                foreach (Vector2Int delta in RookDeltas)
+                {
+                    moves.Add(new Move(name, tag, delta, piece.CurrentChessCoord + delta));
+                }
+                break;
+
+            case 3:
+            case 9:
+                foreach (Vector2Int delta in BishopDeltas)
+                {
+                    moves.Add(new Move(name, tag, delta, piece.CurrentChessCoord + delta));
+                }
+                break;
+
+            case 4:
+            case 10:
+                foreach (Vector2Int delta in HorseDeltas)
+                {
+                    moves.Add(new Move(name, tag, delta, piece.CurrentChessCoord + delta));
+                }
+                break;
+
+            case 5:
+            case 11:
+                foreach (Vector2Int delta in RookDeltas)
+                {
+                    moves.Add(new Move(name, tag, delta, piece.CurrentChessCoord + delta));
+                }
+                foreach (Vector2Int delta in BishopDeltas)
+                {
+                    moves.Add(new Move(name, tag, delta, piece.CurrentChessCoord + delta));
+                }
+                break;
+
+            case 6:
+            case 12:
+                foreach (Vector2Int delta in KingDeltas)
+                {
+                    moves.Add(new Move(name, tag, delta, piece.CurrentChessCoord + delta));
+                }
+                break;
 
         }
 
-        return moves;
+        string temp = Feedback.GetText();
+
+        foreach (Move move in moves)
+        {
+            try
+            {
+                //Debug.Log(move.name);
+                if (piece.IsValidMove(move))
+                {
+                    //Debug.Log(move.name + " accepted");
+                    validMoves.Add(move);
+                }
+                else
+                {
+                    //Debug.Log(move.name + " rejected");
+                }
+                Coord_Manager.RevertMove(ref piece.moveDelta);
+            } catch
+            {
+                Coord_Manager.RevertMove(ref piece.moveDelta);
+            }
+        } 
+
+        Feedback.SetText(temp);
+
+        return validMoves;
     }
 
     /// <summary>
@@ -224,8 +401,8 @@ public class Piece_Middle_manager : MonoBehaviour
     /// <returns>Board units of selected king</returns>
     public Vector2Int GetKingPosition(bool Black, bool main = false)
     {
-        string kingName = Black ? blackKingName: whiteKingName;
-        print(Black+" : "+kingName);
+        string kingName = Black ? blackKingName : whiteKingName;
+        print(Black + " : " + kingName);
         return Coord_Manager.GetCoordPosition(kingName, main);
     }
 

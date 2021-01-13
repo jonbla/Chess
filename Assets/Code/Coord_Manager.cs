@@ -39,7 +39,8 @@ public class Coord_Manager
     /// </summary>
     public static Coord_Manager Coord_Man; //makes this a publicly accessable object
 
-    static Coord_Helper helper = GameObject.Find("ExtraCode").transform.Find("Coord_Helper").GetComponent<Coord_Helper>();
+    static readonly Coord_Helper helper = GameObject.Find("ExtraCode").transform.Find("Coord_Helper").GetComponent<Coord_Helper>();
+    private static readonly Main main = GameObject.Find("MainCode").GetComponent<Main>();
 
     /// <summary>
     /// Converts real coords to board coords
@@ -318,9 +319,11 @@ public class Coord_Manager
         Debug.Log("updated " + name);
     }
 
-    public static void RevertMove()
+    public static void RevertMove(ref Vector2Int moveDelta)
     {
         ClearTempBoard();
+        main.Clear();
+        moveDelta = Vector2Int.zero;
         Debug.Log("revertMove");
     }
 
@@ -384,6 +387,31 @@ public class Coord_Manager
             }
         }
         return flags;
+    }
+
+    public static ColInfo CheckCollitionAt(Vector2Int pos, string parentName, bool main = true)
+    {
+        Transform[,] targetBoard = main ? board : tempBoard;
+        Transform col = targetBoard[pos.x, pos.y];
+        ColInfo flags = new ColInfo(false, false, false);
+
+        flags.nameOfColObject = col.name;
+
+        if (col.name != "Empty")
+        {
+            flags.isColliding = true;
+            if (col.parent.name == parentName)
+            {
+                flags.isCollidingWithOwnTeam = true;
+                if (col.CompareTag("King"))
+                {
+                    flags.isCollidingWithKing = true;
+                }
+            }
+        }
+        return flags;
+
+
     }
 
     //reverse table lookup, gets piece name from coord locations
@@ -528,52 +556,6 @@ public class Coord_Manager
     static bool IsBeingAttacked(Vector2Int space, bool isBlack, bool main = false)
     {
         return IsBeingAttackedByPawn(space, isBlack, main) || IsBeingAttackedByHorse(space, isBlack, main) || IsBeingAttackedByRook(space, isBlack, main) || IsBeingAttackedByBishop(space, isBlack, main) || IsBeingAttackedByKing(space, isBlack, main);
-    }
-
-    /// <summary>
-    /// Check if the king is in mate
-    /// </summary>
-    /// <returns>Mate status of king</returns>
-    static bool IsInMate(Vector2Int space, bool isBlack)
-    {
-        bool returnVal = true;
-        bool[,] emptySpaces = new bool[3, 3];
-
-        for (int x = 0; x < 3; x++)
-        {
-            for (int y = 0; y < 3; y++)
-            {
-                if (x == 1 && y == 1)
-                {
-                    emptySpaces[x, y] = false;
-                    continue;
-                }
-
-                bool temp = false;
-                Transform lookingAt = Coord_Manager.GetTransformAt(new Vector2Int(space.x + x - 1, space.y + y - 1));
-
-                if (lookingAt != null && lookingAt.name == "Empty")
-                {
-                    temp = true;
-                }
-                emptySpaces[x, y] = temp;
-            }
-        }
-
-
-        for (int x = 0; x < 3; x++)
-        {
-            for (int y = 0; y < 3; y++)
-            {
-                if (x == 1 && y == 1) continue;
-                if (emptySpaces[x, y])
-                {
-                    returnVal = returnVal && IsBeingAttacked(new Vector2Int(space.x + x - 1, space.y + y - 1), isBlack);
-                    if (!returnVal) return false;
-                }
-            }
-        }
-        return returnVal;
     }
 
     /// <summary>
@@ -956,16 +938,41 @@ public class Coord_Manager
             }
             catch { };
         }
+	}
 
-        foreach (Transform colour in GameObject.Find("Board").transform.Find("Pieces").transform)
-        {
-            foreach (Transform piece in colour)
-            {
-                piece.GetComponent<Chess_Piece>().Reset();
-            }
-        }
-
-        Init();
+    public static List<Move> GetMoves(bool main, bool LookForBlackPieces)
+    {
+        Transform[,] targetBoard = main ? board : tempBoard;
+        return Move_Generator.Generate(targetBoard, LookForBlackPieces);
     }
 
+    public static void ExecuteMove(Move move)
+    {
+        UpdatePosition(move.name, move.finalPosRaw);
+        GetPiece(move.name).IsValidMove(move);
+        main.KillPieceMarkedForDeath();
+        CommitPositionUpdate();
+        RenderBoard();
+    }
+
+    public static void RenderBoard(bool main = true)
+    {
+        RenderBoard(main ? board : tempBoard);
+    }
+
+    public static void RenderBoard(Transform[,] targetBoard)
+    {        
+        for (int i = 1; i <= BOARDSIZE; i++)
+        {
+            for (int j = 1; j <= BOARDSIZE; j++)
+            {
+                targetBoard[i, j].localPosition = ConvertChessUnitsToCoords(new Vector2Int(i, j));
+                try
+                {
+                    targetBoard[i, j].GetComponent<Chess_Piece>().CenterPiece();
+                }
+                catch { }
+            }
+        }
+    }    
 }

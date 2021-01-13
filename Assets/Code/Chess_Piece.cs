@@ -35,7 +35,7 @@ public class Chess_Piece : MonoBehaviour
     /// <summary>
     /// Last move in chessboard units
     /// </summary>
-    public Vector2Int lastMove;
+    public Vector2Int moveDelta;
 
     /// <summary>
     /// Flag showing if this piece is in play or dead
@@ -52,7 +52,10 @@ public class Chess_Piece : MonoBehaviour
     /// </summary>
     Main main;
 
-    Vector2 SpawnPos;
+    /// <summary>
+    /// The space the piece is currently on
+    /// </summary>
+    public Vector2Int CurrentChessCoord;
 
 
 
@@ -69,6 +72,8 @@ public class Chess_Piece : MonoBehaviour
 
         //On start, make sure all the pieces are center
         CenterPiece();
+
+        CurrentChessCoord = Coord_Manager.ConvertCoordsToChessUnits(transform.localPosition);
     }
 
     /// <summary>
@@ -96,27 +101,32 @@ public class Chess_Piece : MonoBehaviour
     /// Checks if piece is in playable area
     /// </summary>
     /// <returns>True if on board, False otherwise</returns>
-    bool IsInBounds()
+    bool IsInBounds(Move move)
     {
-        if (Mathf.Abs(transform.localPosition.x) > 4.1 || Mathf.Abs(transform.localPosition.y) > 4.1)
+        bool inBoundsCondition1 = false;
+        bool inBoundsCondition2 = false;
+        if (Mathf.Abs(move.finalPosRaw.x) <= 4.1 && Mathf.Abs(move.finalPosRaw.y) <= 4.1)
         {
-            return false;
+            inBoundsCondition1 = true;
         }
-        else
+
+        if(move.finalPos.x <= 8 && move.finalPos.y >= 0 && move.finalPos.y <= 8 && move.finalPos.y >= 0)
         {
-            return true;
+            inBoundsCondition2 = true;
         }
+
+        return inBoundsCondition1 && inBoundsCondition2;
     }
 
     /// <summary>
     /// Checks if the last move was valid
     /// </summary>
     /// <returns>Validity of last move</returns>
-    bool IsValidMove()
+    public bool IsValidMove(Move move)
     {
 
         //is the piece on the board?
-        if (!IsInBounds())
+        if (!IsInBounds(move))
         {
             Debug.LogWarning("Out of Bounds");
             Feedback.SetText("Out of Bounds");
@@ -131,23 +141,23 @@ public class Chess_Piece : MonoBehaviour
             return false;
         }
 
-        lastMove = Coord_Manager.GetPositionDifference();
+        moveDelta = move.newMoveOffset;
 
-        if (lastMove == Vector2Int.zero)
+        Debug.Log(moveDelta);
+
+        if (moveDelta == Vector2Int.zero)
         {
-            //Debug.LogWarning("Oops, dropped your piece");
-            //Feedback.SetText("Oops, dropped your piece");
+            Feedback.SetText("Oops, dropped your piece");
             return false;
         }
 
-        CollisionInfo = Coord_Manager.CheckCollition(transform);
+        CollisionInfo = Coord_Manager.CheckCollitionAt(move.finalPos, GetIsBlack() ? "Black" : "White");
 
         bool isCollidingWithOwnTeam = CollisionInfo.isCollidingWithOwnTeam;
 
         //is the piece trying to kill it's own team?
         if (isCollidingWithOwnTeam)
         {
-            Debug.LogWarning("Can't kill your own piece");
             Feedback.SetText("Can't kill your own piece");
             return false;
         }
@@ -162,7 +172,6 @@ public class Chess_Piece : MonoBehaviour
         CF = Coord_Manager.GetCheckInfoAt(middleMan.GetKingPosition(team.isBlack), team.isBlack);
         if (CF.isInCheck)
         {
-            Debug.LogWarning("King in Check");
             Feedback.SetText("King In Check");
             return false;
         }
@@ -206,10 +215,12 @@ public class Chess_Piece : MonoBehaviour
         CenterPiece();
         Coord_Manager.UpdatePosition(transform.name, transform.localPosition);
 
-        if (!IsValidMove())
+        Move move = new Move(name, tag, Coord_Manager.GetPositionDifference(), transform.localPosition);
+
+        if (!IsValidMove(move))
         {
             transform.position = startPos;
-            Coord_Manager.RevertMove();
+            Coord_Manager.RevertMove(ref moveDelta);
         }
         else
         {
@@ -221,7 +232,10 @@ public class Chess_Piece : MonoBehaviour
                 main.whiteInCheck = false;
             }
 
+            main.KillPieceMarkedForDeath();
             Coord_Manager.CommitPositionUpdate();
+            CurrentChessCoord = Coord_Manager.ConvertCoordsToChessUnits(transform.localPosition);
+
             middleMan.EndTurn();
             team.checkFlags = CF;
             team.EndTurn();
@@ -279,8 +293,11 @@ public class Chess_Piece : MonoBehaviour
     {
         List<Move> moves = new List<Move>();
 
-
-
+        foreach (Move move in middleMan.GetValidMoves())
+        {
+            moves.Add(move);
+        }
+        
         return moves;
     }
 

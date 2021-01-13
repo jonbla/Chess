@@ -35,7 +35,7 @@ public class Pawn_Piece : Custom_Mono
     /// <returns>Validity of move</returns>
     public bool IsValidPawnMove(bool isBlack = false)
     {
-        Vector2Int lastMove = CP.lastMove;
+        Vector2Int lastMove = CP.moveDelta;
         ColInfo flags = CP.CollisionInfo;
 
         if (isBlack)
@@ -47,13 +47,10 @@ public class Pawn_Piece : Custom_Mono
         {
             if (Mathf.Abs(lastMove.x) == 1 && lastMove.y == 1) //was it one of (1,1) or (-1,1)?
             {
-                Debug.Log("pass1");
                 if (!flags.isCollidingWithKing) //make sure you didn't try to kill a king
                 {
-                    Debug.Log("pass2");
                     if (flags.isColliding) //make sure you actually are colliding with something
                     {
-                        Debug.Log("pass3");
                         Kill(flags.nameOfColObject);
                         return true; //if all these were true, then the move is valid
                     }
@@ -62,9 +59,7 @@ public class Pawn_Piece : Custom_Mono
                 {
                     return true;
                 }
-                print("fail4");
             }
-            Debug.Log("fail1");
             return false; //if there was a horizontal move and any of these conditions are false, then this move was invalid
         }
 
@@ -72,17 +67,19 @@ public class Pawn_Piece : Custom_Mono
         {
             if (lastMove.y == 2 && totalMoves == 0) //is this your first move?
             {
-                canBePassanted = true;
-                main.RequestPawnToBeAddedToPassantList(this, 2);
-                return true; //if so, then this move is valid
+                Vector2Int currentCoord = Coord_Manager.ConvertCoordsToChessUnits(transform.localPosition);
+                Debug.Log(currentCoord.y - (isBlack ? -1 : 1));
+                if (Coord_Manager.GetNameAt(new Vector2Int(currentCoord.x, currentCoord.y - (isBlack ? -1 : 1))) == null)
+                {
+                    main.RequestPawnToBeAddedToPassantList(this, 2);
+                    return true; //if so, then this move is valid
+                }
             }
-            Debug.Log("fail2");
             return false; //otherwise it isn't
         }
 
         if (lastMove.y == 1 && flags.isColliding) //can't move forward when there is a piece infront of you as a pawn
         {
-            Debug.Log("fail3");
             return false;
         }
 

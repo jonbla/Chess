@@ -50,6 +50,20 @@ public class Team_Manager : Custom_Mono
 
     public new void EndTurn()
     {
+        //checkFlags = Coord_Manager.GetCheckInfoAt(Coord_Manager.ConvertCoordsToChessUnits(king.transform.position), !isBlack);
+        //if (checkFlags.isInCheck)
+        //{
+        //    Feedback.SetText("CHECK!");
+
+        //    if (team.isBlack)
+        //    {
+        //        main.whiteInCheck = true;
+        //    }
+        //    else
+        //    {
+        //        main.blackInCheck = true;
+        //    }
+        //}
         main.EndTurn();
     }
 }

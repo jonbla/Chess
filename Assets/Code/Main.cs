@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System;
 using ExtraChessStructures;
 using UnityEngine;
 
@@ -58,6 +59,7 @@ public class Main : MonoBehaviour
     Dictionary<Pawn_Piece, int> pawnsToUpdate;
 
     Menu pauseMenu;
+    public string markedForDeath = "";    
 
     public bool inPause { get => pauseMenu.inPause; }
 
@@ -140,6 +142,28 @@ public class Main : MonoBehaviour
             whiteTeam.hasTurn = false;
             blackTeam.hasTurn = true;
             Feedback.SetText("Black Turn");
+
+            List<Move> movesPossible = Coord_Manager.GetMoves(true, true);
+
+            Debug.Log("-------- Valid Moves --------");
+            foreach (Move move in movesPossible)
+            {
+                Debug.Log(move.name + ": " + move.newMoveOffset);
+            }
+
+            var rand = new System.Random();
+
+            if(movesPossible.Count == 0)
+            {
+                Feedback.SetText("I'm Lost, Help");
+                return;
+            }
+
+            Move randomMove = movesPossible[rand.Next(movesPossible.Count)];
+
+            Debug.Log("picked " + randomMove.name + " to " + randomMove.finalPos);
+            Coord_Manager.ExecuteMove(randomMove);
+            ToggleTurnState();
         }
 
         fade.ToggleFade();
@@ -161,6 +185,7 @@ public class Main : MonoBehaviour
     public void CommitPawnToPassantList()
     {
         if (PawnInLimbo == null) return;
+        PawnInLimbo.tempPawn.canBePassanted = true;
         pawnsToUpdate.Add(PawnInLimbo.tempPawn, PawnInLimbo.halfturns);
         PawnInLimbo = null;
     }
@@ -174,7 +199,8 @@ public class Main : MonoBehaviour
 
         UpdatePassantList();
 
-        halfMoves++;
+        UpdateHalfMoves();
+
         ToggleTurnState();
     }
 
@@ -184,26 +210,53 @@ public class Main : MonoBehaviour
     void UpdatePassantList()
     {
         Dictionary<Pawn_Piece, int> tempDict = pawnsToUpdate;
-        foreach (var entry in pawnsToUpdate.ToList())
+
+        if (pawnsToUpdate.Count > 0)
         {
-            int temp = entry.Value;
-            temp--;
-            if (temp <= 0)
+            foreach (var entry in pawnsToUpdate.ToList())
             {
-                entry.Key.canBePassanted = false;
-            }
-            else
-            {
-                tempDict.Remove(entry.Key);
-                tempDict.Add(entry.Key, temp);
+                int temp = entry.Value;
+                temp--;
+                if (temp <= 0)
+                {
+                    entry.Key.canBePassanted = false;
+                }
+                else
+                {
+                    tempDict.Remove(entry.Key);
+                    tempDict.Add(entry.Key, temp);
+                }
             }
         }
         pawnsToUpdate = tempDict;
     }
 
+    public void KillPieceMarkedForDeath()
+    {
+        if (markedForDeath != "")
+        {
+            Coord_Manager.GetPiece(markedForDeath, true).GetKilled();
+            markedForDeath = "";
+        }
+    }
+
+    /// <summary>
+    /// Updates the current half-move count
+    /// </summary>
+    void UpdateHalfMoves()
+    {
+        halfMoves++;
+    }
+
     public void Reset()
     {
+		markedForDeath = "";
         Coord_Manager.Reset();
         Start();
+    }
+    public void Clear()
+    {
+        markedForDeath = "";
+        PawnInLimbo = null;
     }
 }
