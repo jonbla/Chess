@@ -227,7 +227,6 @@ public class Chess_Piece : MonoBehaviour
             }
 
             main.KillPieceMarkedForDeath();
-
             Coord_Manager.CommitPositionUpdate();
             CurrentChessCoord = Coord_Manager.ConvertCoordsToChessUnits(transform.localPosition);
 

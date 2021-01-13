@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System;
 using ExtraChessStructures;
 using UnityEngine;
 
@@ -55,9 +56,9 @@ public class Main : MonoBehaviour
     /// <summary>
     /// pawns whos passant status needs to be updated
     /// </summary>
-    Dictionary<Pawn_Piece, int> pawnsToUpdate = new Dictionary<Pawn_Piece, int>();
+    Dictionary<Pawn_Piece, int> pawnsToUpdate = new Dictionary<Pawn_Piece, int>();    
 
-    public string markedForDeath = "";
+    public string markedForDeath = "";    
 
     /// <summary>
     /// pawn structure to be commited into dictionary
@@ -135,6 +136,14 @@ public class Main : MonoBehaviour
             {
                 Debug.Log(move.name + ": " + move.newMoveOffset);
             }
+
+            var rand = new System.Random();
+
+            Move randomMove = movesPossible[rand.Next(movesPossible.Count)];
+
+            Debug.Log("picked " + randomMove.name + " to " + randomMove.finalPos);
+            Coord_Manager.ExecuteMove(randomMove);
+            ToggleTurnState();
         }
 
         fade.ToggleFade();
