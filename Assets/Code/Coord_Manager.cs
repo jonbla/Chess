@@ -938,6 +938,7 @@ public class Coord_Manager
     public static void ExecuteMove(Move move)
     {
         UpdatePosition(move.name, move.finalPosRaw);
+        GetPiece(move.name).IsValidMove(move);
         main.KillPieceMarkedForDeath();
         CommitPositionUpdate();
         RenderBoard();

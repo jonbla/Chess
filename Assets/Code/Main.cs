@@ -139,6 +139,12 @@ public class Main : MonoBehaviour
 
             var rand = new System.Random();
 
+            if(movesPossible.Count == 0)
+            {
+                Feedback.SetText("I'm Lost, Help");
+                return;
+            }
+
             Move randomMove = movesPossible[rand.Next(movesPossible.Count)];
 
             Debug.Log("picked " + randomMove.name + " to " + randomMove.finalPos);
