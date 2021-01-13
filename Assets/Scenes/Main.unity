@@ -355,9 +355,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mouseIsClicked: 0
-  lastMove: {x: 0, y: 0}
+  moveDelta: {x: 0, y: 0}
   isDead: 0
   team: {fileID: 0}
+  CurrentChessCoord: {x: 0, y: 0}
 --- !u!61 &94695964
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -605,9 +606,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mouseIsClicked: 0
-  lastMove: {x: 0, y: 0}
+  moveDelta: {x: 0, y: 0}
   isDead: 0
   team: {fileID: 0}
+  CurrentChessCoord: {x: 0, y: 0}
 --- !u!61 &147900230
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -891,9 +893,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mouseIsClicked: 0
-  lastMove: {x: 0, y: 0}
+  moveDelta: {x: 0, y: 0}
   isDead: 0
   team: {fileID: 0}
+  CurrentChessCoord: {x: 0, y: 0}
 --- !u!61 &153830143
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -1045,9 +1048,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mouseIsClicked: 0
-  lastMove: {x: 0, y: 0}
+  moveDelta: {x: 0, y: 0}
   isDead: 0
   team: {fileID: 0}
+  CurrentChessCoord: {x: 0, y: 0}
 --- !u!61 &164835600
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -1198,9 +1202,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mouseIsClicked: 0
-  lastMove: {x: 0, y: 0}
+  moveDelta: {x: 0, y: 0}
   isDead: 0
   team: {fileID: 0}
+  CurrentChessCoord: {x: 0, y: 0}
 --- !u!61 &181627012
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -1399,9 +1404,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mouseIsClicked: 0
-  lastMove: {x: 0, y: 0}
+  moveDelta: {x: 0, y: 0}
   isDead: 0
   team: {fileID: 0}
+  CurrentChessCoord: {x: 0, y: 0}
 --- !u!61 &211752470
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -1552,9 +1558,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mouseIsClicked: 0
-  lastMove: {x: 0, y: 0}
+  moveDelta: {x: 0, y: 0}
   isDead: 0
   team: {fileID: 0}
+  CurrentChessCoord: {x: 0, y: 0}
 --- !u!61 &213063058
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -1838,9 +1845,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mouseIsClicked: 0
-  lastMove: {x: 0, y: 0}
+  moveDelta: {x: 0, y: 0}
   isDead: 0
   team: {fileID: 0}
+  CurrentChessCoord: {x: 0, y: 0}
 --- !u!61 &247852995
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -2605,9 +2613,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mouseIsClicked: 0
-  lastMove: {x: 0, y: 0}
+  moveDelta: {x: 0, y: 0}
   isDead: 0
   team: {fileID: 0}
+  CurrentChessCoord: {x: 0, y: 0}
 --- !u!61 &445224150
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -3439,9 +3448,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mouseIsClicked: 0
-  lastMove: {x: 0, y: 0}
+  moveDelta: {x: 0, y: 0}
   isDead: 0
   team: {fileID: 0}
+  CurrentChessCoord: {x: 0, y: 0}
 --- !u!61 &660805275
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -3592,9 +3602,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mouseIsClicked: 0
-  lastMove: {x: 0, y: 0}
+  moveDelta: {x: 0, y: 0}
   isDead: 0
   team: {fileID: 0}
+  CurrentChessCoord: {x: 0, y: 0}
 --- !u!61 &703296996
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -3745,9 +3756,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mouseIsClicked: 0
-  lastMove: {x: 0, y: 0}
+  moveDelta: {x: 0, y: 0}
   isDead: 0
   team: {fileID: 0}
+  CurrentChessCoord: {x: 0, y: 0}
 --- !u!61 &709617383
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -3898,9 +3910,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mouseIsClicked: 0
-  lastMove: {x: 0, y: 0}
+  moveDelta: {x: 0, y: 0}
   isDead: 0
   team: {fileID: 0}
+  CurrentChessCoord: {x: 0, y: 0}
 --- !u!61 &714345676
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -4411,9 +4424,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mouseIsClicked: 0
-  lastMove: {x: 0, y: 0}
+  moveDelta: {x: 0, y: 0}
   isDead: 0
   team: {fileID: 0}
+  CurrentChessCoord: {x: 0, y: 0}
 --- !u!61 &838804374
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -4697,9 +4711,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mouseIsClicked: 0
-  lastMove: {x: 0, y: 0}
+  moveDelta: {x: 0, y: 0}
   isDead: 0
   team: {fileID: 0}
+  CurrentChessCoord: {x: 0, y: 0}
 --- !u!61 &891309100
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -4850,9 +4865,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mouseIsClicked: 0
-  lastMove: {x: 0, y: 0}
+  moveDelta: {x: 0, y: 0}
   isDead: 0
   team: {fileID: 0}
+  CurrentChessCoord: {x: 0, y: 0}
 --- !u!61 &893507225
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -5080,9 +5096,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mouseIsClicked: 0
-  lastMove: {x: 0, y: 0}
+  moveDelta: {x: 0, y: 0}
   isDead: 0
   team: {fileID: 0}
+  CurrentChessCoord: {x: 0, y: 0}
 --- !u!61 &932054365
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -5234,9 +5251,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mouseIsClicked: 0
-  lastMove: {x: 0, y: 0}
+  moveDelta: {x: 0, y: 0}
   isDead: 0
   team: {fileID: 0}
+  CurrentChessCoord: {x: 0, y: 0}
 --- !u!61 &975812572
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -5388,9 +5406,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mouseIsClicked: 0
-  lastMove: {x: 0, y: 0}
+  moveDelta: {x: 0, y: 0}
   isDead: 0
   team: {fileID: 0}
+  CurrentChessCoord: {x: 0, y: 0}
 --- !u!61 &1093830593
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -5542,9 +5561,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mouseIsClicked: 0
-  lastMove: {x: 0, y: 0}
+  moveDelta: {x: 0, y: 0}
   isDead: 0
   team: {fileID: 0}
+  CurrentChessCoord: {x: 0, y: 0}
 --- !u!61 &1100607011
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -5739,9 +5759,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mouseIsClicked: 0
-  lastMove: {x: 0, y: 0}
+  moveDelta: {x: 0, y: 0}
   isDead: 0
   team: {fileID: 0}
+  CurrentChessCoord: {x: 0, y: 0}
 --- !u!61 &1169912494
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -5893,9 +5914,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mouseIsClicked: 0
-  lastMove: {x: 0, y: 0}
+  moveDelta: {x: 0, y: 0}
   isDead: 0
   team: {fileID: 0}
+  CurrentChessCoord: {x: 0, y: 0}
 --- !u!61 &1186274975
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -6046,9 +6068,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mouseIsClicked: 0
-  lastMove: {x: 0, y: 0}
+  moveDelta: {x: 0, y: 0}
   isDead: 0
   team: {fileID: 0}
+  CurrentChessCoord: {x: 0, y: 0}
 --- !u!61 &1189859171
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -6853,9 +6876,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mouseIsClicked: 0
-  lastMove: {x: 0, y: 0}
+  moveDelta: {x: 0, y: 0}
   isDead: 0
   team: {fileID: 0}
+  CurrentChessCoord: {x: 0, y: 0}
 --- !u!61 &1539355546
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -7038,9 +7062,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mouseIsClicked: 0
-  lastMove: {x: 0, y: 0}
+  moveDelta: {x: 0, y: 0}
   isDead: 0
   team: {fileID: 0}
+  CurrentChessCoord: {x: 0, y: 0}
 --- !u!61 &1591113054
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -7368,6 +7393,7 @@ MonoBehaviour:
   toggle: 1
   whiteInCheck: 0
   blackInCheck: 0
+  markedForDeath: 
 --- !u!4 &1874860354
 Transform:
   m_ObjectHideFlags: 0
@@ -7481,9 +7507,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mouseIsClicked: 0
-  lastMove: {x: 0, y: 0}
+  moveDelta: {x: 0, y: 0}
   isDead: 0
   team: {fileID: 0}
+  CurrentChessCoord: {x: 0, y: 0}
 --- !u!61 &1879047826
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -7634,9 +7661,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mouseIsClicked: 0
-  lastMove: {x: 0, y: 0}
+  moveDelta: {x: 0, y: 0}
   isDead: 0
   team: {fileID: 0}
+  CurrentChessCoord: {x: 0, y: 0}
 --- !u!61 &1967497822
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -7788,9 +7816,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mouseIsClicked: 0
-  lastMove: {x: 0, y: 0}
+  moveDelta: {x: 0, y: 0}
   isDead: 0
   team: {fileID: 0}
+  CurrentChessCoord: {x: 0, y: 0}
 --- !u!61 &1968958999
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -8234,7 +8263,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2042254445
 RectTransform:
   m_ObjectHideFlags: 0
@@ -8359,9 +8388,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mouseIsClicked: 0
-  lastMove: {x: 0, y: 0}
+  moveDelta: {x: 0, y: 0}
   isDead: 0
   team: {fileID: 0}
+  CurrentChessCoord: {x: 0, y: 0}
 --- !u!61 &2062195029
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -8512,9 +8542,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mouseIsClicked: 0
-  lastMove: {x: 0, y: 0}
+  moveDelta: {x: 0, y: 0}
   isDead: 0
   team: {fileID: 0}
+  CurrentChessCoord: {x: 0, y: 0}
 --- !u!61 &2080080645
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -8666,9 +8697,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mouseIsClicked: 0
-  lastMove: {x: 0, y: 0}
+  moveDelta: {x: 0, y: 0}
   isDead: 0
   team: {fileID: 0}
+  CurrentChessCoord: {x: 0, y: 0}
 --- !u!61 &2080767335
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -8859,9 +8891,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mouseIsClicked: 0
-  lastMove: {x: 0, y: 0}
+  moveDelta: {x: 0, y: 0}
   isDead: 0
   team: {fileID: 0}
+  CurrentChessCoord: {x: 0, y: 0}
 --- !u!61 &2121514258
 BoxCollider2D:
   m_ObjectHideFlags: 0

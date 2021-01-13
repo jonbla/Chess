@@ -57,7 +57,7 @@ public class Chess_Piece : MonoBehaviour
     /// </summary>
     public Vector2Int CurrentChessCoord;
 
-
+    Vector3 SpawnPos;
 
     // Start is called before the first frame update
     void Start()
