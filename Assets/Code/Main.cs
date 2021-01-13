@@ -162,8 +162,8 @@ public class Main : MonoBehaviour
             Move randomMove = movesPossible[rand.Next(movesPossible.Count)];
 
             Debug.Log("picked " + randomMove.name + " to " + randomMove.finalPos);
-            Coord_Manager.ExecuteMove(randomMove);
-            ToggleTurnState();
+            //Coord_Manager.ExecuteMove(randomMove);
+            //ToggleTurnState();
         }
 
         fade.ToggleFade();

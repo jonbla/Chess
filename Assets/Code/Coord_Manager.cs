@@ -930,15 +930,14 @@ public class Coord_Manager
     }
     public static void Reset()
     {
-        foreach (Transform piece in board)
+        foreach (Transform colour in GameObject.Find("Board").transform.Find("Pieces").transform)
         {
-            try
+            foreach (Transform piece in colour)
             {
                 piece.GetComponent<Chess_Piece>().Reset();
             }
-            catch { };
-        }
-	}
+        }        
+    }
 
     public static List<Move> GetMoves(bool main, bool LookForBlackPieces)
     {
